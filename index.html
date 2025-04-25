@@ -29,8 +29,8 @@
             opacity: 0.9;
             text-align: center;
         }
-        .tribute-card-wrapper { /* Added wrapper for easier replacement */
-            min-height: 320px; /* Apply min-height to wrapper */
+        .tribute-card-wrapper {
+            min-height: 320px;
         }
         .tribute-card {
             transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.24s;
@@ -41,17 +41,17 @@
             border-radius: 20px 18px 18px 17px / 25px 23px 19px 18px;
             box-shadow: 5px 13px 38px 0 rgba(178, 101, 255, 0.17);
             min-height: 320px;
-            display: flex; /* Use flex for consistent height */
-            flex-direction: column; /* Stack content vertically */
-            overflow: hidden; /* Prevent content overflow */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .tribute-card:hover:not(.editing) { /* Don't apply hover effect when editing */
+        .tribute-card:hover:not(.editing) {
             transform: translateY(-8px) scale(1.035) rotate(-2deg);
             box-shadow: 0 8px 26px #fabbdb33, 0 3px 12px #7359aa1a;
             z-index: 10;
         }
         .tribute-card.editing {
-             border: 2px solid #b991ed; /* Highlight editing card */
+             border: 2px solid #b991ed;
              box-shadow: 0 4px 15px rgba(185, 145, 237, 0.3);
         }
 
@@ -93,7 +93,7 @@
             transform-origin: bottom center;
             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
             cursor: pointer;
-            background-color: #eee;
+            background-color: #eee; /* Placeholder background */
         }
          .photo-fan-stack img:hover {
             transform: scale(1.1) translateY(-5px) !important;
@@ -121,14 +121,15 @@
         .gallery-modal-bg.active {display:flex; opacity: 1;}
         .gallery-img-viewer {max-width:90vw;max-height:80vh;box-shadow:0 4px 30px 0 rgba(71,40,116,.3); border: 3px solid white; object-fit: contain;}
         .gallery-modal-controls {position:absolute;top:50%;width:100vw;display:flex;justify-content:space-between;z-index:60;pointer-events:none;}
-        .gallery-modal-controls button {pointer-events:auto; background: rgba(255,255,255,0.7); border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; margin: 0 15px; transition: background 0.2s; color: #502d6b}
+        .gallery-modal-controls button {pointer-events:auto; background: rgba(255,255,255,0.7); border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; margin: 0 15px; transition: background 0.2s; color: #502d6b; cursor: pointer;}
         .gallery-modal-controls button:hover { background: rgba(255,255,255,0.9); }
-        #closeGalleryBtn { position: absolute; top: 20px; right: 20px; z-index: 60; }
-        #lightboxCaption { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0,0,0,0.6); color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.9rem; }
+        #closeGalleryBtn { position: absolute; top: 20px; right: 20px; z-index: 60; background: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; color: #502d6b; cursor: pointer;}
+         #closeGalleryBtn:hover { background: rgba(255,255,255,0.9); }
+        #lightboxCaption { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0,0,0,0.6); color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.9rem; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
         /* Edit form styling */
         .edit-input, .edit-textarea {
-            outline: 2px solid #b991ed !important; /* Ensure outline shows */
+            outline: 2px solid #b991ed !important;
             background: #fef8ff !important;
             border: 1px solid #dcb8ff !important;
             width: 95%;
@@ -136,16 +137,19 @@
             margin-right: auto;
             padding: 6px 8px;
             border-radius: 8px;
+            box-sizing: border-box; /* Include padding in width */
          }
          .edit-textarea {
             font-family: 'Indie Flower', cursive;
             font-size: 1.1rem;
             line-height: 1.5;
-            resize: vertical; /* Allow vertical resize */
+            resize: vertical;
             min-height: 80px;
+            flex-grow: 1; /* Allow textarea to fill available space */
         }
         .edit-photo-preview {
             display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 8px 0;
+            min-height: 64px; /* Reserve space even if empty */
         }
         .edit-photo-item { position: relative; }
         .edit-photo-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #dcb8ff;}
@@ -156,6 +160,7 @@
              font-size: 12px; line-height: 18px; text-align: center;
              cursor: pointer; border: 1px solid white;
              opacity: 0.8; transition: opacity 0.2s;
+             z-index: 5; /* Ensure button is above image */
          }
          .remove-photo-btn:hover { opacity: 1; }
 
@@ -164,6 +169,15 @@
             background-color: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(235, 216, 255, 0.8);
+         }
+
+         /* Style for disabled file input container */
+         .file-input-disabled {
+             opacity: 0.6;
+             cursor: not-allowed;
+         }
+         .file-input-disabled input[type="file"] {
+             pointer-events: none;
          }
 
     </style>
@@ -196,8 +210,9 @@
                 <textarea id="message" name="message" rows="2" class="rounded-xl border border-purple-200 px-3 py-2 w-full focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="220" required placeholder="Your message..."></textarea>
             </div>
             <div class="w-full sm:w-auto sm:flex-initial px-1 mb-2 sm:mb-0">
-                <label for="photo" class="text-purple-500 font-semibold mb-1 block">Photos (max 5)</label>
-                <input id="photo" name="photo" type="file" accept="image/*" multiple class="border rounded-xl py-2 px-2 text-xs w-full bg-purple-50 border-purple-200" style="max-width: 200px;">
+                 <!-- Added container for potential disabling -->
+                <label id="photoInputLabel" for="photo" class="text-purple-500 font-semibold mb-1 block">Photos (max 5)</label>
+                <input id="photo" name="photo" type="file" accept="image/png, image/jpeg, image/gif, image/webp" multiple class="border rounded-xl py-2 px-2 text-xs w-full bg-purple-50 border-purple-200" style="max-width: 200px;">
             </div>
             <div class="w-full sm:w-auto flex items-end justify-end px-1">
                 <button type="submit" title="Share Tribute" class="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-300 hover:to-purple-600 transition-all font-bold py-2 px-6 text-white rounded-xl focus:outline-none active:scale-95 shadow-md flex items-center gap-1">
@@ -223,11 +238,11 @@
         <div class="z-50 relative bg-transparent overflow-visible flex items-center justify-center w-full h-full">
              <button type="button" class="text-2xl text-white bg-pink-500 hover:bg-pink-400 focus:outline-none px-3 py-1 rounded-full z-60" id="closeGalleryBtn" title="Close"><i class="fa-solid fa-xmark"></i></button>
              <img src="" alt="Gallery Photo" id="galleryImage" class="gallery-img-viewer rounded-xl transition-all duration-300" draggable="false">
+             <div id="lightboxCaption"></div> <!-- Moved caption inside inner div -->
              <div class="gallery-modal-controls">
                 <button type="button" class="text-xl" id="prevPhoto" title="Prev"><i class="fa-solid fa-chevron-left"></i></button>
                 <button type="button" class="text-xl" id="nextPhoto" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
-            <div id="lightboxCaption"></div>
         </div>
     </div>
 
@@ -239,7 +254,7 @@
 
     <script>
         // --- Constants and Globals ---
-        const TRIBUTES_LS_KEY = 'retireTributesCombinedV5'; // Incremented key
+        const TRIBUTES_LS_KEY = 'retireTributesCombinedV6'; // Incremented key for data structure change (Data URLs)
         const MAX_PHOTOS = 5;
         const PHOTO_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB limit per photo
         const ICONS = ['fa-flower', 'fa-apple-whole', 'fa-star', 'fa-heart', 'fa-leaf', 'fa-book', 'fa-paint-brush'];
@@ -255,13 +270,17 @@
 
         function escapeHTML(str) {
             if (typeof str !== 'string') return '';
-            return str.replace(/[&<>"']/g, s => ({'&':'&','<':'<','>':'>','"':'"',"'":'''})[s]);
+            return str.replace(/[&<>"']/g, s => ({'&':'&','<':'<','>':'>','"':'"',"'":'''})[s]); // Use HTML entities
         }
 
-        function revokeBlobUrlIfNeeded(url) {
-             if (url && typeof url === 'string' && url.startsWith('blob:')) {
-                try { URL.revokeObjectURL(url); } catch (e) { console.error("Error revoking URL:", url, e); }
-             }
+        // Function to convert File to Data URL (async)
+        function fileToDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
         }
 
         // --- Data Handling ---
@@ -269,13 +288,15 @@
             const ls = window.localStorage.getItem(TRIBUTES_LS_KEY);
             let loadedData = [];
             if (ls) {
-                try { loadedData = JSON.parse(ls); } catch { console.error("Failed to parse tributes from localStorage."); loadedData = getDefaultTributes(); }
+                try { loadedData = JSON.parse(ls); } catch { console.error("Failed to parse tributes from localStorage. Using default data."); loadedData = getDefaultTributes(); }
             } else {
                  loadedData = getDefaultTributes();
             }
-             // Ensure photos array exists and is an array
+             // Ensure photos array exists and is an array for all items
             loadedData.forEach(t => {
                 if (!Array.isArray(t.photos)) t.photos = [];
+                 // Filter out any invalid or old blob URLs that might have somehow persisted
+                 t.photos = t.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http')));
             });
             tributesData = loadedData; // Update global state
             return tributesData;
@@ -285,7 +306,8 @@
              // Clean up any invalid photo entries before saving
              tributesData.forEach(tribute => {
                  if (tribute.photos && Array.isArray(tribute.photos)) {
-                     tribute.photos = tribute.photos.filter(p => typeof p === 'string' && p.length > 0);
+                     // Only save valid Data URLs or external URLs
+                     tribute.photos = tribute.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http')));
                  } else {
                      tribute.photos = [];
                  }
@@ -307,7 +329,7 @@
         // --- Rendering Functions ---
 
         function renderPhotoFanStack(photos, tributeIdx, fromName) {
-             photos = Array.isArray(photos) ? photos.filter(p => typeof p === 'string' && p.length > 0) : []; // Ensure valid array
+             photos = Array.isArray(photos) ? photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http'))) : []; // Ensure valid array of Data/External URLs
              if (!photos.length) {
                  return `<div class="flex justify-center items-center h-[130px] mb-4">
                             <i class="fa-solid fa-image text-purple-300 text-4xl opacity-50"></i>
@@ -315,7 +337,7 @@
              }
              const photoCount = Math.min(photos.length, MAX_PHOTOS); // Use actual photo count up to max
              const imageMarkup = photos.slice(0, photoCount).map((src, i) =>
-                 `<img src="${src}" class="gallery-thumb" loading="lazy"
+                 `<img src="${escapeHTML(src)}" class="gallery-thumb" loading="lazy"
                       onclick="openLightbox(${tributeIdx}, ${i})"
                       alt="Photo ${i + 1} from ${escapeHTML(fromName)}"/>`
              ).join("");
@@ -342,8 +364,8 @@
                     </div>
                     <div class="w-full text-center text-purple-700 font-bold mb-1 text-lg">${safeFrom || "Anonymous"}</div>
                     ${photoMarkup}
-                    <div class="text-gray-700 mb-3 w-full text-center break-words grow px-2"
-                        style="font-family:'Indie Flower',cursive; font-size:1.15rem; line-height: 1.5;">${safeMsg.replace(/\n/g, '<br>') || "..."}</div>
+                    <div class="text-gray-700 mb-3 w-full text-center break-words grow px-2 custom-scroll"
+                        style="font-family:'Indie Flower',cursive; font-size:1.15rem; line-height: 1.5; max-height: 120px; overflow-y: auto; ">${safeMsg.replace(/\n/g, '<br>') || "..."}</div>
                     <div class="text-xs text-pink-400 mt-auto absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1 items-center">
                         <i class="fa-solid ${ICONS[idx % ICONS.length]}"></i>
                         <span>${trb.date || ""}</span>
@@ -357,17 +379,21 @@
             const safeFrom = escapeHTML(trb.from);
             const safeMsg = escapeHTML(trb.msg);
             const cardId = `tribute-card-${idx}`;
-            const currentPhotos = Array.isArray(trb.photos) ? [...trb.photos] : []; // Work with a copy
+            const currentPhotos = Array.isArray(trb.photos) ? trb.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http'))) : []; // Ensure valid photos
 
              let photoPreviewHtml = currentPhotos.length > 0
                  ? `<div class="edit-photo-preview">
                      ${currentPhotos.map((ph, i) => `
-                         <div class="edit-photo-item">
-                             <img src="${ph}" alt="Photo ${i+1}"/>
+                         <div class="edit-photo-item" data-photo-src="${escapeHTML(ph)}"> <!-- Store src here -->
+                             <img src="${escapeHTML(ph)}" alt="Photo ${i+1}"/>
                              <button type="button" data-photoidx="${i}" class="remove-photo-btn" title="Remove photo">×</button>
                          </div>`).join("")}
                     </div>`
-                 : '<p class="text-xs text-gray-400 my-1 text-center">No photos currently.</p>';
+                 : '<p class="text-xs text-gray-400 my-1 text-center">No photos currently.</p><div class="edit-photo-preview"></div>'; // Keep preview div structure
+
+             const fileInputDisabled = currentPhotos.length >= MAX_PHOTOS;
+             const fileInputLabelClass = fileInputDisabled ? 'file-input-disabled' : '';
+
 
              const editModeHtml = `
                  <div id="${cardId}" class="tribute-card editing p-5 pt-6 pb-6 relative flex flex-col shadow-lg">
@@ -375,17 +401,20 @@
                      <input type="text" name="editName" value="${safeFrom}" placeholder="Your Name" maxlength="32" required
                             class="edit-input font-bold text-purple-600 text-lg text-center mb-2"/>
                      <textarea name="editMsg" rows="3" placeholder="Your message..." maxlength="220" required
-                            class="edit-textarea text-gray-700 text-center mb-2 grow">${safeMsg}</textarea>
+                            class="edit-textarea text-gray-700 text-center mb-2">${safeMsg}</textarea>
                      <div class="text-sm text-purple-500 mb-1 text-center">Photos (${currentPhotos.length}/${MAX_PHOTOS}):</div>
                      ${photoPreviewHtml}
-                     <label class="block text-center my-2">
-                         <span class="text-sm text-purple-500">Add/Replace Photos (max ${MAX_PHOTOS}):</span>
-                         <input type="file" name="editPhoto" accept="image/*" multiple class="add-photo-input text-xs w-full mt-1 bg-purple-50 border border-purple-200 rounded p-1"/>
+                     <label class="block text-center my-2 ${fileInputLabelClass}">
+                         <span class="text-sm text-purple-500">${fileInputDisabled ? 'Max photos reached' : `Add/Replace Photos (max ${MAX_PHOTOS})`}</span>
+                         <input type="file" name="editPhoto" accept="image/png, image/jpeg, image/gif, image/webp" multiple
+                                class="add-photo-input text-xs w-full mt-1 bg-purple-50 border border-purple-200 rounded p-1"
+                                ${fileInputDisabled ? 'disabled' : ''}
+                                />
                      </label>
                      <p class="text-xs text-gray-400 mb-3 text-center">Uploading new files will replace existing photos.</p>
                      <div class="flex justify-center gap-3 mt-auto">
-                       <button type="submit" class="bg-gradient-to-r from-green-400 to-blue-400 text-white rounded-lg px-4 py-1 font-semibold shadow hover:from-green-500 hover:to-blue-500">Save</button>
-                       <button type="button" class="cancel-edit-btn bg-gray-300 text-gray-700 rounded-lg px-4 py-1 font-semibold hover:bg-gray-400">Cancel</button>
+                       <button type="submit" class="bg-gradient-to-r from-green-400 to-blue-400 text-white rounded-lg px-4 py-1 font-semibold shadow hover:from-green-500 hover:to-blue-500 active:scale-95">Save</button>
+                       <button type="button" class="cancel-edit-btn bg-gray-300 text-gray-700 rounded-lg px-4 py-1 font-semibold hover:bg-gray-400 active:scale-95">Cancel</button>
                      </div>
                    </form>
                  </div>`;
@@ -416,6 +445,8 @@
                     } else {
                          cardWrapper.innerHTML = renderTributeCard(trb, idx);
                     }
+                    // Use dataset for easy access to index
+                    cardWrapper.dataset.index = idx;
                     grid.appendChild(cardWrapper);
                 });
             }
@@ -428,60 +459,89 @@
              const grid = document.getElementById('tributesGrid');
              if (!grid) return;
 
-             grid.addEventListener('click', function(event) {
+             // Remove any old listeners to prevent duplicates, or rely solely on delegation
+             // The delegation approach used below is robust as it doesn't need re-attaching to specific card elements.
+
+             grid.onclick = function(event) { // Use single click handler on grid
                  const target = event.target;
                  const cardWrapper = target.closest('.tribute-card-wrapper');
-                 if (!cardWrapper) return; // Click wasn't on a card or its content
+                 if (!cardWrapper) return; // Click wasn't on a card wrapper
+
+                 const tributeIdx = parseInt(cardWrapper.dataset.index); // Get index from wrapper
 
                  // --- Delete Button ---
-                 if (target.closest('.delete-btn')) {
-                     const button = target.closest('.delete-btn');
-                     const id = parseInt(button.dataset.id);
-                     if (!isNaN(id) && confirm('Are you sure you want to delete this tribute?')) {
-                         handleDeleteTribute(id);
+                 const deleteButton = target.closest('.delete-btn');
+                 if (deleteButton && deleteButton.dataset.id == tributeIdx) { // Verify ID matches wrapper
+                     if (confirm('Are you sure you want to delete this tribute?')) {
+                         handleDeleteTribute(tributeIdx);
                      }
                      return; // Handled
                  }
 
                  // --- Edit Button ---
-                 if (target.closest('.edit-btn')) {
-                     const button = target.closest('.edit-btn');
-                     const id = parseInt(button.dataset.id);
-                     if (!isNaN(id)) {
-                         handleStartEdit(id);
+                 const editButton = target.closest('.edit-btn');
+                 if (editButton && editButton.dataset.id == tributeIdx) { // Verify ID matches wrapper
+                      // Prevent starting edit if already editing another card
+                     if (currentlyEditingIdx !== null && currentlyEditingIdx !== tributeIdx) {
+                         alert('Please finish editing the current tribute first.');
+                         return;
                      }
+                     handleStartEdit(tributeIdx);
                      return; // Handled
                  }
 
                  // --- Cancel Edit Button ---
-                 if (target.closest('.cancel-edit-btn')) {
+                 const cancelEditButton = target.closest('.cancel-edit-btn');
+                 if (cancelEditButton) { // No need to check data-id here, only one edit form exists
                      handleCancelEdit();
                      return; // Handled
                  }
 
                  // --- Remove Photo Button (within Edit Form) ---
-                 if (target.closest('.remove-photo-btn')) {
-                      event.preventDefault(); // Prevent form submission if it's inside
-                      const button = target.closest('.remove-photo-btn');
-                      const photoIdx = parseInt(button.dataset.photoidx);
-                      const form = button.closest('.edit-tribute-form');
-                      const tributeIdx = parseInt(form?.dataset.id);
-
-                      if (!isNaN(photoIdx) && !isNaN(tributeIdx) && form) {
+                 const removePhotoButton = target.closest('.remove-photo-btn');
+                 if (removePhotoButton) { // No need to check data-id here, only one edit form exists
+                      event.preventDefault(); // Prevent form submission
+                      const photoIdx = parseInt(removePhotoButton.dataset.photoidx);
+                      const form = removePhotoButton.closest('.edit-tribute-form');
+                      if (!isNaN(photoIdx) && form && parseInt(form.dataset.id) === tributeIdx) {
                           handleRemovePhotoDuringEdit(form, photoIdx);
                       }
                       return; // Handled
                  }
-             });
+
+                  // --- Photo Thumbnail Click (to open Lightbox) ---
+                  const galleryThumb = target.closest('.gallery-thumb');
+                  if (galleryThumb && currentlyEditingIdx === null) { // Only open lightbox in view mode
+                       const allThumbsInCard = cardWrapper.querySelectorAll('.gallery-thumb');
+                       let photoIdx = -1;
+                       allThumbsInCard.forEach((thumb, i) => {
+                            if (thumb === galleryThumb) {
+                                photoIdx = i;
+                            }
+                       });
+                       if (photoIdx !== -1) {
+                            openLightbox(tributeIdx, photoIdx);
+                       }
+                       return; // Handled
+                   }
+             };
 
               // --- Handle Edit Form Submission ---
+              // Find the edit form if it's currently rendered and attach submit listener
              const editForm = grid.querySelector(".edit-tribute-form");
              if (editForm) {
-                  editForm.onsubmit = handleSaveEdit; // Use named function for clarity
+                  // Remove potential old listener if this function is called multiple times while form is active
+                  editForm.onsubmit = null; // Clear previous handler
+                  editForm.onsubmit = handleSaveEdit; // Attach new handler
              }
         }
 
          function handleStartEdit(id) {
+             // Check if another card is already being edited
+             if (currentlyEditingIdx !== null && currentlyEditingIdx !== id) {
+                 alert('Please finish editing the current tribute first.');
+                 return;
+             }
              currentlyEditingIdx = id;
              renderAllTributes(); // Re-render to show the edit form
          }
@@ -493,11 +553,7 @@
 
          function handleDeleteTribute(id) {
               if (id < 0 || id >= tributesData.length) return;
-              const tributeToDelete = tributesData[id];
-              // Clean up blob URLs before removing
-              if (tributeToDelete.photos) {
-                  tributeToDelete.photos.forEach(revokeBlobUrlIfNeeded);
-              }
+              // No special cleanup needed for Data URLs or external URLs on delete
               tributesData.splice(id, 1);
               saveTributes();
               currentlyEditingIdx = null; // Ensure not stuck in edit mode
@@ -509,17 +565,28 @@
              const photoPreviewDiv = formElement.querySelector('.edit-photo-preview');
              if (!photoPreviewDiv) return;
              const photoItems = photoPreviewDiv.querySelectorAll('.edit-photo-item');
-             if (photoIndexToRemove < photoItems.length) {
+             if (photoIndexToRemove >= 0 && photoIndexToRemove < photoItems.length) {
                   photoItems[photoIndexToRemove].remove(); // Remove the visual element
-                  // Update the photo count display if needed (optional)
+
+                  // Update the photo count display and file input state
+                  const currentItems = photoPreviewDiv.querySelectorAll('.edit-photo-item');
+                  const currentCount = currentItems.length;
                   const countSpan = formElement.querySelector('.text-sm.text-purple-500');
+                  const fileInputLabel = formElement.querySelector('.add-photo-input').closest('label');
+                  const fileInput = formElement.querySelector('.add-photo-input');
+
                   if(countSpan) {
-                     const currentCount = photoPreviewDiv.querySelectorAll('.edit-photo-item').length;
                      countSpan.textContent = `Photos (${currentCount}/${MAX_PHOTOS}):`;
                   }
+                  if (fileInputLabel && fileInput) {
+                     if (currentCount < MAX_PHOTOS) {
+                          fileInputLabel.classList.remove('file-input-disabled');
+                          fileInputLabel.querySelector('span').textContent = `Add/Replace Photos (max ${MAX_PHOTOS})`;
+                          fileInput.disabled = false;
+                     }
+                     // If count is still >= MAX_PHOTOS, it stays disabled
+                  }
              }
-             // Add a flag or modify data attribute to indicate removal for the save handler
-             // Or, simpler: The save handler will just read the remaining previews
          }
 
          async function handleSaveEdit(event) {
@@ -532,65 +599,65 @@
                   return;
               }
 
-              const originalTribute = tributesData[id];
               const editedName = form.elements.editName.value.trim();
               const editedMsg = form.elements.editMsg.value.trim();
               const fileInput = form.elements.editPhoto;
+
+              if (!editedName || !editedMsg) {
+                  alert("Please enter your name and message.");
+                  return;
+              }
 
               let finalPhotos = []; // Will hold the URLs for the saved tribute
 
               // Check if new files were uploaded
               if (fileInput.files && fileInput.files.length > 0) {
                   // New files replace ALL existing photos
-                   // Revoke *old* blob URLs first
-                  if (originalTribute.photos) {
-                       originalTribute.photos.forEach(revokeBlobUrlIfNeeded);
-                  }
-
-                  // Process new files
                   const files = Array.from(fileInput.files);
-                  let newBlobUrls = [];
+                  const photoPromises = [];
+
                   for (let i = 0; i < Math.min(MAX_PHOTOS, files.length); i++) {
                       const file = files[i];
                       if (file.type.startsWith('image/') && file.size <= PHOTO_SIZE_LIMIT) {
-                          const url = URL.createObjectURL(file);
-                          finalPhotos.push(url);
-                          newBlobUrls.push(url); // Track newly created URLs for later cleanup
+                          photoPromises.push(fileToDataUrl(file));
                       } else {
                           console.warn(`Skipped file during edit: ${file.name} (invalid type or size)`);
+                          alert(`Skipped file "${file.name}": Invalid type or size exceeds ${PHOTO_SIZE_LIMIT / 1024 / 1024}MB.`);
                       }
                   }
-                   // Schedule cleanup for the new blob URLs
-                   setTimeout(() => { newBlobUrls.forEach(revokeBlobUrlIfNeeded); }, 20000);
+                  try {
+                       finalPhotos = await Promise.all(photoPromises);
+                  } catch(error) {
+                       console.error("Error converting files during edit save:", error);
+                       alert("An error occurred processing photos. Save cancelled.");
+                       return; // Stop saving if photo processing fails
+                  }
 
               } else {
                   // No new files uploaded, keep the photos currently shown in the preview
                   const photoPreviewDiv = form.querySelector('.edit-photo-preview');
                   if (photoPreviewDiv) {
-                      const currentPreviewImages = photoPreviewDiv.querySelectorAll('.edit-photo-item img');
-                       currentPreviewImages.forEach(img => {
-                           if (img.src) {
-                               finalPhotos.push(img.src); // Keep existing URLs (could be blob: or https:)
-                           }
+                       // Read the 'data-photo-src' attribute which holds the original URL
+                       const currentPreviewItems = photoPreviewDiv.querySelectorAll('.edit-photo-item');
+                       currentPreviewItems.forEach(item => {
+                           const src = item.dataset.photoSrc;
+                            if (src && (src.startsWith('data:image/') || src.startsWith('http'))) {
+                                finalPhotos.push(src);
+                            }
                        });
                   }
-                  // Crucially, revoke any *original* blob URLs that were removed during the edit but before save
-                  if(originalTribute.photos) {
-                      originalTribute.photos.forEach(originalUrl => {
-                          if(originalUrl.startsWith('blob:') && !finalPhotos.includes(originalUrl)) {
-                              revokeBlobUrlIfNeeded(originalUrl);
-                          }
-                      });
-                  }
               }
+
+              // Ensure finalPhotos doesn't exceed MAX_PHOTOS (should already be handled by loop limits, but as a safeguard)
+              finalPhotos = finalPhotos.slice(0, MAX_PHOTOS);
 
 
               // Update the tribute data
               tributesData[id] = {
-                  ...originalTribute, // Keep original date etc.
-                  from: editedName || "Anonymous",
-                  msg: editedMsg || "...",
-                  photos: finalPhotos.slice(0, MAX_PHOTOS) // Ensure limit and valid array
+                  ...tributesData[id], // Keep original date etc.
+                  from: editedName,
+                  msg: editedMsg,
+                  photos: finalPhotos // Use the collected Data/External URLs
               };
 
               saveTributes();
@@ -616,21 +683,31 @@
 
             const date = formatNow();
             const photos = [];
-            const addedUrls = []; // Keep track of URLs created in this submission
+            const photoPromises = [];
+
 
             if (fileInput.files && fileInput.files.length > 0) {
                  const files = Array.from(fileInput.files);
                  for (let i = 0; i < Math.min(MAX_PHOTOS, files.length); i++) {
                      const file = files[i];
                      if (file.type.startsWith('image/') && file.size <= PHOTO_SIZE_LIMIT) {
-                          const url = URL.createObjectURL(file);
-                          photos.push(url);
-                          addedUrls.push(url);
+                          photoPromises.push(fileToDataUrl(file)); // Convert to Data URL
                       } else {
-                          alert(`File "${file.name}" is either not an image or exceeds the ${PHOTO_SIZE_LIMIT / 1024 / 1024}MB size limit.`);
+                          console.warn(`Skipped file during upload: ${file.name} (invalid type or size)`);
+                          alert(`Skipped file "${file.name}": Invalid type or size exceeds ${PHOTO_SIZE_LIMIT / 1024 / 1024}MB.`);
                       }
                  }
             }
+
+            try {
+                 const dataUrls = await Promise.all(photoPromises);
+                 photos.push(...dataUrls); // Add generated Data URLs to photos array
+            } catch(error) {
+                 console.error("Error converting files during new post:", error);
+                 alert("An error occurred processing photos. Post cancelled.");
+                 return; // Stop posting if photo processing fails
+            }
+
 
             // Add to the beginning of the data array
             tributesData.unshift({ from: from || "Anonymous", msg, date, photos });
@@ -638,11 +715,22 @@
             renderAllTributes(); // Re-render the whole grid
             form.reset(); // Clear the form
 
-            // Clean up the newly created ObjectURLs after a delay
-            setTimeout(() => {
-                addedUrls.forEach(revokeBlobUrlIfNeeded);
-            }, 20000); // Increased delay
+            // Reset file input state if needed (though reset() should handle this)
+             const photoInputLabel = document.getElementById('photoInputLabel');
+             const photoInput = document.getElementById('photo');
+             photoInputLabel.classList.remove('file-input-disabled');
+             photoInputLabel.querySelector('span').textContent = `Photos (max ${MAX_PHOTOS})`; // Assuming max 5 is default text
+             photoInput.disabled = false;
         };
+
+        // --- Handle file input change for new form (to update label) ---
+        document.getElementById('photo').addEventListener('change', function() {
+            const fileCount = this.files.length;
+            const labelSpan = this.closest('div').querySelector('label span');
+            if (labelSpan) {
+                labelSpan.textContent = `Photos (${fileCount}/${MAX_PHOTOS})`;
+            }
+        });
 
 
         // --- Lightbox Modal Logic ---
@@ -655,7 +743,9 @@
             const tribute = tributesData[tributeIdx];
             if (!tribute.photos || tribute.photos.length === 0) return;
 
-            lightboxPhotoUrls = tribute.photos.filter(p => typeof p === 'string' && p.length > 0); // Ensure valid URLs
+            // Ensure we only use valid URLs
+            lightboxPhotoUrls = tribute.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http')));
+
             if (photoIdx < 0 || photoIdx >= lightboxPhotoUrls.length) return;
 
             lightboxCurrentIndex = photoIdx;
@@ -677,7 +767,7 @@
                 return;
             }
 
-            imgTag.src = lightboxPhotoUrls[lightboxCurrentIndex];
+            imgTag.src = escapeHTML(lightboxPhotoUrls[lightboxCurrentIndex]);
             imgTag.alt = `Photo ${lightboxCurrentIndex + 1} from ${escapeHTML(lightboxCurrentFrom)}`;
             captionTag.textContent = `${escapeHTML(lightboxCurrentFrom)}'s photo ${lightboxCurrentIndex + 1} of ${lightboxPhotoUrls.length}`;
 
@@ -689,21 +779,30 @@
             const modal = document.getElementById('galleryModal');
             if (modal) modal.classList.remove('active');
             document.body.style.overflow = '';
+             // Clear photo URLs when closing to free memory/references (Data URLs are fine, but good practice)
+             lightboxPhotoUrls = [];
+             lightboxCurrentIndex = 0;
+             lightboxCurrentFrom = "";
+             document.getElementById('galleryImage').src = ''; // Clear image src
+             document.getElementById('lightboxCaption').textContent = ''; // Clear caption
         }
 
         document.getElementById('closeGalleryBtn')?.addEventListener('click', closeLightbox);
         document.getElementById('galleryModal')?.addEventListener('click', function(e) {
-            if (e.target === this) closeLightbox(); // Close if clicking background
+            // Check if the click was directly on the modal background
+             if (e.target === this || e.target.classList.contains('gallery-img-viewer')) { // Also close if clicking the image directly (optional)
+                closeLightbox();
+            }
         });
         document.getElementById('nextPhoto')?.addEventListener('click', (e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // Prevent modal background click if controls are clicked
             if (lightboxCurrentIndex < lightboxPhotoUrls.length - 1) {
                 lightboxCurrentIndex++;
                 updateLightboxView();
             }
         });
         document.getElementById('prevPhoto')?.addEventListener('click', (e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // Prevent modal background click if controls are clicked
             if (lightboxCurrentIndex > 0) {
                 lightboxCurrentIndex--;
                 updateLightboxView();
@@ -720,28 +819,23 @@
         });
 
 
-        // --- Initialization and Cleanup ---
+        // --- Initialization ---
         document.addEventListener("DOMContentLoaded", function() {
             renderAllTributes();
             // Initial animation effect
             setTimeout(() => {
                 const grid = document.getElementById('tributesGrid');
                 if(grid) {
-                    grid.style.transition = 'transform 0.7s ease-out';
-                    grid.style.transform = 'scale(1.03)';
-                    setTimeout(() => {
-                         grid.style.transform = 'scale(1)';
-                    }, 550);
+                    // grid.style.transition = 'transform 0.7s ease-out'; // Removed, can interfere with card animations
+                    // grid.style.transform = 'scale(1.03)';
+                    // setTimeout(() => {
+                    //      grid.style.transform = 'scale(1)';
+                    // }, 550);
                 }
             }, 320);
         });
 
-        window.addEventListener('beforeunload', () => {
-            // Attempt to clean up any remaining blob URLs from the current data state
-            tributesData.forEach(t => {
-                if (t.photos) t.photos.forEach(revokeBlobUrlIfNeeded);
-            });
-        });
+        // No window.addEventListener('beforeunload') needed with Data URLs
 
     </script>
 </body>
