@@ -212,303 +212,427 @@
   </footer>
 
 <script>
-  // --- STATE & UTIL ---
-  function formatNow() {
-    const d = new Date();
-    return d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-  const starterTributes = [
-    {
-      from: "Zoe",
-      msg: "Thank you for being such a patient and inspiring teacher. Happy retirement!",
-      date: "May 17, 2024",
-      photos: [
-        "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=320&h=220&facepad=1"
-      ]
-    },
-    {
-      from: "Ming",
-      msg: "I'll always remember your fun lessons and kind smile. You made school a happy place!",
-      date: "May 18, 2024",
-      photos: []
-    },
-    {
-      from: "Alicia",
-      msg: "Wishing you endless days of gardening and naps. You've earned it, Teacher!",
-      date: "May 19, 2024",
-      photos: [
-        "https://images.unsplash.com/photo-1444065381814-865dc9da92c0?auto=format&fit=facearea&w=340&h=340&facepad=3",
-        "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=320&h=220&facepad=2"
-      ]
+// --- STATE & UTIL ---
+let tributes = []; // Will be populated by fetching from the backend
+let editingIndex = null; // Kept for potential future edit UI state
+
+function escapeHtml(str) {
+  if (typeof str !== 'string') return ''; // Handle non-string input
+  return str.replace(/[&<>"']/g, s => ({
+    '&': '&', '<': '<', '>': '>', '"': '"', "'": '''
+  })[s]);
+}
+
+// Helper to format date string from DB (e.g., ISO string or SQLite format)
+function formatDateString(dbDateString) {
+    if (!dbDateString) return '';
+    try {
+        // Turso/SQLite often returns dates in a format JS can parse
+        const date = new Date(dbDateString);
+        // Adjust formatting if needed
+        return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+        console.error("Error formatting date:", dbDateString, e);
+        return ''; // Return empty string or the original string on error
     }
-  ];
-  function getStorageKey() { return "teacherRetireTributes"; }
-  function getTributes() {
-    const stored = localStorage.getItem(getStorageKey());
-    if(stored) {
-      try { return JSON.parse(stored); } catch { return []; }
-    }
-    return JSON.parse(JSON.stringify(starterTributes));
-  }
-  function saveTributes(arr) {
-    localStorage.setItem(getStorageKey(), JSON.stringify(arr));
-  }
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, s=>({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    })[s]);
+}
+
+
+// --- RENDERING ---
+
+function renderAllTributes() {
+  const grid = document.getElementById("tributesGrid");
+  grid.innerHTML = ""; // Clear existing grid
+  const emptyState = document.getElementById('emptyState');
+
+  if (!tributes || !tributes.length) {
+    emptyState.classList.remove('hidden');
+    return;
   }
 
-  let tributes = getTributes();
-  let editingIndex = null;
-
-  // --- RENDERING ---
-  function renderAllTributes() {
-    const grid = document.getElementById("tributesGrid");
-    grid.innerHTML = "";
-    if(!tributes.length) {
-      document.getElementById('emptyState').classList.remove('hidden');
-      return;
-    }
-    document.getElementById('emptyState').classList.add('hidden');
-    tributes.forEach((trb, idx) => {
-      grid.innerHTML += renderTributeCard(trb, idx);
-    });
-    attachCardEventListeners();
-  }
-  // Fan gallery for up to 4 photos, fan out
-  function renderFanGallery(photos, tributeIdx) {
-    if(!photos || !photos.length) return `
-      <div class="w-20 h-20 flex items-center justify-center text-pink-300 rounded-full bg-pink-50 border-2 border-pink-100 shadow mb-3 text-3xl"><i class="fa-solid fa-flower"></i></div>
-    `;
-    let imgMarkup = "";
-    let n = Math.min(photos.length,4);
-    let spread = (n === 1) ? [0] :
-                 (n === 2) ? [-18, 18] :
-                 (n === 3) ? [-18, 0, 18] :
-                             [-24, -8, 8, 24];
-    let shiftBase = (n-1)*49/2;
-    for(let i = 0; i < n; i++) {
-      let ang = spread[i];
-      let l = (i*49) - shiftBase;
-      imgMarkup += `<img
-        src="${photos[i]}"
-        class="fan-img"
-        data-tidx="${tributeIdx}"
-        data-pidx="${i}"
-        tabindex="0"
-        style="transform:rotate(${ang}deg) translateX(${l}px);"
-        alt="Tribute Photo ${i+1}"
-      >`;
-    }
-    return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
-  }
-
-  function renderTributeCard(tribute, idx) {
-    const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
-    return `
-      <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}">
-        <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
-          <button title="Edit" data-act="edit" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-pen"></i>
-          </button>
-          <button title="Delete" data-act="delete" class="text-purple-400 hover:text-pink-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
-        ${renderFanGallery(tribute.photos, idx)}
-        <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
-        <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg).replace(/\n/g, "<br>")}</div>
-        <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-          <i class="fa-solid ${icons[idx % icons.length]}"></i>
-          <span>${tribute.date || ''}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  // --- FORM/CRUD LOGIC ---
-  document.getElementById('tributeForm').onsubmit = async function(e) {
-    e.preventDefault();
-    const from = document.getElementById('fromName').value.trim() || "Anonymous";
-    const msg = document.getElementById('message').value.trim();
-    const date = formatNow();
-    const fileInput = document.getElementById('photos');
-    let photos = [];
-    if(fileInput.files.length) {
-      for(let i=0; i<fileInput.files.length && photos.length<4; i++) {
-        const f = fileInput.files[i];
-        if(f.type.startsWith('image/') && f.size<6*1024*1024) {
-          photos.push(URL.createObjectURL(f));
-        }
-      }
-    }
-    const editIndex = document.getElementById('editIndex').value;
-    if(editIndex !== "") {
-      tributes[parseInt(editIndex)].from = from;
-      tributes[parseInt(editIndex)].msg = msg;
-      // only update photos if some uploaded anew
-      if(photos.length) tributes[parseInt(editIndex)].photos = photos;
-      tributes[parseInt(editIndex)].date = formatNow();
+  emptyState.classList.add('hidden');
+  tributes.forEach((trb, idx) => {
+    // Ensure trb has the expected structure {id, from, msg, photos, date} from the API
+    if (trb && typeof trb === 'object') {
+        grid.innerHTML += renderTributeCard(trb, idx);
     } else {
-      tributes.unshift({from, msg, date, photos});
+        console.warn("Skipping invalid tribute data:", trb);
     }
-    saveTributes(tributes);
-    renderAllTributes();
+  });
+  attachCardEventListeners(); // Re-attach listeners for modal, hover effects etc.
+}
+
+// Fan gallery for up to 4 photos, fan out
+function renderFanGallery(photos, tributeIdx) {
+  // Ensure photos is an array, default to empty if null/undefined
+  const photoArray = Array.isArray(photos) ? photos : [];
+
+  if (!photoArray.length) return `
+    <div class="w-20 h-20 flex items-center justify-center text-pink-300 rounded-full bg-pink-50 border-2 border-pink-100 shadow mb-3 text-3xl"><i class="fa-solid fa-flower"></i></div>
+  `;
+
+  let imgMarkup = "";
+  let n = Math.min(photoArray.length, 4);
+  let spread = (n === 1) ? [0] :
+               (n === 2) ? [-18, 18] :
+               (n === 3) ? [-18, 0, 18] :
+                           [-24, -8, 8, 24];
+  // Adjust shiftBase calculation slightly for potentially fewer images
+  let shiftBase = n > 1 ? (n - 1) * 49 / 2 : 0;
+
+  for (let i = 0; i < n; i++) {
+    let ang = spread[i];
+    // Calculate left position relative to center of the stack
+    let l = (n === 1) ? 0 : (i * 49) - shiftBase;
+    imgMarkup += `<img
+      src="${escapeHtml(photoArray[i])}" // Escape photo URLs just in case
+      class="fan-img"
+      data-tidx="${tributeIdx}"
+      data-pidx="${i}"
+      tabindex="0"
+      style="transform:rotate(${ang}deg) translateX(${l}px);"
+      alt="Tribute Photo ${i+1}"
+      onerror="this.style.display='none'" // Hide img if src is invalid/fails to load
+    >`;
+  }
+  // Adjust width of fan-stack container based on number of images
+  const stackWidth = (n === 1) ? 98 : (n === 2) ? 140 : (n === 3) ? 190 : 240;
+  return `<div class="fan-stack mb-1 mx-auto" style="width:${stackWidth}px;">${imgMarkup}</div>`;
+}
+
+
+function renderTributeCard(tribute, idx) {
+  // tribute object structure from API: { id, from, msg, photos, date }
+  const icons = ['fa-flower', 'fa-apple-whole', 'fa-star', 'fa-heart', 'fa-seedling', 'fa-book'];
+  const tributeId = tribute.id || idx; // Use DB id if available, fallback to index
+
+  // ** NOTE: Edit/Delete buttons are disabled as backend functions are not implemented **
+  return `
+    <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}" data-id="${tributeId}">
+      <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
+        <button title="Edit (disabled)" data-act="edit" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button title="Delete (disabled)" data-act="delete" class="text-purple-400 hover:text-pink-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+      ${renderFanGallery(tribute.photos, idx)}
+      <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
+      <div class="text-gray-700 mb-3 text-center break-words" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg).replace(/\n/g, "<br>")}</div>
+      <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
+        <i class="fa-solid ${icons[idx % icons.length]}"></i>
+        <span>${formatDateString(tribute.date) || ''}</span>
+      </div>
+    </div>
+  `;
+}
+
+// --- API Interaction ---
+async function fetchAndRenderTributes() {
+  const grid = document.getElementById("tributesGrid");
+  const emptyState = document.getElementById('emptyState');
+  grid.innerHTML = '<p class="text-purple-400 text-center col-span-full italic">Loading tributes...</p>'; // Show loading state
+  emptyState.classList.add('hidden');
+
+  try {
+    // Call the Netlify function endpoint
+    const response = await fetch('/.netlify/functions/get-tributes');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    tributes = await response.json(); // Update the global tributes array
+    renderAllTributes(); // Render using the fetched data
+
+  } catch (error) {
+    console.error("Failed to fetch tributes:", error);
+    grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check your connection and try again later.</p>';
+    emptyState.classList.add('hidden');
+  }
+}
+
+
+// --- FORM SUBMISSION ---
+document.getElementById('tributeForm').onsubmit = async function(e) {
+  e.preventDefault();
+  const submitBtn = document.getElementById('submitBtn');
+  const submitBtnText = document.getElementById('submitBtnText');
+  const originalBtnText = submitBtnText.textContent;
+  submitBtn.disabled = true;
+  submitBtnText.textContent = 'Sharing...';
+
+  const from = document.getElementById('fromName').value.trim() || "Anonymous";
+  const msg = document.getElementById('message').value.trim();
+  const fileInput = document.getElementById('photos');
+
+  // **Image Handling Limitation:**
+  // Storing blob: URLs from createObjectURL won't work persistently.
+  // For a real solution, you need to upload files to a service (e.g., Cloudinary, S3, Netlify Large Media)
+  // and store the permanent URLs. For now, we'll send an empty array or placeholder URLs if needed.
+  let photos = []; // Send empty array for now. Implement proper upload later.
+
+  // Example of how you *might* handle file selection if you were uploading:
+  // if (fileInput.files.length > 0) {
+  //    // Add logic here to upload files and get back permanent URLs
+  //    // For now, we just acknowledge files were selected but don't process them into the DB correctly.
+  //    console.log("Files selected, but upload logic is not implemented.");
+  // }
+
+
+  const newTributeData = { from, msg, photos }; // 'date' is added by the backend
+
+  try {
+    // Call the Netlify function endpoint to add the tribute
+    const response = await fetch('/.netlify/functions/add-tribute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newTributeData)
+    });
+
+    if (!response.ok) {
+      // Try to get error message from backend response body
+      let errorMsg = `HTTP error! status: ${response.status}`;
+      try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg; // Use backend error if available
+      } catch (parseError) {
+          // Ignore if response body isn't valid JSON
+      }
+      throw new Error(errorMsg);
+    }
+
+    // const addedTribute = await response.json(); // Optional: use the returned tribute data
+
+    // **Successfully added! Reset form and re-fetch all tributes to show the new one.**
     document.getElementById('tributeForm').reset();
-    document.getElementById('submitBtnText').textContent = "Share";
+    await fetchAndRenderTributes(); // Refresh the list from the database
+
+  } catch (error) {
+    console.error("Failed to add tribute:", error);
+    alert(`Error sharing tribute: ${error.message}`); // Show error to user
+  } finally {
+    // Re-enable the button and restore text regardless of success/failure
+    submitBtn.disabled = false;
+    submitBtnText.textContent = originalBtnText;
+    // Reset edit state if you implement it
     document.getElementById('cancelEditBtn').classList.add('hidden');
     document.getElementById('editIndex').value = "";
-    if(photos.length) setTimeout(() => photos.forEach(p => {
-      if(p.startsWith('blob:')) try { URL.revokeObjectURL(p);}catch{}
-    }), 10000);
-  };
-  document.getElementById('cancelEditBtn').onclick = function() {
-    document.getElementById('tributeForm').reset();
-    document.getElementById('submitBtnText').textContent = "Share";
-    document.getElementById('cancelEditBtn').classList.add('hidden');
-    document.getElementById('editIndex').value = "";
-  };
+  }
+};
 
-  // --- Card Buttons / Image Events ---
-  function attachCardEventListeners() {
-    // Edit & Delete buttons
-    document.querySelectorAll('.tribute-card [data-act="edit"]').forEach(btn => {
-      btn.onclick = function(e) {
-        e.stopPropagation();
-        const idx = btn.closest('.tribute-card').getAttribute('data-cardidx');
-        loadEdit(idx);
-      }
-    });
-    document.querySelectorAll('.tribute-card [data-act="delete"]').forEach(btn => {
-      btn.onclick = function(e) {
-        e.stopPropagation();
-        const idx = btn.closest('.tribute-card').getAttribute('data-cardidx');
-        if(confirm('Delete this tribute?')) {
-          let toDel = tributes[idx];
-          if(toDel && toDel.photos) toDel.photos.forEach(ph => {
-            if(ph && ph.startsWith('blob:')) try{URL.revokeObjectURL(ph);}catch{}
-          });
-          tributes.splice(idx,1);
-          saveTributes(tributes);
-          renderAllTributes();
-        }
-      }
-    });
-    // Fan Image modal launch & animate
-    document.querySelectorAll('.fan-img').forEach(img => {
-      img.onclick = function(e) {
-        e.stopPropagation();
-        const tIdx = parseInt(img.getAttribute("data-tidx"));
-        const pIdx = parseInt(img.getAttribute("data-pidx"));
-        showModalGallery(tIdx, pIdx);
-      };
-      img.onkeydown = function(e) {
-        if(e.key==='Enter'||e.key===' '){img.click();}
-      }
-      // Animate fan images on hover/mobile in-view
-      img.classList.remove('fan-anim', 'fan-expanded', 'fan-pop');
-      img.addEventListener('mouseenter', function() {
-        img.classList.add('fan-expanded');
-      });
-      img.addEventListener('mouseleave', function() {
-        img.classList.remove('fan-expanded');
-      });
-      if('IntersectionObserver' in window) {
-        let obs = new IntersectionObserver(function(entries){
-          entries.forEach(entry => {
-            if(entry.isIntersecting){
-              img.classList.add('fan-pop');
-              setTimeout(()=>img.classList.remove('fan-pop'),700);
-            }
-          });
-        }, {threshold:0.5});
-        obs.observe(img);
-      }
-    });
-    // Animate cards on mobile/in-viewport
-    if('IntersectionObserver' in window){
-      document.querySelectorAll('.tribute-card').forEach(card => {
-        card.classList.remove('card-mobile-anim');
-        let observer = new IntersectionObserver(function(entries){
-          entries.forEach(entry => {
-            if(entry.isIntersecting){
-              card.classList.add('card-mobile-anim');
-              setTimeout(()=>card.classList.remove('card-mobile-anim'),690);
-            }
-          });
-        }, {threshold:0.42});
-        observer.observe(card);
-      });
+// Cancel Edit Button (remains the same, just resets the form)
+document.getElementById('cancelEditBtn').onclick = function() {
+  document.getElementById('tributeForm').reset();
+  document.getElementById('submitBtnText').textContent = "Share";
+  document.getElementById('cancelEditBtn').classList.add('hidden');
+  document.getElementById('editIndex').value = "";
+};
+
+
+// --- Card Buttons / Image Events ---
+function attachCardEventListeners() {
+  // --- Edit & Delete Buttons (Currently Disabled Logic) ---
+  // You would need to implement backend functions (e.g., /delete-tribute?id=..., /update-tribute)
+  // and then update this logic to call those functions using the 'data-id' attribute.
+  document.querySelectorAll('.tribute-card [data-act="edit"]').forEach(btn => {
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      alert("Edit functionality is not yet implemented.");
+      // Original logic (would need adaptation for backend):
+      // const idx = btn.closest('.tribute-card').getAttribute('data-cardidx');
+      // const dbId = btn.closest('.tribute-card').getAttribute('data-id');
+      // loadEdit(idx, dbId); // Pass dbId too
     }
+  });
+  document.querySelectorAll('.tribute-card [data-act="delete"]').forEach(btn => {
+    btn.onclick = async function(e) { // Make async if calling backend
+      e.stopPropagation();
+      alert("Delete functionality is not yet implemented.");
+      // Original logic (would need adaptation for backend):
+      // const cardElement = btn.closest('.tribute-card');
+      // const idx = cardElement.getAttribute('data-cardidx');
+      // const dbId = cardElement.getAttribute('data-id');
+      // if (confirm('Delete this tribute?')) {
+      //    try {
+      //       // Example: await fetch(`/.netlify/functions/delete-tribute?id=${dbId}`, { method: 'DELETE' });
+      //       await fetchAndRenderTributes(); // Refresh list after successful delete
+      //    } catch (error) {
+      //        console.error("Failed to delete tribute:", error);
+      //        alert("Could not delete tribute.");
+      //    }
+      // }
+    }
+  });
+
+  // --- Fan Image modal launch & animate ---
+  document.querySelectorAll('.fan-img').forEach(img => {
+    // Click handler
+    img.onclick = function(e) {
+      e.stopPropagation();
+      // Use data-tidx to find the tribute in the *current* tributes array
+      const tributeIdx = parseInt(img.getAttribute("data-tidx"));
+      const photoIdx = parseInt(img.getAttribute("data-pidx"));
+      if (!isNaN(tributeIdx) && !isNaN(photoIdx) && tributes[tributeIdx]) {
+          showModalGallery(tributeIdx, photoIdx);
+      } else {
+          console.error("Could not find tribute or photo index for modal");
+      }
+    };
+    // Keyboard accessibility
+    img.onkeydown = function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { img.click(); }
+    }
+    // Hover/Focus animation
+    img.classList.remove('fan-anim', 'fan-expanded', 'fan-pop'); // Reset states
+    img.addEventListener('mouseenter', function() { img.classList.add('fan-expanded'); });
+    img.addEventListener('mouseleave', function() { img.classList.remove('fan-expanded'); });
+    img.addEventListener('focus', function() { img.classList.add('fan-expanded'); }); // Add focus style
+    img.addEventListener('blur', function() { img.classList.remove('fan-expanded'); }); // Remove focus style
+
+    // Intersection Observer for pop animation (remains the same)
+    if ('IntersectionObserver' in window) {
+      let obs = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            img.classList.add('fan-pop');
+            // Use animationend event for more reliable removal
+            img.addEventListener('animationend', () => {
+                img.classList.remove('fan-pop');
+            }, { once: true });
+          }
+        });
+      }, { threshold: 0.5 });
+      obs.observe(img);
+    }
+  });
+
+  // Animate cards on mobile/in-viewport (remains the same)
+  if ('IntersectionObserver' in window) {
+    document.querySelectorAll('.tribute-card').forEach(card => {
+      card.classList.remove('card-mobile-anim'); // Reset state
+      let observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            card.classList.add('card-mobile-anim');
+             card.addEventListener('animationend', () => {
+                card.classList.remove('card-mobile-anim');
+            }, { once: true });
+          }
+        });
+      }, { threshold: 0.42 });
+      observer.observe(card);
+    });
   }
-  function loadEdit(idx) {
-    let t = tributes[idx];
-    document.getElementById('fromName').value = t.from;
-    document.getElementById('message').value = t.msg;
-    document.getElementById('editIndex').value = idx;
-    document.getElementById('submitBtnText').textContent = "Update";
-    document.getElementById('cancelEditBtn').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// --- Load Edit Form (Currently Disabled Logic) ---
+// This would need significant changes to handle fetching the specific tribute
+// data by ID and implementing an update function/endpoint.
+function loadEdit(idx, dbId) { // Would need dbId
+    alert("Edit functionality is not yet implemented.");
+    // Original logic (for reference):
+    // let t = tributes[idx];
+    // document.getElementById('fromName').value = t.from;
+    // document.getElementById('message').value = t.msg;
+    // document.getElementById('editIndex').value = idx; // Might use dbId instead
+    // document.getElementById('submitBtnText').textContent = "Update";
+    // document.getElementById('cancelEditBtn').classList.remove('hidden');
+    // window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+
+// --- MODAL GALLERY LOGIC --- (Remains largely the same, operates on the global 'tributes' array)
+let modalTributeIdx = 0, modalPhotoIdx = 0;
+
+function showModalGallery(tributeIdx, photoIdx) {
+  // Ensure indices are valid for the current tributes array
+  if (tributeIdx < 0 || tributeIdx >= tributes.length || !tributes[tributeIdx].photos) {
+      console.error("Invalid tribute index or missing photos for modal:", tributeIdx);
+      return;
+  }
+  const photos = tributes[tributeIdx].photos;
+   if (photoIdx < 0 || photoIdx >= photos.length) {
+      console.error("Invalid photo index for modal:", photoIdx);
+      return;
   }
 
-  // --- MODAL GALLERY LOGIC ---
-  let modalTributeIdx = 0, modalPhotoIdx = 0;
-  function showModalGallery(tributeIdx, photoIdx) {
-    modalTributeIdx = tributeIdx;
-    modalPhotoIdx = photoIdx;
+  modalTributeIdx = tributeIdx;
+  modalPhotoIdx = photoIdx;
+  renderModalImage(); // Render the specific image
+  document.getElementById("galleryModal").classList.remove("hidden");
+  document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
+
+function renderModalImage() {
+  // Assumes modalTributeIdx and modalPhotoIdx are set correctly by showModalGallery
+  let t = tributes[modalTributeIdx];
+  let photos = t.photos || []; // Default to empty array
+
+  // Double check indices are still valid before accessing
+  if (modalPhotoIdx < 0 || modalPhotoIdx >= photos.length) {
+      console.error("Modal photo index out of bounds during render:", modalPhotoIdx);
+      closeModalGallery(); // Close modal if data is inconsistent
+      return;
+  }
+
+  document.getElementById('modalImg').src = photos[modalPhotoIdx];
+  document.getElementById('galleryCaption').textContent = `${escapeHtml(t.from || "Anonymous")}: ${modalPhotoIdx + 1} / ${photos.length}`;
+
+  // Toggle nav buttons
+  document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0);
+  document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx === (photos.length - 1));
+}
+
+function closeModalGallery() {
+  document.getElementById("galleryModal").classList.add("hidden");
+  document.getElementById('modalImg').src = ''; // Clear image src
+  document.body.style.overflow = ''; // Restore background scroll
+}
+
+// Modal Event Listeners (remain the same)
+document.getElementById('closeModalBtn').onclick = closeModalGallery;
+document.getElementById('modalBG').onclick = closeModalGallery;
+
+document.getElementById('prevImgBtn').onclick = function(e) {
+  e.stopPropagation(); // Prevent background click
+  if (modalPhotoIdx > 0) {
+    modalPhotoIdx--;
     renderModalImage();
-    document.getElementById("galleryModal").classList.remove("hidden");
-    document.body.style.overflow='hidden';
   }
-  function renderModalImage() {
-    let t = tributes[modalTributeIdx];
-    let photos = t.photos || [];
-    if(!photos.length){ document.getElementById("galleryModal").classList.add("hidden"); return;}
-    document.getElementById('modalImg').src = photos[modalPhotoIdx];
-    document.getElementById('galleryCaption').textContent = (t.from || "Anonymous")+": "+(modalPhotoIdx+1)+" / "+photos.length;
-    document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx===0);
-    document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx==(photos.length-1));
-  }
-  function closeModalGallery(){
-    document.getElementById("galleryModal").classList.add("hidden");
-    document.getElementById('modalImg').src='';
-    document.body.style.overflow='';
-  }
-  document.getElementById('closeModalBtn').onclick = closeModalGallery;
-  document.getElementById('modalBG').onclick = closeModalGallery;
-  document.getElementById('prevImgBtn').onclick = function(e){
-    e.stopPropagation();
-    if(modalPhotoIdx>0){
-      modalPhotoIdx--;
-      renderModalImage();
-    }
-  };
-  document.getElementById('nextImgBtn').onclick = function(e){
-    e.stopPropagation();
-    let t = tributes[modalTributeIdx];
-    if(modalPhotoIdx < t.photos.length-1){
-      modalPhotoIdx++;
-      renderModalImage();
-    }
-  };
-  window.addEventListener("keydown", function(e){
-    if(document.getElementById("galleryModal").classList.contains("hidden")) return;
-    if(e.key=="ArrowLeft") document.getElementById('prevImgBtn').click();
-    if(e.key=="ArrowRight") document.getElementById('nextImgBtn').click();
-    if(e.key=="Escape") closeModalGallery();
-  });
+};
 
-  // --- INITIALIZE ---
-  document.addEventListener("DOMContentLoaded", function() {
-    renderAllTributes();
-    setTimeout(()=>{document.getElementById('tributesGrid').classList.add('transition','duration-700','ease-out','scale-105');
-      setTimeout(()=>{document.getElementById('tributesGrid').classList.remove('scale-105');}, 420);
-    }, 290);
-  });
-  window.onbeforeunload = () => {
-    tributes.forEach(t=>{ t.photos && t.photos.forEach(ph=>{ if(ph && ph.startsWith('blob:')) try{URL.revokeObjectURL(ph);}catch{} }) });
-  };
+document.getElementById('nextImgBtn').onclick = function(e) {
+  e.stopPropagation(); // Prevent background click
+  let t = tributes[modalTributeIdx];
+  if (t && t.photos && modalPhotoIdx < t.photos.length - 1) {
+    modalPhotoIdx++;
+    renderModalImage();
+  }
+};
+
+window.addEventListener("keydown", function(e) {
+  if (document.getElementById("galleryModal").classList.contains("hidden")) return; // Only act if modal is open
+  if (e.key == "ArrowLeft") { document.getElementById('prevImgBtn').click(); }
+  if (e.key == "ArrowRight") { document.getElementById('nextImgBtn').click(); }
+  if (e.key == "Escape") { closeModalGallery(); }
+});
+
+
+// --- INITIALIZE ---
+document.addEventListener("DOMContentLoaded", function() {
+  fetchAndRenderTributes(); // Fetch data and render when the page is ready
+
+  // Keep the initial grid animation if desired, maybe trigger after fetch?
+  // Consider triggering this inside fetchAndRenderTributes after data loads.
+   setTimeout(()=>{
+      const grid = document.getElementById('tributesGrid');
+      if (grid.children.length > 0) { // Only animate if there are cards
+         grid.classList.add('transition','duration-700','ease-out','scale-105');
+         setTimeout(()=>{ grid.classList.remove('scale-105'); }, 420);
+      }
+   }, 500); // Delay slightly longer to allow fetch/render
+});
+
 </script>
 </body>
 </html>
