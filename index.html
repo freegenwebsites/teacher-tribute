@@ -6,19 +6,12 @@
   <title>Retiring Teacher Tribute Board</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
   <style>
-    body { font-family: 'Quicksand', 'Indie Flower', cursive, sans-serif; background: linear-gradient(110deg, #fde7fb 0%, #e6e8ff 100%);}
-    .tribute-card {
-      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
-      position: relative;
-      background: #fff9fe;
-    }
-    /* Apply hover effects also when .touched class is present (for mobile) */
-    .tribute-card:hover, .tribute-card.touched {
-      transform: translateY(-6px) scale(1.045) rotate(-1.5deg);
-      box-shadow: 0 8px 28px rgba(180, 138, 255, 0.18), 0 1.5px 8px rgba(122, 122, 216, 0.17);
-      z-index: 10;
+    body {
+      font-family: 'Quicksand', 'Indie Flower', cursive, sans-serif;
+      background: linear-gradient(110deg, #fde7fb 0%, #e6e8ff 100%);
+      min-height: 100vh;
     }
     .cute-title {
       font-family: 'Indie Flower', cursive;
@@ -27,51 +20,98 @@
       font-size: 2.15rem;
       text-shadow: 0 2px 7px #fed6f5a5;
     }
-    .cute-quote {font-family: 'Indie Flower', cursive;color: #6d4fa8;font-size: 1.08rem;opacity: 0.85;text-align: center;}
+    .cute-quote {
+      font-family: 'Indie Flower', cursive;
+      color: #6d4fa8;
+      font-size: 1.08rem;
+      opacity: 0.85;
+      text-align: center;
+    }
+    .fan-stack {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px auto;
+      position: relative;
+      min-height: 120px;
+    }
+    .fan-img {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      border-radius: 1.1rem;
+      box-shadow: 0 6px 22px rgba(220, 176, 253, 0.26);
+      transform-origin: 50% 80%;
+      position: absolute;
+      cursor: pointer;
+      transition: 
+        box-shadow 0.2s cubic-bezier(0.34, 1.3, 0.47, 1.13), 
+        transform 0.33s cubic-bezier(.38,1.49,.67,.94), 
+        z-index 0.2s;
+      z-index: 1;
+      background: #fffbfe;
+      border: 2.5px solid #ede1fa;
+    }
+    .fan-img.expanded {
+      z-index: 10 !important;
+      box-shadow: 0 12px 42px 0 rgba(220,176,253,0.28);
+      transform: scale(1.22) translateY(-10px) !important;
+    }
+    .tribute-card {
+      transition: box-shadow 0.2s, transform .20s cubic-bezier(0.18,0.95,0.61,0.97);
+      position: relative;
+      background: #fff9fe;
+      overflow: visible;
+    }
+    .tribute-card.animate-in {
+      animation: entryPopIn .7s cubic-bezier(.68,1.6,.5,.82);
+    }
+    @keyframes entryPopIn {
+      0% {transform: scale(.65) translateY(80px); opacity: 0.2;}
+      80% {transform: scale(1.04); opacity: 1;}
+      100% {transform: scale(1);}
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .tribute-card {
+        /* on mobile, animate cards when in view (see js) */
+      }
+    }
+    /* Hide input number arrows in modern browsers */
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0;}
+    input[type="number"] { -moz-appearance: textfield; }
     .floating-heart {
       position: absolute;
-      font-size: 1.2rem;
-      opacity: 0.16;
+      font-size: 1.3rem;
+      opacity: 0.18;
       pointer-events: none;
       animation: floatHeart 8s linear infinite;
     }
     @keyframes floatHeart {
-      0% {transform: translateY(40px) scale(1.3);}
+      0% {transform: translateY(40px) scale(1.2);}
       100% {transform: translateY(-210px) scale(1);}
     }
-    /* Modal (fullscreen image gallery) styles */
-    .gallery-modal-bg {position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(52,28,75,0.58);z-index:50;display:none;align-items:center;justify-content:center;}
-    .gallery-modal-bg.active {display:flex;}
-    .gallery-img-viewer {max-width:91vw;max-height:82vh;box-shadow:0 4px 30px 0 rgba(71,40,116,.27);}
-    .gallery-modal-controls {position:absolute;top:50%;width:100vw;display:flex;justify-content:space-between;z-index:60;pointer-events:none;}
-    .gallery-modal-controls button {pointer-events:auto;}
-
-    /* Collage Gallery grid inside card */
-    .photo-collage {display:grid;gap:6px;}
-    .collage-1 {grid-template-columns:1fr;}
-    .collage-2 {grid-template-columns:repeat(2,1fr);}
-    .collage-3, .collage-4 {grid-template-columns:repeat(2,1fr);}
-    .collage-3 img:nth-child(1) {grid-column:1/3;}
-    .photo-collage img {object-fit:cover;width:100%;height:96px;border-radius:0.7em;transition:box-shadow .18s;}
-    .photo-collage img:hover {box-shadow: 0 4px 16px rgba(235,140,255,0.24);}
-    .collage-1 img {height:180px;}
-    .collage-2 img {height:146px;}
-    .collage-4 img {height:89px;}
-
     .custom-scroll::-webkit-scrollbar { width: 7px;}
     .custom-scroll::-webkit-scrollbar-thumb { background: #d2a9f6; border-radius: 10px;}
     .custom-scroll::-webkit-scrollbar-track { background: #f5efff;}
-    .edit-input, .edit-textarea { outline: 2px solid #b991ed; background: #fbf2ff; }
-    .edit-actions button {margin-right:0.3em;}
+    /* expand anim for fan on tap or scroll-in */
+    .fanImgAnim {
+      animation: fanPop .74s cubic-bezier(.65,1.7,.5,.8);
+    }
+    @keyframes fanPop {
+      0% { transform: scale(.74) rotate(0deg);}
+      70% { transform: scale(1.17) rotate(2deg);}
+      100% { transform: scale(1) rotate(0deg);}
+    }
   </style>
 </head>
-<body class="min-h-screen pb-14 select-none">
-  <!-- Floating hearts for cuteness -->
+<body class="pb-14">
+  <!-- Decorations -->
   <span class="floating-heart left-10 top-20" style="animation-delay:0s; color:#f890b4;"><i class="fa-solid fa-heart"></i></span>
   <span class="floating-heart left-1/2 top-7" style="animation-delay:1.3s; color:#dcb8ff;"><i class="fa-solid fa-heart"></i></span>
-  <span class="floating-heart right-8 top-24" style="animation-delay:0.7s; color:#fcddec;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart right-8 top-28" style="animation-delay:0.7s; color:#fcddec;"><i class="fa-solid fa-heart"></i></span>
   <span class="floating-heart left-1/3 top-32" style="animation-delay:2.8s; color:#fcb6c0;"><i class="fa-solid fa-heart"></i></span>
-  <!-- Title -->
+  <!-- Title/Intro -->
   <div class="text-center mt-8">
     <h1 class="cute-title mb-2">🌷 Happy Retirement, Teacher! 🌈</h1>
     <p class="cute-quote">
@@ -79,21 +119,21 @@
       <span class="text-pink-400 font-semibold">Leave your heartfelt words & pictures below!</span>
     </p>
   </div>
-  <!-- Board Container -->
+  <!-- Board Main -->
   <div class="w-full max-w-5xl mx-auto mt-10 px-3">
     <!-- Add Message Form -->
-    <form id="tributeForm" class="mb-9 sticky top-4 z-20 p-4 flex flex-wrap items-center justify-between rounded-2xl border border-purple-100 shadow-lg bg-white" autocomplete="off">
-       <!-- Added sticky top-4 z-20 for better stickiness -->
+    <form id="tributeForm" class="mb-9 p-4 flex flex-wrap items-center justify-between rounded-2xl border border-purple-100 shadow-lg bg-white" autocomplete="off">
       <div class="flex flex-col w-full sm:w-1/4 mb-2 sm:mb-0 sm:pr-2">
         <label for="fromName" class="text-purple-500 font-semibold mb-1">Your Name</label>
-        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="32" required autocomplete="off" placeholder="Jamie"></div>
+        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="32" required autocomplete="off" placeholder="Jamie"/>
+      </div>
       <div class="flex flex-col w-full sm:w-1/2 mb-2 sm:mb-0 sm:px-2">
         <label for="message" class="text-purple-500 font-semibold mb-1">Message</label>
         <textarea id="message" name="message" rows="2" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="230" required placeholder="Your message..."></textarea>
       </div>
       <div class="flex flex-col w-full sm:w-1/6 sm:px-2 mb-2 sm:mb-0">
-         <label for="photo" class="text-purple-500 font-semibold mb-1">Photo(s)<span class="font-normal text-xs text-gray-400 ml-1">(max 3)</span></label>
-         <input id="photo" name="photo" multiple type="file" accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-purple-50 file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
+        <label for="photo" class="text-purple-500 font-semibold mb-1">Photo(s)<br><span class="font-normal text-xs text-gray-300">(max 4)</span></label>
+        <input id="photo" name="photo" multiple type="file" accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-purple-50"/>
       </div>
       <div class="w-full sm:w-auto flex items-end justify-start sm:justify-end mt-2 sm:mt-0">
         <button type="submit" class="bg-gradient-to-r from-pink-300 to-violet-400 hover:from-rose-200 hover:to-violet-700 font-bold py-2 px-6 text-white rounded-xl focus:outline-none transition-transform transform active:scale-95 shadow">
@@ -101,21 +141,16 @@
         </button>
       </div>
     </form>
-    <!-- Messages Board -->
-    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 custom-scroll transition-all">
-      <!-- Tributes inserted here -->
-    </div>
+    <!-- Tribute Grid -->
+    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 custom-scroll transition-all"></div>
     <div id="emptyState" class="text-center text-purple-300 italic mt-10 text-lg hidden">
       <i class="fa-solid fa-star fa-bounce mr-2"></i>No messages yet. Be the first to post your tribute!
     </div>
-    <div id="galleryModal" class="gallery-modal-bg">
-      <div class="z-50 relative bg-transparent overflow-visible">
-        <button type="button" class="absolute -top-11 right-2 text-2xl text-white bg-pink-600 hover:bg-pink-400 focus:outline-none px-3 py-1 rounded-full z-60" id="closeGalleryBtn" title="Close"><i class="fa-solid fa-xmark"></i></button>
-        <img src="" alt="Gallery Photo" id="galleryImage" class="gallery-img-viewer rounded-3xl border-2 border-white shadow-lg transition-all duration-300" draggable="false">
-        <div class="gallery-modal-controls">
-          <button type="button" class="text-3xl p-3 bg-white bg-opacity-30 hover:bg-opacity-80 rounded-l-full rounded-r-full ml-2" id="prevPhoto" title="Prev"><i class="fa-solid fa-chevron-left"></i></button>
-          <button type="button" class="text-3xl p-3 bg-white bg-opacity-30 hover:bg-opacity-80 rounded-l-full rounded-r-full mr-2" id="nextPhoto" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
-        </div>
+    <!-- Modal for viewing fan image -->
+    <div id="fanModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
+      <div class="relative">
+        <img id="fanModalImg" src="" alt="Tribute Image" class="rounded-2xl shadow-lg max-h-[74vh] max-w-[95vw] border-2 border-white" />
+        <button id="fanModalClose" class="absolute -top-8 right-2 text-white text-2xl bg-pink-700 px-2 py-0.5 rounded-full hover:bg-pink-400 shadow"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
   </div>
@@ -124,8 +159,8 @@
     <span>Made with 💝 for an unforgettable teacher's new adventure.</span>
   </footer>
 <script>
-// --- Data & Utilities ---
-const starterTributes = [ /* Kept the original starter tributes */
+// Starter tributes for demo
+const starterTributes = [
   {
     from: "Zoe",
     msg: "Thank you for being such a patient and inspiring teacher. Happy retirement!",
@@ -150,429 +185,241 @@ const starterTributes = [ /* Kept the original starter tributes */
     ]
   }
 ];
-
+// Util
 function formatNow() {
   const d = new Date();
   return d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
 }
-
 function loadTributes() {
-  const ls = window.localStorage.getItem('retireTributesV2');
-  if(ls) { try { return JSON.parse(ls); } catch { return []; } }
-  return [...starterTributes]; // Use spread to return a copy, not the original
+  const ls = window.localStorage.getItem('retireTributesFanV3');
+  if(ls) {try {return JSON.parse(ls);} catch{ return [];} }
+  return [...starterTributes];
 }
-
 function saveTributes(arr) {
-  window.localStorage.setItem('retireTributesV2', JSON.stringify(arr));
+  window.localStorage.setItem('retireTributesFanV3', JSON.stringify(arr));
 }
-
 function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, s => {
-    return ({'&':'&','<':'<','>':'>','"':'"',"'":'''})[s] || s;
-  });
+  return String(str).replace(/[&<>"']/g, s=>{
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[s]
+  })
 }
-
-// --- Rendering ---
-let galleryPhotoSet = [], galleryPhotoIdx = 0; // For gallery modal
-
-function renderPhotoCollage(photos, tribIdx) {
-  if(!photos || !photos.length) return '';
-  const numPhotos = Math.min(photos.length, 4); // Max 4 visible in collage
-  let collageClass="collage-"+numPhotos;
-  let imgs = '';
-  for(let i=0; i < numPhotos; i++) {
-    // Add error handling for potentially broken image URLs
-    imgs += `<img src="${escapeHtml(photos[i] || '')}" class="gallery-thumb" data-tribidx="${tribIdx}" data-photoidx="${i}" alt="Tribute Photo ${i+1}" loading="lazy" onerror="this.style.display='none'">`;
+// Fan-stacked image markup
+function renderFanStack(photos, tribIdx) {
+  if(!photos||!photos.length) return '';
+  // Fan angles for up to 4
+  let maxAng = 36, spread = (photos.length>1) ? (maxAng/(photos.length-1)) : 0;
+  let baseAng = -0.5 * (maxAng);
+  let imgMarkup = '';
+  let leftMost = (photos.length-1)*42/2;
+  for(let i=0;i<photos.length;i++) {
+    let ang = baseAng + i*spread;
+    let l = (i*42)-(leftMost);
+    imgMarkup += `<img src="${photos[i]}" 
+      class="fan-img" 
+      data-tribidx="${tribIdx}" 
+      data-photoidx="${i}" 
+      alt="Tribute Photo ${i+1}" 
+      style="transform: rotate(${ang}deg) translateX(${l}px);" 
+      loading="lazy"/>`;
   }
-  return `<div class="photo-collage ${collageClass} mb-2 cursor-pointer">${imgs}</div>`;
+  return `<div class="fan-stack w-full mb-2 min-h-[100px]">${imgMarkup}</div>`;
 }
-
+// Tribute card markup
 function renderTributeCard(tribute, idx) {
   let imageMarkup = "";
-  if(tribute.photos && tribute.photos.length > 0) {
-    imageMarkup = renderPhotoCollage(tribute.photos, idx);
+  if(tribute.photos && tribute.photos.length>0) {
+    imageMarkup = renderFanStack(tribute.photos, idx);
   } else {
     imageMarkup = `<div class="w-16 h-16 flex items-center justify-center text-pink-400 rounded-full bg-pink-50 border-2 border-pink-100 mb-2 mx-auto shadow-sm text-3xl">
-      <i class="fa-solid fa-leaf"></i> <!-- Changed icon slightly -->
+      <i class="fa-solid fa-flower"></i>
     </div>`;
   }
-  const icons=['fa-flower','fa-apple-whole','fa-star','fa-heart', 'fa-sun', 'fa-bookmark']; // Added more icons
-
-  // *** IMPORTANT: Use escapeHtml for user-generated content ***
-  const safeFrom = escapeHtml(tribute.from || "Anonymous");
-  const safeMsg = escapeHtml(tribute.msg || "");
-
+  const icons=['fa-flower','fa-apple-whole','fa-star','fa-heart'];
   return `
-    <div class="tribute-card flex flex-col items-center px-5 pt-7 pb-7 rounded-2xl shadow-md min-h-[290px] relative group" data-idx="${idx}">
-      <div class="w-full flex flex-row-reverse gap-1 absolute -top-2 right-2 opacity-0 group-hover:opacity-95 group-[.touched]:opacity-95 transition-opacity z-10"> <!-- Use group-[.touched] for mobile -->
-        <button class="edit-btn text-indigo-500 hover:text-indigo-900 px-2 py-1 focus:outline-none bg-white/70 rounded-full backdrop-blur-sm" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-        <button class="remove-btn text-pink-500 hover:text-pink-900 px-2 py-1 focus:outline-none bg-white/70 rounded-full backdrop-blur-sm" title="Delete"><i class="fa-solid fa-trash"></i></button>
+    <div class="tribute-card flex flex-col items-center px-5 pt-7 pb-8 rounded-2xl shadow-md min-h-[290px] relative group bg-white bg-opacity-90">
+      <div class="w-full flex flex-row-reverse gap-2 absolute -top-2 right-3 opacity-60 group-hover:opacity-95 transition-opacity z-10">
+        <button class="edit-btn text-indigo-500 hover:text-indigo-900 px-2 py-1 focus:outline-none" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button class="remove-btn text-pink-500 hover:text-pink-900 px-2 py-1 focus:outline-none" title="Delete"><i class="fa-solid fa-trash"></i></button>
       </div>
       ${imageMarkup}
-      <div class="text-purple-500 font-bold mb-1">${safeFrom}</div>
-      <div class="text-gray-700 mb-3 text-center whitespace-pre-line break-words" style="font-family:'Indie Flower',cursive;font-size:1.13rem;">${safeMsg}</div>
+      <div class="text-purple-500 font-bold mb-1">${escapeHtml(tribute.from || "Anonymous")}</div>
+      <div class="text-gray-700 mb-3 text-center whitespace-pre-line" style="font-family:'Indie Flower',cursive;font-size:1.11rem;">${escapeHtml(tribute.msg)}</div>
       <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-        <i class="fa-solid ${icons[idx % icons.length]}"></i>
-        <span>${escapeHtml(tribute.date || "")}</span>
+        <i class="fa-solid ${icons[idx%icons.length]}"></i>
+        <span>${tribute.date||""}</span>
       </div>
     </div>
   `;
 }
-
-function renderAllTributes(){
+// --- RENDER ---
+function renderAllTributes(scrollToTop=true){
   const tributes = loadTributes();
   const grid = document.getElementById('tributesGrid');
   grid.innerHTML = "";
-
   if(!tributes.length) {
     document.getElementById('emptyState').classList.remove('hidden');
     return;
   } else {
     document.getElementById('emptyState').classList.add('hidden');
   }
-
   tributes.forEach((trb, idx) => {
-    grid.innerHTML += renderTributeCard(trb, idx);
+    let div = document.createElement('div');
+    div.innerHTML = renderTributeCard(trb, idx);
+    const card = div.firstElementChild;
+    card.style.opacity="0";
+    // Animate in when mounting
+    setTimeout(()=>{card.style.opacity="1"; card.classList.add('animate-in');}, 60+idx*75);
+    grid.appendChild(card);
+    // Remove/Delete handlers
+    card.querySelector('.remove-btn').onclick = function(e){
+      if(confirm("Remove this tribute? This cannot be undone.")){
+        const tribs = loadTributes();
+        tribs.splice(idx,1);
+        saveTributes(tribs);
+        renderAllTributes();
+      }
+    }
+    card.querySelector('.edit-btn').onclick = function(e){
+      startEditCard(idx,card);
+    }
   });
-
-  // --- Attach Event Listeners ---
-  grid.querySelectorAll('.tribute-card').forEach(card => {
-    const idx = parseInt(card.getAttribute('data-idx')); // Get index from data attribute
-
-    // Gallery Thumbnails
-    card.querySelectorAll('.gallery-thumb').forEach(img => {
-      img.addEventListener('click', e => {
-        e.stopPropagation(); // Prevent card touch event if clicking image
-        const tribIdx = parseInt(img.getAttribute('data-tribidx'));
-        const pIdx = parseInt(img.getAttribute('data-photoidx'));
-        const currentTribs = loadTributes(); // Load fresh data
-        galleryPhotoSet = (currentTribs[tribIdx]?.photos) || [];
-        galleryPhotoIdx = pIdx;
-        if (galleryPhotoSet.length > 0) {
-          openGalleryModal();
-        }
-      });
-    });
-
-    // Remove Button
-    card.querySelector('.remove-btn')?.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent card touch event
-        if(confirm("Remove this tribute? This cannot be undone.")){
-            const currentTribs = loadTributes();
-            currentTribs.splice(idx, 1);
-            saveTributes(currentTribs);
-            renderAllTributes(); // Re-render the whole grid
-        }
-    });
-
-    // Edit Button
-    card.querySelector('.edit-btn')?.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent card touch event
-        startEditCard(idx, card);
-    });
-
-    // ** IMPROVEMENT: Mobile Touch Listener for Hover Effect **
-    card.addEventListener('touchstart', function(e) {
-        // Add 'touched' class only if not clicking on a button/image inside
-         if (!e.target.closest('button') && !e.target.closest('img.gallery-thumb')) {
-            this.classList.add('touched');
-         }
-    }, { passive: true }); // Use passive for better scroll performance
-
-    card.addEventListener('touchend', function() {
-        this.classList.remove('touched');
-    });
-    card.addEventListener('touchcancel', function() { // Handle interruption
-        this.classList.remove('touched');
-    });
-
-    // Optional: Remove 'touched' if user scrolls significantly while touching
-    // let touchStartY = 0;
-    // card.addEventListener('touchstart', function(e) { touchStartY = e.touches[0].clientY; }, { passive: true });
-    // card.addEventListener('touchmove', function(e) {
-    //     if (Math.abs(e.touches[0].clientY - touchStartY) > 10) { // Threshold
-    //         this.classList.remove('touched');
-    //     }
-    // }, { passive: true });
-
-
-  });
+  setTimeout(()=>attachFanImgEvents(), 200);
+  if(scrollToTop) window.scrollTo({top: 0, behavior: "smooth"});
 }
-
-// --- Form Submission ---
+// --- FORM SUBMIT ---
 document.getElementById('tributeForm').onsubmit = async function(e) {
   e.preventDefault();
-  const form = e.target;
-  const fromInput = document.getElementById('fromName');
-  const msgInput = document.getElementById('message');
-  const fileInput = document.getElementById('photo');
-
-  const from = fromInput.value.trim() || "Anonymous";
-  const msg = msgInput.value.trim();
+  const from = document.getElementById('fromName').value.trim() || "Anonymous";
+  const msg = document.getElementById('message').value.trim();
   const date = formatNow();
+  const fileInput = document.getElementById('photo');
   let photos = [];
-  const MAX_PHOTOS = 3;
-  const MAX_SIZE_MB = 3.3;
-
-  if (fileInput.files.length) {
-    // Use Promise.all for cleaner async handling if needed, but simple loop is ok here
-    for (let i = 0; i < fileInput.files.length && photos.length < MAX_PHOTOS; i++) {
+  if(fileInput.files.length) {
+    for(let i=0; i<fileInput.files.length && photos.length<4; i++) {
       const file = fileInput.files[i];
-      if (file.type.startsWith('image/') && file.size < MAX_SIZE_MB * 1024 * 1024) {
-        try {
-            // Using ObjectURL is simple for client-side only
-            const objectURL = URL.createObjectURL(file);
-            photos.push(objectURL);
-        } catch (error) {
-            console.error("Error creating object URL:", error);
-            // Optionally notify user about the failed file
-        }
-      } else {
-          console.warn(`Skipping file ${file.name}: Invalid type or size.`);
-          // Optionally notify user about skipped files
+      if(file.type.startsWith('image/') && file.size<4e6) {
+        // files from input in browser: Use objectURL (local, no upload)
+        photos.push(URL.createObjectURL(file));
       }
     }
   }
-
   let tributes = loadTributes();
-  tributes.unshift({ from, msg, date, photos });
+  tributes.unshift({from, msg, date, photos});
   saveTributes(tributes);
   renderAllTributes();
-  form.reset(); // Reset the form
-
-  // Clean up Object URLs after a delay to ensure images have rendered
-  if (photos.length > 0) {
-    setTimeout(() => {
-        photos.forEach(ph => {
-            if (ph && ph.startsWith('blob:')) {
-                try { URL.revokeObjectURL(ph); } catch (e) { console.error("Error revoking URL:", e); }
-            }
-        });
-    }, 10000); // Increased delay slightly
-  }
+  document.getElementById('tributeForm').reset();
+  setTimeout(() => { photos.forEach(ph=>{ if(ph.startsWith('blob:')) URL.revokeObjectURL(ph); });}, 6500);
 };
-
-// --- Edit Functionality ---
-function startEditCard(idx, cardElem) {
-  let tributes = loadTributes();
-  let t = tributes[idx];
-  // Keep track of Object URLs created during this edit session
-  let newObjectUrls = [];
-
-  // Build edit form inside the card
-  cardElem.classList.remove('touched'); // Ensure no hover state while editing
-  cardElem.innerHTML = `<form class='edit-tribute-form w-full h-full flex flex-col items-center justify-between p-3' autocomplete="off">
-    <input type="text" class="edit-input font-bold px-2 py-1 rounded-lg border border-purple-300 w-11/12 my-2 text-purple-500 text-base text-center" maxlength="32" value="${escapeHtml(t.from || '')}">
-    <textarea class="edit-textarea px-2 py-1 rounded-lg border border-purple-300 w-11/12 my-1 mb-2 text-gray-700 text-center resize-y min-h-[60px]" maxlength="230" rows="3">${escapeHtml(t.msg || '')}</textarea>
-    <div class='edit-photos-container flex justify-center flex-wrap gap-2 mb-1 w-full px-2 overflow-y-auto max-h-[100px] custom-scroll'>
-      ${(t.photos || []).map((ph, i) =>
-        `<span class="relative rounded-lg group/img">
-          <img src="${escapeHtml(ph)}" class="inline-block w-14 h-14 object-cover rounded-lg border border-purple-200 shadow-sm">
-          <button title="Remove" type="button" class="remove-img absolute -top-1 -right-1 text-xs text-center w-5 h-5 leading-5 bg-white border border-pink-400 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white shadow opacity-50 group-hover/img:opacity-100 transition-opacity" data-phidx="${i}"><i class="fa fa-times"></i></button>
+// --- EDIT CARD ---
+function startEditCard(idx,cardElem) {
+  let tribs = loadTributes();
+  let t = tribs[idx];
+  cardElem.innerHTML = `<form class='edit-tribute-form w-full h-full flex flex-col items-center justify-between p-1' autocomplete="off">
+    <input type="text" class="edit-input font-bold px-2 py-1 rounded-xl border border-purple-300 w-4/5 my-2 text-purple-500 text-lg text-center" maxlength="32" value="${escapeHtml(t.from)}">
+    <textarea class="edit-textarea px-2 py-1 rounded-xl border border-purple-300 w-4/5 my-1 mb-2 text-gray-700 text-center resize-none" maxlength="230" rows="3">${escapeHtml(t.msg)}</textarea>
+    <div class='flex justify-center flex-wrap gap-2 mb-1'>
+      ${t.photos&&t.photos.map((ph,i)=>
+        `<span class="relative rounded-lg">
+          <img src="${ph}" class="inline-block w-16 h-16 object-cover rounded-lg border border-purple-200 shadow-md">
+          <button title="Remove" type="button" class="remove-img absolute -top-2 -right-2 text-sm text-center w-6 h-6 leading-5 bg-white border border-pink-400 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white shadow-sm" data-phidx="${i}"><i class="fa fa-times"></i></button>
         </span>`).join("")}
     </div>
-    <label class="w-full text-purple-500 font-medium text-xs mt-2 mb-1 text-center cursor-pointer hover:text-pink-500">
-        <i class="fa fa-image"></i> Add Photo(s) (Max 3 total)
-        <input type="file" accept="image/*" class="edit-photo-uploader sr-only" multiple> <!-- Use sr-only to hide default input, style label instead -->
+    <label class="w-full text-purple-400 font-medium text-xs mb-1"><i class="fa fa-image"></i> Add more photo
+      <input type="file" accept="image/*" class="edit-photo-uploader ml-1 mb-1" style="display:inline;" multiple>
     </label>
-    <div class="edit-actions mt-auto pt-2 w-full flex justify-center gap-2">
+    <div class="edit-actions mt-2 w-full flex justify-center gap-2">
       <button type="submit" class="bg-violet-200 hover:bg-violet-300 text-indigo-700 font-semibold py-1 px-3 rounded-lg">Save</button>
       <button type="button" class="bg-pink-200 hover:bg-pink-300 text-pink-700 font-semibold py-1 px-3 rounded-lg cancel-edit-btn">Cancel</button>
     </div>
   </form>`;
-
-  const photosContainer = cardElem.querySelector('.edit-photos-container');
-
-  // Remove image button listener
-  cardElem.querySelectorAll('.remove-img').forEach(btn => {
-    btn.onclick = function() {
-      const phidx = parseInt(btn.getAttribute('data-phidx'));
-      // Ensure photos array exists and index is valid
-       if (t.photos && t.photos[phidx] !== undefined) {
-           // If it's a temporary blob URL created in this edit session, revoke it now
-           const urlToRemove = t.photos[phidx];
-           if (newObjectUrls.includes(urlToRemove)) {
-               try { URL.revokeObjectURL(urlToRemove); } catch (e) { console.error("Error revoking URL:", e); }
-               newObjectUrls = newObjectUrls.filter(url => url !== urlToRemove); // Remove from temp list
-           }
-           t.photos.splice(phidx, 1); // Remove from the tribute's photo array
-           // Re-render only the photo thumbnails part of the edit form for efficiency
-           renderEditPhotoThumbnails(t.photos, photosContainer, newObjectUrls);
-           // Need to re-attach remove listeners after re-rendering thumbnails
-            attachRemoveImageListeners(cardElem, t, photosContainer, newObjectUrls);
-       }
+  // Remove photo in edit mode
+  cardElem.querySelectorAll('.remove-img').forEach(btn=>{
+    btn.onclick = function(){
+      let phidx = parseInt(btn.getAttribute('data-phidx'));
+      t.photos.splice(phidx,1);
+      startEditCard(idx,cardElem);
     }
   });
-
-  // Add photo listener (Improved Logic)
-  cardElem.querySelector('.edit-photo-uploader').onchange = function(e) {
+  // Add photo (up to 4 in total)
+  cardElem.querySelector('.edit-photo-uploader').onchange = function(e){
     let files = Array.from(e.target.files);
-    let currentPhotoCount = t.photos ? t.photos.length : 0;
-    const MAX_PHOTOS = 3;
-    const MAX_SIZE_MB = 3.3;
-    let addedCount = 0;
-
-    files.forEach(file => {
-      if (currentPhotoCount + addedCount < MAX_PHOTOS && file.type.startsWith('image/') && file.size < MAX_SIZE_MB * 1024 * 1024) {
-        try {
-            const objectURL = URL.createObjectURL(file);
-            if (!t.photos) t.photos = []; // Initialize if it doesn't exist
-            t.photos.push(objectURL);
-            newObjectUrls.push(objectURL); // Track new URL for potential cleanup on cancel
-            addedCount++;
-        } catch (error) {
-             console.error("Error creating object URL during edit:", error);
+    if(files.some(f=>t.photos.length<4 && f.type.startsWith('image/') && f.size<4e6)){
+      files.slice(0,4-t.photos.length).forEach(f=>{
+        let url = URL.createObjectURL(f);
+        t.photos.push(url);
+      });
+      startEditCard(idx,cardElem); // rerender
+    }
+  }
+  cardElem.querySelector('.cancel-edit-btn').onclick = function(){ renderAllTributes(false); }
+  cardElem.querySelector('.edit-tribute-form').onsubmit = function(e){
+    e.preventDefault();
+    t.from = cardElem.querySelector('.edit-input').value.trim().slice(0,32)||"";
+    t.msg = cardElem.querySelector('.edit-textarea').value.trim().slice(0,230)||"";
+    saveTributes(tribs);
+    renderAllTributes(false);
+  }
+}
+// ----- FAN IMAGE EVENTS (expanding, modal) -----
+function attachFanImgEvents() {
+  document.querySelectorAll('.fan-img').forEach(img=>{
+    img.onclick = function(e){
+      e.stopPropagation();
+      let src = img.getAttribute('src');
+      showFanModal(src);
+    }
+    // Mobile: animate on scroll into view instead of hover
+    img.classList.remove('expanded','fanImgAnim');
+    // Using IntersectionObserver for mobile-friendly reveal
+    if(window.fanObs) window.fanObs.disconnect();
+    window.fanObs = new window.IntersectionObserver((ents)=>{
+      ents.forEach(ent=>{
+        if(ent.isIntersecting){
+          ent.target.classList.add("fanImgAnim");
         }
-      } else {
-          console.warn(`Skipping file during edit ${file.name}: Max photos reached, invalid type, or size.`);
+      })
+    },{threshold:.6});
+    window.fanObs.observe(img);
+  });
+}
+// --- MODAL ---
+function showFanModal(src){
+  let m = document.getElementById('fanModal');
+  document.getElementById('fanModalImg').src = src;
+  m.classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+document.getElementById('fanModalClose').onclick = function(){
+  document.getElementById('fanModal').classList.add('hidden');
+  document.body.style.overflow='';
+}
+document.getElementById('fanModal').onclick = function(e){
+  if(e.target===this) document.getElementById('fanModalClose').click();
+}
+document.addEventListener('keydown', function(e){
+  if(document.getElementById('fanModal').classList.contains('hidden')) return;
+  if(e.key==='Escape') document.getElementById('fanModalClose').click();
+});
+// --- Animate on scroll for cards (mobile: no hover) ---
+function applyScrollInAnimForCards() {
+  if (!('IntersectionObserver' in window)) return;
+  let obs = new window.IntersectionObserver((entries)=>{
+    entries.forEach(ent=>{
+      if(ent.isIntersecting){
+        ent.target.classList.add('animate-in');
+        obs.unobserve(ent.target);
       }
     });
-
-    if (addedCount > 0) {
-      // Re-render only the photo thumbnails part of the edit form
-       renderEditPhotoThumbnails(t.photos, photosContainer, newObjectUrls);
-       attachRemoveImageListeners(cardElem, t, photosContainer, newObjectUrls); // Re-attach listeners
-    }
-    // Clear the file input value so the same file can be selected again if removed then re-added
-    e.target.value = null;
-  };
-
-  // Cancel button listener
-  cardElem.querySelector('.cancel-edit-btn').onclick = function() {
-    // Revoke any temporary object URLs created during this cancelled edit
-    newObjectUrls.forEach(url => {
-        try { URL.revokeObjectURL(url); } catch (e) { console.error("Error revoking URL on cancel:", e); }
-    });
-    renderAllTributes(); // Re-render the original card state
-  }
-
-  // Save button listener (form submit)
-  cardElem.querySelector('.edit-tribute-form').onsubmit = function(e) {
-    e.preventDefault();
-    t.from = cardElem.querySelector('.edit-input').value.trim().slice(0, 32) || "";
-    t.msg = cardElem.querySelector('.edit-textarea').value.trim().slice(0, 230) || "";
-    // t.photos is already updated by the add/remove actions
-    saveTributes(tributes); // Save the modified tributes array
-    renderAllTributes(); // Re-render the board
-    // Note: newObjectUrls don't need explicit revoke here, as they are now part of saved data.
-    // The general onbeforeunload will attempt cleanup later, or they persist if needed.
-  }
+  }, {threshold:0.26});
+  document.querySelectorAll(".tribute-card").forEach(card=>{
+    obs.observe(card);
+  });
 }
-// Helper to render just the photo thumbnails in edit mode
-function renderEditPhotoThumbnails(photos, container, newObjectUrls) {
-    container.innerHTML = (photos || []).map((ph, i) =>
-        `<span class="relative rounded-lg group/img">
-          <img src="${escapeHtml(ph)}" class="inline-block w-14 h-14 object-cover rounded-lg border border-purple-200 shadow-sm">
-          <button title="Remove" type="button" class="remove-img absolute -top-1 -right-1 text-xs text-center w-5 h-5 leading-5 bg-white border border-pink-400 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white shadow opacity-50 group-hover/img:opacity-100 transition-opacity" data-phidx="${i}"><i class="fa fa-times"></i></button>
-        </span>`).join("");
-}
-// Helper to re-attach remove image listeners after thumbnail re-render
-function attachRemoveImageListeners(cardElem, tributeData, photosContainer, newObjectUrls) {
-     cardElem.querySelectorAll('.remove-img').forEach(btn => {
-        btn.onclick = function() {
-           const phidx = parseInt(btn.getAttribute('data-phidx'));
-           if (tributeData.photos && tributeData.photos[phidx] !== undefined) {
-               const urlToRemove = tributeData.photos[phidx];
-               if (newObjectUrls.includes(urlToRemove)) {
-                   try { URL.revokeObjectURL(urlToRemove); } catch (e) { console.error("Error revoking URL:", e); }
-                   newObjectUrls = newObjectUrls.filter(url => url !== urlToRemove);
-               }
-               tributeData.photos.splice(phidx, 1);
-               renderEditPhotoThumbnails(tributeData.photos, photosContainer, newObjectUrls); // Re-render thumbnails
-               attachRemoveImageListeners(cardElem, tributeData, photosContainer, newObjectUrls); // Recursively re-attach
-           }
-        }
-    });
-}
-
-
-// --- Gallery Modal Logic ---
-function openGalleryModal() {
-  const modal = document.getElementById('galleryModal');
-  updateGalleryView();
-  modal.classList.add('active');
-  document.body.style.overflow = 'hidden'; // Prevent body scroll when modal is open
-}
-
-function closeGalleryModal() {
-  const modal = document.getElementById('galleryModal');
-  modal.classList.remove('active');
-  document.body.style.overflow = ''; // Restore body scroll
-}
-
-function updateGalleryView() {
-  const img = document.getElementById('galleryImage');
-  if (galleryPhotoSet && galleryPhotoSet.length > 0) {
-    // Ensure index is within bounds
-    galleryPhotoIdx = (galleryPhotoSet.length + galleryPhotoIdx) % galleryPhotoSet.length;
-    img.src = escapeHtml(galleryPhotoSet[galleryPhotoIdx] || ''); // Escape URL just in case
-    img.alt = `Gallery Photo ${galleryPhotoIdx + 1}`;
-    img.style.display = 'block'; // Ensure visible
-    img.onerror = () => { img.style.display = 'none'; /* Hide if image fails to load */ };
-  } else {
-      img.style.display = 'none'; // Hide if no photos
-  }
-}
-
-document.getElementById('closeGalleryBtn').onclick = closeGalleryModal;
-document.getElementById('prevPhoto').onclick = function(e) {
-  if (galleryPhotoSet.length > 1) { // Only navigate if more than one photo
-    galleryPhotoIdx = (galleryPhotoSet.length + galleryPhotoIdx - 1) % galleryPhotoSet.length;
-    updateGalleryView();
-  }
-}
-document.getElementById('nextPhoto').onclick = function(e) {
-  if (galleryPhotoSet.length > 1) {
-    galleryPhotoIdx = (galleryPhotoIdx + 1) % galleryPhotoSet.length;
-    updateGalleryView();
-  }
-}
-// Close modal on clicking background or pressing Esc
-document.getElementById('galleryModal').onclick = function(e) {
-  // Close only if clicking the dark background itself, not the image or buttons
-  if (e.target === this) {
-    closeGalleryModal();
-  }
-}
-document.addEventListener('keydown', function(e) {
-  if (document.getElementById('galleryModal').classList.contains('active')) {
-    if (e.key === 'Escape') { closeGalleryModal(); }
-    if (e.key === 'ArrowRight') { document.getElementById('nextPhoto').click(); }
-    if (e.key === 'ArrowLeft') { document.getElementById('prevPhoto').click(); }
-  }
-});
-
-// --- Initial Load & Cleanup ---
 document.addEventListener("DOMContentLoaded", function() {
   renderAllTributes();
-  // Subtle load animation (optional)
-  const grid = document.getElementById('tributesGrid');
-  if (grid) {
-      grid.style.opacity = '0';
-      grid.style.transform = 'translateY(20px)';
-      setTimeout(() => {
-          grid.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-          grid.style.opacity = '1';
-          grid.style.transform = 'translateY(0)';
-      }, 100); // Short delay
-  }
+  setTimeout(applyScrollInAnimForCards, 400);
 });
-
-window.onbeforeunload = () => {
-    // Attempt to clean up *all* remaining blob URLs associated with tributes in storage
-    try {
-        const tributes = loadTributes();
-        tributes.forEach(t => {
-            (t.photos || []).forEach(ph => {
-            if (ph && ph.startsWith('blob:')) {
-                try { URL.revokeObjectURL(ph); } catch (e) { /* Ignore cleanup errors */ }
-            }
-            });
-        });
-    } catch (e) {
-        console.error("Error during beforeunload cleanup:", e);
-    }
-};
 </script>
 </body>
 </html>
+
