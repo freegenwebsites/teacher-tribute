@@ -2,164 +2,208 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Retiring Teacher Tribute Board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create a tribute board for a retiring teacher with hover animations, fan-like stacking image gallery, and mobile-friendly features">
+  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <!-- Google Fonts: Indie Flower (cute headlines), Quicksand (body) -->
   <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
   <style>
     body {
+      background: linear-gradient(120deg, #f9ecff 0%, #e9e1ff 100%);
       font-family: 'Quicksand', 'Indie Flower', cursive, sans-serif;
-      background: linear-gradient(110deg, #fde7fb 0%, #e6e8ff 100%);
       min-height: 100vh;
     }
-    .cute-title {
+    .card-animated {
+      transition: 
+        transform 0.21s cubic-bezier(.34,1.56,.64,1),
+        box-shadow 0.22s;
+      will-change: transform, box-shadow;
+      background: linear-gradient(135deg,#fcf3ff 70%, #e6d5f7 100%);
+    }
+    .card-animated:hover, .card-animated.mobile-anim {
+      transform: translateY(-8px) scale(1.045) rotate(-1.5deg);
+      box-shadow: 0 15px 44px rgba(200,138,255,.18), 0 1.5px 8px rgba(122,122,216,.13);
+      z-index:10;
+    }
+    .tribute-title {
       font-family: 'Indie Flower', cursive;
       color: #b366d1;
-      letter-spacing: 2px;
-      font-size: 2.15rem;
       text-shadow: 0 2px 7px #fed6f5a5;
+      font-size: 2.07rem;
+      letter-spacing: 1.5px;
     }
-    .cute-quote {
+    .tribute-quote {
       font-family: 'Indie Flower', cursive;
       color: #6d4fa8;
-      font-size: 1.08rem;
-      opacity: 0.85;
+      font-size:1.07rem;
+      opacity: .9;
       text-align: center;
     }
-    .fan-stack {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 14px auto;
-      position: relative;
-      min-height: 120px;
+    .cute-btn {
+      background: linear-gradient(90deg, #fccb90 0%, #d57eea 100%);
+      transition: background 0.14s;
     }
-    .fan-img {
-      width: 86px;
-      height: 86px;
-      object-fit: cover;
-      border-radius: 1.1rem;
-      box-shadow: 0 6px 22px rgba(220, 176, 253, 0.26);
-      transform-origin: 50% 80%;
-      position: absolute;
-      cursor: pointer;
-      transition: 
-        box-shadow 0.2s cubic-bezier(0.34, 1.3, 0.47, 1.13), 
-        transform 0.33s cubic-bezier(.38,1.49,.67,.94), 
-        z-index 0.2s;
-      z-index: 1;
-      background: #fffbfe;
-      border: 2.5px solid #ede1fa;
+    .cute-btn:hover {
+      background: linear-gradient(90deg, #fcb6c0 0%, #a16ae8 100%);
     }
-    .fan-img.expanded {
-      z-index: 10 !important;
-      box-shadow: 0 12px 42px 0 rgba(220,176,253,0.28);
-      transform: scale(1.22) translateY(-10px) !important;
-    }
-    .tribute-card {
-      transition: box-shadow 0.2s, transform .20s cubic-bezier(0.18,0.95,0.61,0.97);
-      position: relative;
-      background: #fff9fe;
-      overflow: visible;
-    }
-    .tribute-card.animate-in {
-      animation: entryPopIn .7s cubic-bezier(.68,1.6,.5,.82);
-    }
-    @keyframes entryPopIn {
-      0% {transform: scale(.65) translateY(80px); opacity: 0.2;}
-      80% {transform: scale(1.04); opacity: 1;}
-      100% {transform: scale(1);}
-    }
-    @media (hover: none) and (pointer: coarse) {
-      .tribute-card {
-        /* on mobile, animate cards when in view (see js) */
-      }
-    }
-    /* Hide input number arrows in modern browsers */
-    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0;}
-    input[type="number"] { -moz-appearance: textfield; }
+    /* Floating hearts in the background for cuteness */
     .floating-heart {
       position: absolute;
-      font-size: 1.3rem;
-      opacity: 0.18;
-      pointer-events: none;
-      animation: floatHeart 8s linear infinite;
+      font-size: 1.23rem;
+      opacity: 0.15;
+      pointer-events:none;
+      animation: floatHeart 10s linear infinite;
+      z-index: 0;
     }
     @keyframes floatHeart {
-      0% {transform: translateY(40px) scale(1.2);}
-      100% {transform: translateY(-210px) scale(1);}
+      0% {transform: translateY(50px) scale(1.09);}
+      100% {transform: translateY(-200px) scale(1);}
     }
-    .custom-scroll::-webkit-scrollbar { width: 7px;}
-    .custom-scroll::-webkit-scrollbar-thumb { background: #d2a9f6; border-radius: 10px;}
-    .custom-scroll::-webkit-scrollbar-track { background: #f5efff;}
-    /* expand anim for fan on tap or scroll-in */
-    .fanImgAnim {
-      animation: fanPop .74s cubic-bezier(.65,1.7,.5,.8);
+    /* Fan Gallery Stacking Effect */
+    .fan-gallery {
+      position: relative;
+      height:126px;
+      width:156px;
+      margin:0 auto 0.8rem auto;
+      display:flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index:4;
+      pointer-events: none;
     }
-    @keyframes fanPop {
-      0% { transform: scale(.74) rotate(0deg);}
-      70% { transform: scale(1.17) rotate(2deg);}
-      100% { transform: scale(1) rotate(0deg);}
+    .fan-img {
+      position: absolute;
+      left:50%; bottom:0;
+      width:105px;height:120px;
+      object-fit:cover;
+      object-position: center top;
+      border-radius: 13px;
+      box-shadow: 0 2px 12px 0 rgba(156,108,200,0.14);
+      background: #faf7ff;
+      border: 2px solid #f3deff;
+      cursor:pointer;
+      pointer-events:auto;
+      opacity:.93;
+      transition: 
+        box-shadow 0.22s cubic-bezier(.34,1.56,.64,1),
+        transform .23s cubic-bezier(.4,1.8,.6,.75),
+        z-index .22s,
+        filter .14s;
+      will-change: transform, box-shadow, filter;
+    }
+    .fan-img:hover, .fan-img:focus {
+      box-shadow: 0 8px 24px rgba(199,136,255,0.23);
+      filter: brightness(1.08);
+      z-index:23!important;
+      transform: scale(1.16) rotate(0deg)!important;
+    }
+    .fan-gallery .fan-img.fan-anim {
+      filter: brightness(1.09) drop-shadow(0 0 15px #f9e1ff73);
+      transform: scale(1.14) rotate(0deg)!important;
+      z-index:30!important;
+    }
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width:8px;}
+    ::-webkit-scrollbar-thumb { background: #e5d0fd; border-radius: 10px;}
+    ::-webkit-scrollbar-track { background: #f8f0ff;}
+    [data-tooltip] {
+      position: relative;
+      cursor: pointer;
+    }
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus::after {
+      opacity:1;visibility:visible;
+      transition:opacity .15s;
+    }
+    [data-tooltip]::after {
+      opacity: 0; visibility: hidden;
+      position: absolute;
+      left: 50%; top:110%; transform:translateX(-50%);
+      background: #fff7fc;
+      border: 1px solid #e2cefe;
+      color: #ad32a3; font-size: .87rem; font-family: 'Quicksand', sans-serif;
+      padding: 4px 12px; border-radius: 10px;
+      content: attr(data-tooltip);
+      box-shadow: 0 2px 15px rgba(221,164,244,0.09);
+      white-space:pre;
+      z-index:111;
+      min-width: 48px;
     }
   </style>
 </head>
-<body class="pb-14">
-  <!-- Decorations -->
-  <span class="floating-heart left-10 top-20" style="animation-delay:0s; color:#f890b4;"><i class="fa-solid fa-heart"></i></span>
-  <span class="floating-heart left-1/2 top-7" style="animation-delay:1.3s; color:#dcb8ff;"><i class="fa-solid fa-heart"></i></span>
-  <span class="floating-heart right-8 top-28" style="animation-delay:0.7s; color:#fcddec;"><i class="fa-solid fa-heart"></i></span>
-  <span class="floating-heart left-1/3 top-32" style="animation-delay:2.8s; color:#fcb6c0;"><i class="fa-solid fa-heart"></i></span>
-  <!-- Title/Intro -->
+<body class="relative min-h-screen pb-14">
+  <!-- Cute background hearts -->
+  <span class="floating-heart left-10 top-24" style="animation-delay: 0s; color:#f890b4;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart left-1/2 top-14" style="animation-delay:1.7s; color:#dcb8ff;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart right-6 top-32" style="animation-delay:0.5s; color:#fcddec;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart left-1/3 top-36" style="animation-delay:2.2s; color:#fcb6c0;"><i class="fa-solid fa-heart"></i></span>
+  <!-- Header -->
   <div class="text-center mt-8">
-    <h1 class="cute-title mb-2">🌷 Happy Retirement, Teacher! 🌈</h1>
-    <p class="cute-quote">
-      “A good teacher is like a candle – it consumes itself to light the way for others.”<br>
-      <span class="text-pink-400 font-semibold">Leave your heartfelt words & pictures below!</span>
+    <h1 class="tribute-title mb-2">🌸 Happy Retirement, Teacher!</h1>
+    <p class="tribute-quote max-w-2xl mx-auto">
+      “A truly great teacher is hard to find, difficult to part with, and impossible to forget.”<br>
+      <span class="text-pink-400 font-semibold">Leave a note or upload your pictures below!</span>
     </p>
   </div>
-  <!-- Board Main -->
-  <div class="w-full max-w-5xl mx-auto mt-10 px-3">
-    <!-- Add Message Form -->
-    <form id="tributeForm" class="mb-9 p-4 flex flex-wrap items-center justify-between rounded-2xl border border-purple-100 shadow-lg bg-white" autocomplete="off">
+  <!-- Form -->
+  <div class="w-full max-w-4xl mx-auto mt-8 px-2">
+    <form id="tributeForm" class="mb-8 p-4 bg-white rounded-2xl shadow flex flex-wrap items-center justify-between border-2 border-purple-50">
       <div class="flex flex-col w-full sm:w-1/4 mb-2 sm:mb-0 sm:pr-2">
         <label for="fromName" class="text-purple-500 font-semibold mb-1">Your Name</label>
-        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="32" required autocomplete="off" placeholder="Jamie"/>
+        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="32" required autocomplete="off" placeholder="E.g. Jamie">
       </div>
-      <div class="flex flex-col w-full sm:w-1/2 mb-2 sm:mb-0 sm:px-2">
+      <div class="flex flex-col w-full sm:w-1/2 sm:px-2 mb-2 sm:mb-0">
         <label for="message" class="text-purple-500 font-semibold mb-1">Message</label>
-        <textarea id="message" name="message" rows="2" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="230" required placeholder="Your message..."></textarea>
+        <textarea id="message" name="message" rows="2" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="220" required placeholder="Your message..."></textarea>
       </div>
-      <div class="flex flex-col w-full sm:w-1/6 sm:px-2 mb-2 sm:mb-0">
-        <label for="photo" class="text-purple-500 font-semibold mb-1">Photo(s)<br><span class="font-normal text-xs text-gray-300">(max 4)</span></label>
-        <input id="photo" name="photo" multiple type="file" accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-purple-50"/>
+      <div class="flex flex-col w-full sm:w-1/6 sm:pl-2 mb-2 sm:mb-0">
+        <label for="photos" class="text-purple-500 font-semibold mb-1">Photo(s) 
+          <span class="text-xs font-normal text-gray-400">(max 4)</span>
+        </label>
+        <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-purple-50">
       </div>
       <div class="w-full sm:w-auto flex items-end justify-start sm:justify-end mt-2 sm:mt-0">
-        <button type="submit" class="bg-gradient-to-r from-pink-300 to-violet-400 hover:from-rose-200 hover:to-violet-700 font-bold py-2 px-6 text-white rounded-xl focus:outline-none transition-transform transform active:scale-95 shadow">
+        <button type="submit" class="cute-btn hover:shadow-lg font-bold py-2 px-7 text-white rounded-xl focus:outline-none transition-transform transform active:scale-95">
           <i class="fa-solid fa-paper-plane mr-1"></i> Share
         </button>
       </div>
     </form>
-    <!-- Tribute Grid -->
-    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 custom-scroll transition-all"></div>
+    <!-- Cards grid -->
+    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     <div id="emptyState" class="text-center text-purple-300 italic mt-10 text-lg hidden">
-      <i class="fa-solid fa-star fa-bounce mr-2"></i>No messages yet. Be the first to post your tribute!
-    </div>
-    <!-- Modal for viewing fan image -->
-    <div id="fanModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
-      <div class="relative">
-        <img id="fanModalImg" src="" alt="Tribute Image" class="rounded-2xl shadow-lg max-h-[74vh] max-w-[95vw] border-2 border-white" />
-        <button id="fanModalClose" class="absolute -top-8 right-2 text-white text-2xl bg-pink-700 px-2 py-0.5 rounded-full hover:bg-pink-400 shadow"><i class="fa-solid fa-xmark"></i></button>
-      </div>
+      <i class="fa-solid fa-star fa-bounce mr-2"></i>No tributes yet. Be the first to post your message!
     </div>
   </div>
-  <footer class="w-full text-center py-7 mt-8 text-gray-400 text-base">
+  <!-- Modal for photo gallery -->
+  <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-30 z-50 hidden flex items-center justify-center cursor-pointer transition-all">
+    <div class="absolute inset-0" id="modalBG"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border-2 border-purple-100 transition-all">
+      <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-purple-500 hover:text-pink-400 focus:outline-none z-10" title="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="w-full flex items-center justify-center mb-3">
+        <button type="button" id="prevImgBtn" class="text-xl text-purple-300 hover:text-purple-600 px-3 focus:outline-none hidden">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow">
+          <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;">
+        </div>
+        <button type="button" id="nextImgBtn" class="text-xl text-purple-300 hover:text-purple-600 px-3 focus:outline-none hidden">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+      <div id="galleryCaption" class="text-center text-xs mt-2 mb-2 text-gray-500"></div>
+    </div>
+  </div>
+  <footer class="w-full text-center py-7 mt-10 text-gray-400 text-base">
     <i class="fa-solid fa-cake-candles text-pink-300"></i>
     <span>Made with 💝 for an unforgettable teacher's new adventure.</span>
   </footer>
 <script>
-// Starter tributes for demo
 const starterTributes = [
   {
     from: "Zoe",
@@ -181,69 +225,62 @@ const starterTributes = [
     date: "May 18, 2024",
     photos: [
       "https://images.unsplash.com/photo-1444065381814-865dc9da92c0?auto=format&fit=facearea&w=320&h=220&facepad=2",
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=320&h=220&facepad=1"
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=320&h=220&facepad=1",
+      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=320&h=220"
     ]
   }
 ];
-// Util
+
+function getTributes() {
+  const stored = localStorage.getItem("teacherTributesV2");
+  if(stored) {
+    try { return JSON.parse(stored); } catch { return []; }
+  }
+  return starterTributes;
+}
+function saveTributes(arr) {
+  localStorage.setItem("teacherTributesV2", JSON.stringify(arr));
+}
 function formatNow() {
   const d = new Date();
   return d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
 }
-function loadTributes() {
-  const ls = window.localStorage.getItem('retireTributesFanV3');
-  if(ls) {try {return JSON.parse(ls);} catch{ return [];} }
-  return [...starterTributes];
-}
-function saveTributes(arr) {
-  window.localStorage.setItem('retireTributesFanV3', JSON.stringify(arr));
-}
-function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, s=>{
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[s]
-  })
-}
-// Fan-stacked image markup
-function renderFanStack(photos, tribIdx) {
-  if(!photos||!photos.length) return '';
-  // Fan angles for up to 4
-  let maxAng = 36, spread = (photos.length>1) ? (maxAng/(photos.length-1)) : 0;
-  let baseAng = -0.5 * (maxAng);
-  let imgMarkup = '';
-  let leftMost = (photos.length-1)*42/2;
-  for(let i=0;i<photos.length;i++) {
-    let ang = baseAng + i*spread;
-    let l = (i*42)-(leftMost);
-    imgMarkup += `<img src="${photos[i]}" 
-      class="fan-img" 
-      data-tribidx="${tribIdx}" 
-      data-photoidx="${i}" 
-      alt="Tribute Photo ${i+1}" 
-      style="transform: rotate(${ang}deg) translateX(${l}px);" 
-      loading="lazy"/>`;
-  }
-  return `<div class="fan-stack w-full mb-2 min-h-[100px]">${imgMarkup}</div>`;
-}
-// Tribute card markup
-function renderTributeCard(tribute, idx) {
-  let imageMarkup = "";
-  if(tribute.photos && tribute.photos.length>0) {
-    imageMarkup = renderFanStack(tribute.photos, idx);
-  } else {
-    imageMarkup = `<div class="w-16 h-16 flex items-center justify-center text-pink-400 rounded-full bg-pink-50 border-2 border-pink-100 mb-2 mx-auto shadow-sm text-3xl">
-      <i class="fa-solid fa-flower"></i>
-    </div>`;
-  }
-  const icons=['fa-flower','fa-apple-whole','fa-star','fa-heart'];
-  return `
-    <div class="tribute-card flex flex-col items-center px-5 pt-7 pb-8 rounded-2xl shadow-md min-h-[290px] relative group bg-white bg-opacity-90">
-      <div class="w-full flex flex-row-reverse gap-2 absolute -top-2 right-3 opacity-60 group-hover:opacity-95 transition-opacity z-10">
-        <button class="edit-btn text-indigo-500 hover:text-indigo-900 px-2 py-1 focus:outline-none" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-        <button class="remove-btn text-pink-500 hover:text-pink-900 px-2 py-1 focus:outline-none" title="Delete"><i class="fa-solid fa-trash"></i></button>
+
+let tributes = getTributes();
+
+// Card render helpers
+function renderFanGallery(photos, tributeIdx) {
+  if(!photos || !photos.length) return `
+    <div class="w-full flex items-center justify-center mb-4">
+      <div class="w-20 h-20 flex items-center justify-center text-pink-300 rounded-full bg-pink-50 border-2 border-pink-100 shadow text-3xl">
+        <i class="fa-solid fa-flower"></i>
       </div>
-      ${imageMarkup}
-      <div class="text-purple-500 font-bold mb-1">${escapeHtml(tribute.from || "Anonymous")}</div>
-      <div class="text-gray-700 mb-3 text-center whitespace-pre-line" style="font-family:'Indie Flower',cursive;font-size:1.11rem;">${escapeHtml(tribute.msg)}</div>
+    </div>
+  `;
+  let imgs = '';
+  let n=photos.length, fanSpread=28;
+  // -3deg,-1deg,1deg,3deg for 4; -2,0,2 for 3, -1,1 for 2; 0 for 1
+  for(let i=0;i<n;i++){
+    let rot = n===1?0:(n===2?-10+20*i:(n===3?-12+12*i:(n===4?-12+8*i:((i-n/2)*fanSpread/n))));
+    let shift = ((i - (n-1)/2) * 29);
+    // .fan-anim applied to .fan-img when animating
+    imgs+=`<img 
+      src="${photos[i]}" 
+      data-tidx="${tributeIdx}" data-pidx="${i}" 
+      class="fan-img transition-all focus:outline-none" 
+      style="z-index:${10+i};transform:translateX(${shift}px) rotate(${rot}deg);" 
+      tabindex="0" 
+      alt="Tribute Photo ${i+1}">`;
+  }
+  return `<div class="fan-gallery mb-4">${imgs}</div>`;
+}
+function renderTributeCard(tribute, idx) {
+  const icons=['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
+  return `
+    <div class="card-animated relative rounded-2xl px-5 pt-7 pb-7 flex flex-col items-center min-h-[306px] shadow-lg border border-purple-100 group" style="overflow:visible;margin-bottom:6px;">
+      ${renderFanGallery(tribute.photos, idx)}
+      <div class="text-purple-500 font-bold mb-1" style="font-family: 'Indie Flower', cursive;">${tribute.from || "Anonymous"}</div>
+      <div class="text-gray-700 mb-4 text-center whitespace-pre-line" style="font-family:'Indie Flower',cursive;font-size:1.13rem;">${tribute.msg}</div>
       <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
         <i class="fa-solid ${icons[idx%icons.length]}"></i>
         <span>${tribute.date||""}</span>
@@ -251,10 +288,8 @@ function renderTributeCard(tribute, idx) {
     </div>
   `;
 }
-// --- RENDER ---
-function renderAllTributes(scrollToTop=true){
-  const tributes = loadTributes();
-  const grid = document.getElementById('tributesGrid');
+function renderAllTributes() {
+  const grid = document.getElementById("tributesGrid");
   grid.innerHTML = "";
   if(!tributes.length) {
     document.getElementById('emptyState').classList.remove('hidden');
@@ -263,163 +298,136 @@ function renderAllTributes(scrollToTop=true){
     document.getElementById('emptyState').classList.add('hidden');
   }
   tributes.forEach((trb, idx) => {
-    let div = document.createElement('div');
-    div.innerHTML = renderTributeCard(trb, idx);
-    const card = div.firstElementChild;
-    card.style.opacity="0";
-    // Animate in when mounting
-    setTimeout(()=>{card.style.opacity="1"; card.classList.add('animate-in');}, 60+idx*75);
-    grid.appendChild(card);
-    // Remove/Delete handlers
-    card.querySelector('.remove-btn').onclick = function(e){
-      if(confirm("Remove this tribute? This cannot be undone.")){
-        const tribs = loadTributes();
-        tribs.splice(idx,1);
-        saveTributes(tribs);
-        renderAllTributes();
+    grid.innerHTML += renderTributeCard(trb, idx);
+  });
+  attachFanGalleryListeners();
+}
+function attachFanGalleryListeners() {
+  // Make images clickable for modal gallery
+  document.querySelectorAll('.fan-img').forEach(img => {
+    img.onclick = function(e) {
+      e.stopPropagation();
+      const tIdx = parseInt(img.getAttribute("data-tidx"));
+      const pIdx = parseInt(img.getAttribute("data-pidx"));
+      showModalGallery(tIdx, pIdx);
+    }
+    img.onkeydown = function(e) {
+      if(e.key==='Enter'||e.key===' '){img.click();}
+    }
+    // Fan-like hover animation for desktop only (simulated on mobile scroll by intersection observer)
+    img.onmouseenter = function() {
+      if(window.innerWidth > 768){
+        img.classList.add('fan-anim');
       }
     }
-    card.querySelector('.edit-btn').onclick = function(e){
-      startEditCard(idx,card);
+    img.onmouseleave = function() {
+      img.classList.remove('fan-anim');
     }
   });
-  setTimeout(()=>attachFanImgEvents(), 200);
-  if(scrollToTop) window.scrollTo({top: 0, behavior: "smooth"});
+  // Card hover for mobile: trigger animation when in viewport
+  if('IntersectionObserver' in window){
+    document.querySelectorAll('.card-animated').forEach(card => {
+      card.classList.remove('mobile-anim');
+      let observer = new IntersectionObserver(function(entries){
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            card.classList.add('mobile-anim');
+            setTimeout(()=>card.classList.remove('mobile-anim'),700);
+          }
+        });
+      }, {threshold:0.4});
+      observer.observe(card);
+    });
+  }
 }
-// --- FORM SUBMIT ---
-document.getElementById('tributeForm').onsubmit = async function(e) {
+
+// Add message handling
+document.getElementById('tributeForm').onsubmit = function(e){
   e.preventDefault();
-  const from = document.getElementById('fromName').value.trim() || "Anonymous";
+  const name = document.getElementById('fromName').value.trim() || "Anonymous";
   const msg = document.getElementById('message').value.trim();
   const date = formatNow();
-  const fileInput = document.getElementById('photo');
+  const files = document.getElementById('photos').files;
   let photos = [];
-  if(fileInput.files.length) {
-    for(let i=0; i<fileInput.files.length && photos.length<4; i++) {
-      const file = fileInput.files[i];
-      if(file.type.startsWith('image/') && file.size<4e6) {
-        // files from input in browser: Use objectURL (local, no upload)
+  // Only use object URLs if not base64 and under 4 files
+  if(files.length){
+    for(let i=0; i<Math.min(files.length, 4); i++){
+      const file = files[i];
+      if(file.type.startsWith("image/") && file.size<5*1024*1024){
         photos.push(URL.createObjectURL(file));
       }
     }
   }
-  let tributes = loadTributes();
-  tributes.unshift({from, msg, date, photos});
+  tributes.unshift({from: name, msg, date, photos});
   saveTributes(tributes);
   renderAllTributes();
+  // Reset and cleanup
   document.getElementById('tributeForm').reset();
-  setTimeout(() => { photos.forEach(ph=>{ if(ph.startsWith('blob:')) URL.revokeObjectURL(ph); });}, 6500);
+  setTimeout(() => {photos.forEach(ph=>{ if(ph.startsWith('blob:')) URL.revokeObjectURL(ph); });}, 8000);
 };
-// --- EDIT CARD ---
-function startEditCard(idx,cardElem) {
-  let tribs = loadTributes();
-  let t = tribs[idx];
-  cardElem.innerHTML = `<form class='edit-tribute-form w-full h-full flex flex-col items-center justify-between p-1' autocomplete="off">
-    <input type="text" class="edit-input font-bold px-2 py-1 rounded-xl border border-purple-300 w-4/5 my-2 text-purple-500 text-lg text-center" maxlength="32" value="${escapeHtml(t.from)}">
-    <textarea class="edit-textarea px-2 py-1 rounded-xl border border-purple-300 w-4/5 my-1 mb-2 text-gray-700 text-center resize-none" maxlength="230" rows="3">${escapeHtml(t.msg)}</textarea>
-    <div class='flex justify-center flex-wrap gap-2 mb-1'>
-      ${t.photos&&t.photos.map((ph,i)=>
-        `<span class="relative rounded-lg">
-          <img src="${ph}" class="inline-block w-16 h-16 object-cover rounded-lg border border-purple-200 shadow-md">
-          <button title="Remove" type="button" class="remove-img absolute -top-2 -right-2 text-sm text-center w-6 h-6 leading-5 bg-white border border-pink-400 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white shadow-sm" data-phidx="${i}"><i class="fa fa-times"></i></button>
-        </span>`).join("")}
-    </div>
-    <label class="w-full text-purple-400 font-medium text-xs mb-1"><i class="fa fa-image"></i> Add more photo
-      <input type="file" accept="image/*" class="edit-photo-uploader ml-1 mb-1" style="display:inline;" multiple>
-    </label>
-    <div class="edit-actions mt-2 w-full flex justify-center gap-2">
-      <button type="submit" class="bg-violet-200 hover:bg-violet-300 text-indigo-700 font-semibold py-1 px-3 rounded-lg">Save</button>
-      <button type="button" class="bg-pink-200 hover:bg-pink-300 text-pink-700 font-semibold py-1 px-3 rounded-lg cancel-edit-btn">Cancel</button>
-    </div>
-  </form>`;
-  // Remove photo in edit mode
-  cardElem.querySelectorAll('.remove-img').forEach(btn=>{
-    btn.onclick = function(){
-      let phidx = parseInt(btn.getAttribute('data-phidx'));
-      t.photos.splice(phidx,1);
-      startEditCard(idx,cardElem);
-    }
-  });
-  // Add photo (up to 4 in total)
-  cardElem.querySelector('.edit-photo-uploader').onchange = function(e){
-    let files = Array.from(e.target.files);
-    if(files.some(f=>t.photos.length<4 && f.type.startsWith('image/') && f.size<4e6)){
-      files.slice(0,4-t.photos.length).forEach(f=>{
-        let url = URL.createObjectURL(f);
-        t.photos.push(url);
-      });
-      startEditCard(idx,cardElem); // rerender
-    }
-  }
-  cardElem.querySelector('.cancel-edit-btn').onclick = function(){ renderAllTributes(false); }
-  cardElem.querySelector('.edit-tribute-form').onsubmit = function(e){
-    e.preventDefault();
-    t.from = cardElem.querySelector('.edit-input').value.trim().slice(0,32)||"";
-    t.msg = cardElem.querySelector('.edit-textarea').value.trim().slice(0,230)||"";
-    saveTributes(tribs);
-    renderAllTributes(false);
-  }
-}
-// ----- FAN IMAGE EVENTS (expanding, modal) -----
-function attachFanImgEvents() {
-  document.querySelectorAll('.fan-img').forEach(img=>{
-    img.onclick = function(e){
-      e.stopPropagation();
-      let src = img.getAttribute('src');
-      showFanModal(src);
-    }
-    // Mobile: animate on scroll into view instead of hover
-    img.classList.remove('expanded','fanImgAnim');
-    // Using IntersectionObserver for mobile-friendly reveal
-    if(window.fanObs) window.fanObs.disconnect();
-    window.fanObs = new window.IntersectionObserver((ents)=>{
-      ents.forEach(ent=>{
-        if(ent.isIntersecting){
-          ent.target.classList.add("fanImgAnim");
-        }
-      })
-    },{threshold:.6});
-    window.fanObs.observe(img);
-  });
-}
-// --- MODAL ---
-function showFanModal(src){
-  let m = document.getElementById('fanModal');
-  document.getElementById('fanModalImg').src = src;
-  m.classList.remove('hidden');
+
+// Image modal gallery logic
+let modalTributeIdx = 0, modalPhotoIdx = 0;
+function showModalGallery(tributeIdx, photoIdx) {
+  modalTributeIdx = tributeIdx;
+  modalPhotoIdx = photoIdx;
+  renderModalImage();
+  document.getElementById("galleryModal").classList.remove("hidden");
   document.body.style.overflow='hidden';
 }
-document.getElementById('fanModalClose').onclick = function(){
-  document.getElementById('fanModal').classList.add('hidden');
+function renderModalImage() {
+  let t = tributes[modalTributeIdx];
+  let photos = t.photos||[];
+  if(!photos.length){ document.getElementById("galleryModal").classList.add("hidden"); return;}
+  document.getElementById('modalImg').src = photos[modalPhotoIdx];
+  document.getElementById('galleryCaption').textContent = (t.from || "Anonymous")+": "+(modalPhotoIdx+1)+" / "+photos.length;
+  document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx===0);
+  document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx==(photos.length-1));
+}
+document.getElementById('closeModalBtn').onclick = closeModalGallery;
+document.getElementById('modalBG').onclick = closeModalGallery;
+function closeModalGallery(){
+  document.getElementById("galleryModal").classList.add("hidden");
+  document.getElementById('modalImg').src='';
   document.body.style.overflow='';
 }
-document.getElementById('fanModal').onclick = function(e){
-  if(e.target===this) document.getElementById('fanModalClose').click();
+document.getElementById('prevImgBtn').onclick = function(e){
+  e.stopPropagation();
+  if(modalPhotoIdx>0){
+    modalPhotoIdx--;
+    renderModalImage();
+  }
 }
-document.addEventListener('keydown', function(e){
-  if(document.getElementById('fanModal').classList.contains('hidden')) return;
-  if(e.key==='Escape') document.getElementById('fanModalClose').click();
+document.getElementById('nextImgBtn').onclick = function(e){
+  e.stopPropagation();
+  let t = tributes[modalTributeIdx];
+  if(modalPhotoIdx < t.photos.length-1){
+    modalPhotoIdx++;
+    renderModalImage();
+  }
+}
+window.addEventListener("keydown", function(e){
+  if(document.getElementById("galleryModal").classList.contains("hidden")) return;
+  if(e.key=="ArrowLeft") document.getElementById('prevImgBtn').click();
+  if(e.key=="ArrowRight") document.getElementById('nextImgBtn').click();
+  if(e.key=="Escape") closeModalGallery();
 });
-// --- Animate on scroll for cards (mobile: no hover) ---
-function applyScrollInAnimForCards() {
-  if (!('IntersectionObserver' in window)) return;
-  let obs = new window.IntersectionObserver((entries)=>{
-    entries.forEach(ent=>{
-      if(ent.isIntersecting){
-        ent.target.classList.add('animate-in');
-        obs.unobserve(ent.target);
-      }
-    });
-  }, {threshold:0.26});
-  document.querySelectorAll(".tribute-card").forEach(card=>{
-    obs.observe(card);
-  });
-}
+
+// Page mount effects
 document.addEventListener("DOMContentLoaded", function() {
   renderAllTributes();
-  setTimeout(applyScrollInAnimForCards, 400);
+  // Animate grid on load
+  setTimeout(()=>{
+    document.getElementById('tributesGrid').classList.add('transition','duration-800','ease-out','scale-105');
+    setTimeout(()=>{document.getElementById('tributesGrid').classList.remove('scale-105');}, 540);
+  },400);
+  // Clean up any leaked object URLs on beforeunload
+  window.onbeforeunload = () => {
+    tributes.forEach(t=>{
+      t.photos && t.photos.forEach(ph=>{ if(ph && ph.startsWith('blob:')) try{URL.revokeObjectURL(ph);}catch{} });
+    });
+  }
 });
 </script>
 </body>
 </html>
-
