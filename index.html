@@ -1,842 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Retiring Teacher Tribute Board</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
-    <style>
-        html, body {
-            font-family: 'Quicksand', 'Indie Flower', cursive, sans-serif;
-            background: linear-gradient(118deg, #E9E3FF 0%, #FDE8E6 80%);
-            min-height: 100vh;
-            scroll-behavior: smooth;
-        }
-        .cute-title {
-            font-family: 'Indie Flower', cursive;
-            color: #b366d1;
-            letter-spacing: 1.5px;
-            font-size: 2.2rem;
-            text-shadow: 0 1px 12px #fff5fdb7;
-        }
-        @media (min-width: 640px) { .cute-title { font-size: 2.5rem; } }
-        .cute-quote {
-            font-family: 'Quicksand', sans-serif;
-            color: #a881c7;
-            font-size: 1rem;
-            opacity: 0.9;
-            text-align: center;
-        }
-        .tribute-card-wrapper {
-            min-height: 320px;
-        }
-        .tribute-card {
-            transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.24s;
-            position: relative;
-            background: repeating-linear-gradient(
-                135deg, #fffbe6 0px, #ffe7e7 15px, #fffbe6 30px
-            );
-            border-radius: 20px 18px 18px 17px / 25px 23px 19px 18px;
-            box-shadow: 5px 13px 38px 0 rgba(178, 101, 255, 0.17);
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .tribute-card:hover:not(.editing) {
-            transform: translateY(-8px) scale(1.035) rotate(-2deg);
-            box-shadow: 0 8px 26px #fabbdb33, 0 3px 12px #7359aa1a;
-            z-index: 10;
-        }
-        .tribute-card.editing {
-             border: 2px solid #b991ed;
-             box-shadow: 0 4px 15px rgba(185, 145, 237, 0.3);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Retiring Teacher Tribute Board</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <style>
+    body { font-family: 'Quicksand', 'Indie Flower', cursive, sans-serif; background: linear-gradient(110deg, #fde7fb 0%, #e6e8ff 100%);}
+    .tribute-card {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+      position: relative;
+      background: #fff9fe;
+    }
+    /* Apply hover effects also when .touched class is present (for mobile) */
+    .tribute-card:hover, .tribute-card.touched {
+      transform: translateY(-6px) scale(1.045) rotate(-1.5deg);
+      box-shadow: 0 8px 28px rgba(180, 138, 255, 0.18), 0 1.5px 8px rgba(122, 122, 216, 0.17);
+      z-index: 10;
+    }
+    .cute-title {
+      font-family: 'Indie Flower', cursive;
+      color: #b366d1;
+      letter-spacing: 2px;
+      font-size: 2.15rem;
+      text-shadow: 0 2px 7px #fed6f5a5;
+    }
+    .cute-quote {font-family: 'Indie Flower', cursive;color: #6d4fa8;font-size: 1.08rem;opacity: 0.85;text-align: center;}
+    .floating-heart {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0.16;
+      pointer-events: none;
+      animation: floatHeart 8s linear infinite;
+    }
+    @keyframes floatHeart {
+      0% {transform: translateY(40px) scale(1.3);}
+      100% {transform: translateY(-210px) scale(1);}
+    }
+    /* Modal (fullscreen image gallery) styles */
+    .gallery-modal-bg {position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(52,28,75,0.58);z-index:50;display:none;align-items:center;justify-content:center;}
+    .gallery-modal-bg.active {display:flex;}
+    .gallery-img-viewer {max-width:91vw;max-height:82vh;box-shadow:0 4px 30px 0 rgba(71,40,116,.27);}
+    .gallery-modal-controls {position:absolute;top:50%;width:100vw;display:flex;justify-content:space-between;z-index:60;pointer-events:none;}
+    .gallery-modal-controls button {pointer-events:auto;}
 
-        .floating-heart {
-            position: absolute;
-            font-size: 1.35rem;
-            opacity: 0.18;
-            pointer-events: none;
-            animation: floatHeart 10s linear infinite;
-            z-index: -1;
-        }
-        @keyframes floatHeart {
-            0% {transform: translateY(70px) scale(1.1);}
-            100% {transform: translateY(-320px) scale(1);}
-        }
-        .custom-scroll::-webkit-scrollbar { width: 7px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #dbcdf8; border-radius: 12px;}
-        .custom-scroll::-webkit-scrollbar-track { background: #faf9ff; }
+    /* Collage Gallery grid inside card */
+    .photo-collage {display:grid;gap:6px;}
+    .collage-1 {grid-template-columns:1fr;}
+    .collage-2 {grid-template-columns:repeat(2,1fr);}
+    .collage-3, .collage-4 {grid-template-columns:repeat(2,1fr);}
+    .collage-3 img:nth-child(1) {grid-column:1/3;}
+    .photo-collage img {object-fit:cover;width:100%;height:96px;border-radius:0.7em;transition:box-shadow .18s;}
+    .photo-collage img:hover {box-shadow: 0 4px 16px rgba(235,140,255,0.24);}
+    .collage-1 img {height:180px;}
+    .collage-2 img {height:146px;}
+    .collage-4 img {height:89px;}
 
-        /* Fan Stack Photo Collage Styles */
-        .photo-fan-stack {
-            position: relative;
-            width: 100%;
-            height: 130px;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-        }
-        .photo-fan-stack img {
-            position: absolute;
-            bottom: 0;
-            width: 90px;
-            height: 110px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            transform-origin: bottom center;
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-            cursor: pointer;
-            background-color: #eee; /* Placeholder background */
-        }
-         .photo-fan-stack img:hover {
-            transform: scale(1.1) translateY(-5px) !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            z-index: 15;
-         }
-        .photo-count-1 img:nth-child(1) { transform: translateX(0) rotate(0deg); z-index: 5; }
-        .photo-count-2 img:nth-child(1) { transform: translateX(-15px) rotate(-8deg); z-index: 4; }
-        .photo-count-2 img:nth-child(2) { transform: translateX(15px) rotate(8deg); z-index: 5; }
-        .photo-count-3 img:nth-child(1) { transform: translateX(-25px) rotate(-12deg); z-index: 3; }
-        .photo-count-3 img:nth-child(2) { transform: translateX(0) rotate(0deg); z-index: 4; }
-        .photo-count-3 img:nth-child(3) { transform: translateX(25px) rotate(12deg); z-index: 5; }
-        .photo-count-4 img:nth-child(1) { transform: translateX(-35px) rotate(-16deg); z-index: 2; }
-        .photo-count-4 img:nth-child(2) { transform: translateX(-12px) rotate(-5deg); z-index: 3; }
-        .photo-count-4 img:nth-child(3) { transform: translateX(12px) rotate(5deg); z-index: 4; }
-        .photo-count-4 img:nth-child(4) { transform: translateX(35px) rotate(16deg); z-index: 5; }
-        .photo-count-5 img:nth-child(1) { transform: translateX(-45px) rotate(-20deg); z-index: 1; }
-        .photo-count-5 img:nth-child(2) { transform: translateX(-22px) rotate(-10deg); z-index: 2; }
-        .photo-count-5 img:nth-child(3) { transform: translateX(0) rotate(0deg); z-index: 3; }
-        .photo-count-5 img:nth-child(4) { transform: translateX(22px) rotate(10deg); z-index: 4; }
-        .photo-count-5 img:nth-child(5) { transform: translateX(45px) rotate(20deg); z-index: 5; }
-
-        /* Modal gallery styles */
-        .gallery-modal-bg {position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(52,28,75,0.7);backdrop-filter:blur(3px);z-index:50;display:none;align-items:center;justify-content:center; opacity: 0; transition: opacity 0.2s ease-in-out;}
-        .gallery-modal-bg.active {display:flex; opacity: 1;}
-        .gallery-img-viewer {max-width:90vw;max-height:80vh;box-shadow:0 4px 30px 0 rgba(71,40,116,.3); border: 3px solid white; object-fit: contain;}
-        .gallery-modal-controls {position:absolute;top:50%;width:100vw;display:flex;justify-content:space-between;z-index:60;pointer-events:none;}
-        .gallery-modal-controls button {pointer-events:auto; background: rgba(255,255,255,0.7); border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; margin: 0 15px; transition: background 0.2s; color: #502d6b; cursor: pointer;}
-        .gallery-modal-controls button:hover { background: rgba(255,255,255,0.9); }
-        #closeGalleryBtn { position: absolute; top: 20px; right: 20px; z-index: 60; background: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; color: #502d6b; cursor: pointer;}
-         #closeGalleryBtn:hover { background: rgba(255,255,255,0.9); }
-        #lightboxCaption { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0,0,0,0.6); color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.9rem; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-
-        /* Edit form styling */
-        .edit-input, .edit-textarea {
-            outline: 2px solid #b991ed !important;
-            background: #fef8ff !important;
-            border: 1px solid #dcb8ff !important;
-            width: 95%;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 6px 8px;
-            border-radius: 8px;
-            box-sizing: border-box; /* Include padding in width */
-         }
-         .edit-textarea {
-            font-family: 'Indie Flower', cursive;
-            font-size: 1.1rem;
-            line-height: 1.5;
-            resize: vertical;
-            min-height: 80px;
-            flex-grow: 1; /* Allow textarea to fill available space */
-        }
-        .edit-photo-preview {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 8px 0;
-            min-height: 64px; /* Reserve space even if empty */
-        }
-        .edit-photo-item { position: relative; }
-        .edit-photo-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #dcb8ff;}
-        .remove-photo-btn {
-             position: absolute; top: -8px; right: -8px;
-             background-color: #ef4444; color: white;
-             border-radius: 50%; width: 20px; height: 20px;
-             font-size: 12px; line-height: 18px; text-align: center;
-             cursor: pointer; border: 1px solid white;
-             opacity: 0.8; transition: opacity 0.2s;
-             z-index: 5; /* Ensure button is above image */
-         }
-         .remove-photo-btn:hover { opacity: 1; }
-
-         /* Add a subtle background to the main form */
-         #tributeForm {
-            background-color: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(235, 216, 255, 0.8);
-         }
-
-         /* Style for disabled file input container */
-         .file-input-disabled {
-             opacity: 0.6;
-             cursor: not-allowed;
-         }
-         .file-input-disabled input[type="file"] {
-             pointer-events: none;
-         }
-
-    </style>
+    .custom-scroll::-webkit-scrollbar { width: 7px;}
+    .custom-scroll::-webkit-scrollbar-thumb { background: #d2a9f6; border-radius: 10px;}
+    .custom-scroll::-webkit-scrollbar-track { background: #f5efff;}
+    .edit-input, .edit-textarea { outline: 2px solid #b991ed; background: #fbf2ff; }
+    .edit-actions button {margin-right:0.3em;}
+  </style>
 </head>
-<body class="pb-8 select-none">
-
-    <!-- Floating hearts -->
-    <span class="floating-heart left-10 top-20" style="animation-delay:0s;color:#f890b4;"><i class="fa-solid fa-heart"></i></span>
-    <span class="floating-heart left-1/2 top-6" style="animation-delay:1.3s;color:#dcb8ff;"><i class="fa-solid fa-heart"></i></span>
-    <span class="floating-heart right-8 top-16" style="animation-delay:0.7s;color:#fcddec;"><i class="fa-solid fa-heart"></i></span>
-    <span class="floating-heart left-1/3 top-28" style="animation-delay:2.8s;color:#fcb6c0;"><i class="fa-solid fa-heart"></i></span>
-
-    <div class="text-center mt-8 px-4">
-        <h1 class="cute-title mb-2 flex justify-center items-center gap-2">
-          <span>🌷</span> Happy Retirement, Teacher! <span>🌈</span>
-        </h1>
-        <p class="cute-quote mb-1 max-w-xl mx-auto">“A good teacher is like a candle – it consumes itself to light the way for others.”</p>
-        <p class="text-pink-500 font-semibold text-sm">Share a heartfelt message or some photos below!</p>
+<body class="min-h-screen pb-14 select-none">
+  <!-- Floating hearts for cuteness -->
+  <span class="floating-heart left-10 top-20" style="animation-delay:0s; color:#f890b4;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart left-1/2 top-7" style="animation-delay:1.3s; color:#dcb8ff;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart right-8 top-24" style="animation-delay:0.7s; color:#fcddec;"><i class="fa-solid fa-heart"></i></span>
+  <span class="floating-heart left-1/3 top-32" style="animation-delay:2.8s; color:#fcb6c0;"><i class="fa-solid fa-heart"></i></span>
+  <!-- Title -->
+  <div class="text-center mt-8">
+    <h1 class="cute-title mb-2">🌷 Happy Retirement, Teacher! 🌈</h1>
+    <p class="cute-quote">
+      “A good teacher is like a candle – it consumes itself to light the way for others.”<br>
+      <span class="text-pink-400 font-semibold">Leave your heartfelt words & pictures below!</span>
+    </p>
+  </div>
+  <!-- Board Container -->
+  <div class="w-full max-w-5xl mx-auto mt-10 px-3">
+    <!-- Add Message Form -->
+    <form id="tributeForm" class="mb-9 sticky top-4 z-20 p-4 flex flex-wrap items-center justify-between rounded-2xl border border-purple-100 shadow-lg bg-white" autocomplete="off">
+       <!-- Added sticky top-4 z-20 for better stickiness -->
+      <div class="flex flex-col w-full sm:w-1/4 mb-2 sm:mb-0 sm:pr-2">
+        <label for="fromName" class="text-purple-500 font-semibold mb-1">Your Name</label>
+        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="32" required autocomplete="off" placeholder="Jamie"></div>
+      <div class="flex flex-col w-full sm:w-1/2 mb-2 sm:mb-0 sm:px-2">
+        <label for="message" class="text-purple-500 font-semibold mb-1">Message</label>
+        <textarea id="message" name="message" rows="2" class="rounded-xl border border-purple-200 px-3 py-2 focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="230" required placeholder="Your message..."></textarea>
+      </div>
+      <div class="flex flex-col w-full sm:w-1/6 sm:px-2 mb-2 sm:mb-0">
+         <label for="photo" class="text-purple-500 font-semibold mb-1">Photo(s)<span class="font-normal text-xs text-gray-400 ml-1">(max 3)</span></label>
+         <input id="photo" name="photo" multiple type="file" accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-purple-50 file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
+      </div>
+      <div class="w-full sm:w-auto flex items-end justify-start sm:justify-end mt-2 sm:mt-0">
+        <button type="submit" class="bg-gradient-to-r from-pink-300 to-violet-400 hover:from-rose-200 hover:to-violet-700 font-bold py-2 px-6 text-white rounded-xl focus:outline-none transition-transform transform active:scale-95 shadow">
+          <i class="fa-solid fa-paper-plane mr-1"></i> Share
+        </button>
+      </div>
+    </form>
+    <!-- Messages Board -->
+    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 custom-scroll transition-all">
+      <!-- Tributes inserted here -->
     </div>
-
-    <!-- Tribute Form -->
-    <div class="w-full max-w-5xl mx-auto mt-8 px-3">
-        <form id="tributeForm" class="p-4 md:p-6 flex flex-wrap items-end justify-between mb-10 gap-y-4 rounded-2xl shadow-lg" autocomplete="off">
-            <div class="w-full sm:w-auto sm:flex-1 px-1 mb-2 sm:mb-0 min-w-[150px]">
-                <label for="fromName" class="text-purple-500 font-semibold mb-1 block">Your Name</label>
-                <input id="fromName" name="fromName" type="text" class="rounded-xl border border-purple-200 px-3 py-2 w-full focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="32" required placeholder="e.g. Jamie" />
-            </div>
-            <div class="w-full sm:w-auto sm:flex-1 px-1 mb-2 sm:mb-0 min-w-[200px]">
-                <label for="message" class="text-purple-500 font-semibold mb-1 block">Message</label>
-                <textarea id="message" name="message" rows="2" class="rounded-xl border border-purple-200 px-3 py-2 w-full focus:ring-2 focus:ring-pink-200 focus:outline-none" maxlength="220" required placeholder="Your message..."></textarea>
-            </div>
-            <div class="w-full sm:w-auto sm:flex-initial px-1 mb-2 sm:mb-0">
-                 <!-- Added container for potential disabling -->
-                <label id="photoInputLabel" for="photo" class="text-purple-500 font-semibold mb-1 block">Photos (max 5)</label>
-                <input id="photo" name="photo" type="file" accept="image/png, image/jpeg, image/gif, image/webp" multiple class="border rounded-xl py-2 px-2 text-xs w-full bg-purple-50 border-purple-200" style="max-width: 200px;">
-            </div>
-            <div class="w-full sm:w-auto flex items-end justify-end px-1">
-                <button type="submit" title="Share Tribute" class="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-300 hover:to-purple-600 transition-all font-bold py-2 px-6 text-white rounded-xl focus:outline-none active:scale-95 shadow-md flex items-center gap-1">
-                    <i class="fa-solid fa-paper-plane"></i> Share
-                </button>
-            </div>
-        </form>
-
-        <!-- Tributes Board -->
-        <div id="tributesGrid"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
-            style="min-height:140px;"
-        >
-            <!-- Tribute card wrappers inserted here -->
-        </div>
-        <div id="emptyState" class="text-center text-purple-300 italic mt-10 text-lg hidden">
-            <i class="fa-solid fa-star fa-bounce mr-2"></i>No messages yet. Be the first to post your tribute!
-        </div>
+    <div id="emptyState" class="text-center text-purple-300 italic mt-10 text-lg hidden">
+      <i class="fa-solid fa-star fa-bounce mr-2"></i>No messages yet. Be the first to post your tribute!
     </div>
-
-    <!-- Lightbox Modal -->
-     <div id="galleryModal" class="gallery-modal-bg">
-        <div class="z-50 relative bg-transparent overflow-visible flex items-center justify-center w-full h-full">
-             <button type="button" class="text-2xl text-white bg-pink-500 hover:bg-pink-400 focus:outline-none px-3 py-1 rounded-full z-60" id="closeGalleryBtn" title="Close"><i class="fa-solid fa-xmark"></i></button>
-             <img src="" alt="Gallery Photo" id="galleryImage" class="gallery-img-viewer rounded-xl transition-all duration-300" draggable="false">
-             <div id="lightboxCaption"></div> <!-- Moved caption inside inner div -->
-             <div class="gallery-modal-controls">
-                <button type="button" class="text-xl" id="prevPhoto" title="Prev"><i class="fa-solid fa-chevron-left"></i></button>
-                <button type="button" class="text-xl" id="nextPhoto" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
-            </div>
+    <div id="galleryModal" class="gallery-modal-bg">
+      <div class="z-50 relative bg-transparent overflow-visible">
+        <button type="button" class="absolute -top-11 right-2 text-2xl text-white bg-pink-600 hover:bg-pink-400 focus:outline-none px-3 py-1 rounded-full z-60" id="closeGalleryBtn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+        <img src="" alt="Gallery Photo" id="galleryImage" class="gallery-img-viewer rounded-3xl border-2 border-white shadow-lg transition-all duration-300" draggable="false">
+        <div class="gallery-modal-controls">
+          <button type="button" class="text-3xl p-3 bg-white bg-opacity-30 hover:bg-opacity-80 rounded-l-full rounded-r-full ml-2" id="prevPhoto" title="Prev"><i class="fa-solid fa-chevron-left"></i></button>
+          <button type="button" class="text-3xl p-3 bg-white bg-opacity-30 hover:bg-opacity-80 rounded-l-full rounded-r-full mr-2" id="nextPhoto" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
+      </div>
     </div>
+  </div>
+  <footer class="w-full text-center py-7 mt-8 text-gray-400 text-base">
+    <i class="fa-solid fa-cake-candles text-pink-300"></i>
+    <span>Made with 💝 for an unforgettable teacher's new adventure.</span>
+  </footer>
+<script>
+// --- Data & Utilities ---
+const starterTributes = [ /* Kept the original starter tributes */
+  {
+    from: "Zoe",
+    msg: "Thank you for being such a patient and inspiring teacher. Happy retirement!",
+    date: "May 17, 2024",
+    photos: [
+      "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=320&h=220&facepad=1"
+    ]
+  },
+  {
+    from: "Ming",
+    msg: "I'll always remember your fun lessons and kind smile. You made school a happy place!",
+    date: "May 18, 2024",
+    photos: []
+  },
+  {
+    from: "Alicia",
+    msg: "Wishing you endless days of gardening and naps. You’ve earned it!",
+    date: "May 18, 2024",
+    photos: [
+      "https://images.unsplash.com/photo-1444065381814-865dc9da92c0?auto=format&fit=facearea&w=320&h=220&facepad=2",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=320&h=220&facepad=1"
+    ]
+  }
+];
 
-    <!-- Footer -->
-    <footer class="w-full text-center py-7 mt-8 text-gray-500 text-base">
-        <i class="fa-regular fa-cake-candles text-pink-300"></i>
-        <span>Made with <span class="text-pink-400">♥</span> for a wonderful teacher's new chapter.</span>
-    </footer>
+function formatNow() {
+  const d = new Date();
+  return d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
+}
 
-    <script>
-        // --- Constants and Globals ---
-        const TRIBUTES_LS_KEY = 'retireTributesCombinedV6'; // Incremented key for data structure change (Data URLs)
-        const MAX_PHOTOS = 5;
-        const PHOTO_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB limit per photo
-        const ICONS = ['fa-flower', 'fa-apple-whole', 'fa-star', 'fa-heart', 'fa-leaf', 'fa-book', 'fa-paint-brush'];
+function loadTributes() {
+  const ls = window.localStorage.getItem('retireTributesV2');
+  if(ls) { try { return JSON.parse(ls); } catch { return []; } }
+  return [...starterTributes]; // Use spread to return a copy, not the original
+}
 
-        let currentlyEditingIdx = null; // Track which card is being edited
-        let tributesData = []; // Holds the current tribute data array
+function saveTributes(arr) {
+  window.localStorage.setItem('retireTributesV2', JSON.stringify(arr));
+}
 
-        // --- Utility Functions ---
-        function formatNow() {
-            const d = new Date();
-            return d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, s => {
+    return ({'&':'&','<':'<','>':'>','"':'"',"'":'''})[s] || s;
+  });
+}
+
+// --- Rendering ---
+let galleryPhotoSet = [], galleryPhotoIdx = 0; // For gallery modal
+
+function renderPhotoCollage(photos, tribIdx) {
+  if(!photos || !photos.length) return '';
+  const numPhotos = Math.min(photos.length, 4); // Max 4 visible in collage
+  let collageClass="collage-"+numPhotos;
+  let imgs = '';
+  for(let i=0; i < numPhotos; i++) {
+    // Add error handling for potentially broken image URLs
+    imgs += `<img src="${escapeHtml(photos[i] || '')}" class="gallery-thumb" data-tribidx="${tribIdx}" data-photoidx="${i}" alt="Tribute Photo ${i+1}" loading="lazy" onerror="this.style.display='none'">`;
+  }
+  return `<div class="photo-collage ${collageClass} mb-2 cursor-pointer">${imgs}</div>`;
+}
+
+function renderTributeCard(tribute, idx) {
+  let imageMarkup = "";
+  if(tribute.photos && tribute.photos.length > 0) {
+    imageMarkup = renderPhotoCollage(tribute.photos, idx);
+  } else {
+    imageMarkup = `<div class="w-16 h-16 flex items-center justify-center text-pink-400 rounded-full bg-pink-50 border-2 border-pink-100 mb-2 mx-auto shadow-sm text-3xl">
+      <i class="fa-solid fa-leaf"></i> <!-- Changed icon slightly -->
+    </div>`;
+  }
+  const icons=['fa-flower','fa-apple-whole','fa-star','fa-heart', 'fa-sun', 'fa-bookmark']; // Added more icons
+
+  // *** IMPORTANT: Use escapeHtml for user-generated content ***
+  const safeFrom = escapeHtml(tribute.from || "Anonymous");
+  const safeMsg = escapeHtml(tribute.msg || "");
+
+  return `
+    <div class="tribute-card flex flex-col items-center px-5 pt-7 pb-7 rounded-2xl shadow-md min-h-[290px] relative group" data-idx="${idx}">
+      <div class="w-full flex flex-row-reverse gap-1 absolute -top-2 right-2 opacity-0 group-hover:opacity-95 group-[.touched]:opacity-95 transition-opacity z-10"> <!-- Use group-[.touched] for mobile -->
+        <button class="edit-btn text-indigo-500 hover:text-indigo-900 px-2 py-1 focus:outline-none bg-white/70 rounded-full backdrop-blur-sm" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button class="remove-btn text-pink-500 hover:text-pink-900 px-2 py-1 focus:outline-none bg-white/70 rounded-full backdrop-blur-sm" title="Delete"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      ${imageMarkup}
+      <div class="text-purple-500 font-bold mb-1">${safeFrom}</div>
+      <div class="text-gray-700 mb-3 text-center whitespace-pre-line break-words" style="font-family:'Indie Flower',cursive;font-size:1.13rem;">${safeMsg}</div>
+      <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
+        <i class="fa-solid ${icons[idx % icons.length]}"></i>
+        <span>${escapeHtml(tribute.date || "")}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderAllTributes(){
+  const tributes = loadTributes();
+  const grid = document.getElementById('tributesGrid');
+  grid.innerHTML = "";
+
+  if(!tributes.length) {
+    document.getElementById('emptyState').classList.remove('hidden');
+    return;
+  } else {
+    document.getElementById('emptyState').classList.add('hidden');
+  }
+
+  tributes.forEach((trb, idx) => {
+    grid.innerHTML += renderTributeCard(trb, idx);
+  });
+
+  // --- Attach Event Listeners ---
+  grid.querySelectorAll('.tribute-card').forEach(card => {
+    const idx = parseInt(card.getAttribute('data-idx')); // Get index from data attribute
+
+    // Gallery Thumbnails
+    card.querySelectorAll('.gallery-thumb').forEach(img => {
+      img.addEventListener('click', e => {
+        e.stopPropagation(); // Prevent card touch event if clicking image
+        const tribIdx = parseInt(img.getAttribute('data-tribidx'));
+        const pIdx = parseInt(img.getAttribute('data-photoidx'));
+        const currentTribs = loadTributes(); // Load fresh data
+        galleryPhotoSet = (currentTribs[tribIdx]?.photos) || [];
+        galleryPhotoIdx = pIdx;
+        if (galleryPhotoSet.length > 0) {
+          openGalleryModal();
         }
+      });
+    });
 
-        function escapeHTML(str) {
-            if (typeof str !== 'string') return '';
-            return str.replace(/[&<>"']/g, s => ({'&':'&','<':'<','>':'>','"':'"',"'":'''})[s]); // Use HTML entities
-        }
-
-        // Function to convert File to Data URL (async)
-        function fileToDataUrl(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // --- Data Handling ---
-        function loadTributes() {
-            const ls = window.localStorage.getItem(TRIBUTES_LS_KEY);
-            let loadedData = [];
-            if (ls) {
-                try { loadedData = JSON.parse(ls); } catch { console.error("Failed to parse tributes from localStorage. Using default data."); loadedData = getDefaultTributes(); }
-            } else {
-                 loadedData = getDefaultTributes();
-            }
-             // Ensure photos array exists and is an array for all items
-            loadedData.forEach(t => {
-                if (!Array.isArray(t.photos)) t.photos = [];
-                 // Filter out any invalid or old blob URLs that might have somehow persisted
-                 t.photos = t.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http')));
-            });
-            tributesData = loadedData; // Update global state
-            return tributesData;
-        }
-
-        function saveTributes() {
-             // Clean up any invalid photo entries before saving
-             tributesData.forEach(tribute => {
-                 if (tribute.photos && Array.isArray(tribute.photos)) {
-                     // Only save valid Data URLs or external URLs
-                     tribute.photos = tribute.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http')));
-                 } else {
-                     tribute.photos = [];
-                 }
-             });
-            window.localStorage.setItem(TRIBUTES_LS_KEY, JSON.stringify(tributesData));
-        }
-
-        function getDefaultTributes() {
-           // Return a fresh copy each time to avoid mutation issues
-           return [
-               { from: 'Zoe', msg: 'Thank you for being such a patient and inspiring teacher. Happy retirement! 🎉 So many great memories.', date: 'May 17, 2024', photos: ["https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"] },
-               { from: 'Alicia', msg: "Wishing you endless days of gardening and naps. You've earned it 🌻! Thanks for everything.", date: 'May 18, 2024', photos: ["https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"] },
-               { from: 'Ming', msg: "I'll always remember your fun lessons and kind smile. You made school a happy place! 😊 Best wishes!", date: 'May 18, 2024', photos: [] },
-               { from: 'Class of 2024', msg: "Happy retirement! We'll miss you! Enjoy your well-deserved break. Here are some moments!", date: 'May 19, 2024', photos: ["https://images.unsplash.com/photo-1465146344424-50a78b3c6a14?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", "https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"] }
-           ];
-        }
-
-
-        // --- Rendering Functions ---
-
-        function renderPhotoFanStack(photos, tributeIdx, fromName) {
-             photos = Array.isArray(photos) ? photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http'))) : []; // Ensure valid array of Data/External URLs
-             if (!photos.length) {
-                 return `<div class="flex justify-center items-center h-[130px] mb-4">
-                            <i class="fa-solid fa-image text-purple-300 text-4xl opacity-50"></i>
-                         </div>`;
-             }
-             const photoCount = Math.min(photos.length, MAX_PHOTOS); // Use actual photo count up to max
-             const imageMarkup = photos.slice(0, photoCount).map((src, i) =>
-                 `<img src="${escapeHTML(src)}" class="gallery-thumb" loading="lazy"
-                      onclick="openLightbox(${tributeIdx}, ${i})"
-                      alt="Photo ${i + 1} from ${escapeHTML(fromName)}"/>`
-             ).join("");
-
-             return `<div class="photo-fan-stack photo-count-${photoCount}">${imageMarkup}</div>`;
-        }
-
-        function renderTributeCard(trb, idx) {
-            const safeFrom = escapeHTML(trb.from);
-            const safeMsg = escapeHTML(trb.msg);
-            const cardId = `tribute-card-${idx}`;
-
-             // --- View Mode ---
-            const photoMarkup = renderPhotoFanStack(trb.photos, idx, safeFrom);
-            const viewModeHtml = `
-                <div id="${cardId}" class="tribute-card p-5 pt-8 pb-6 relative flex flex-col items-center shadow-md group">
-                    <div class="absolute top-2 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <button type="button" class="edit-btn text-purple-500 hover:text-pink-600 text-lg" title="Edit" data-id="${idx}">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button type="button" class="delete-btn text-pink-500 hover:text-red-500 text-lg" title="Delete" data-id="${idx}">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="w-full text-center text-purple-700 font-bold mb-1 text-lg">${safeFrom || "Anonymous"}</div>
-                    ${photoMarkup}
-                    <div class="text-gray-700 mb-3 w-full text-center break-words grow px-2 custom-scroll"
-                        style="font-family:'Indie Flower',cursive; font-size:1.15rem; line-height: 1.5; max-height: 120px; overflow-y: auto; ">${safeMsg.replace(/\n/g, '<br>') || "..."}</div>
-                    <div class="text-xs text-pink-400 mt-auto absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1 items-center">
-                        <i class="fa-solid ${ICONS[idx % ICONS.length]}"></i>
-                        <span>${trb.date || ""}</span>
-                    </div>
-                </div>
-            `;
-            return viewModeHtml;
-        }
-
-        function renderEditForm(trb, idx) {
-            const safeFrom = escapeHTML(trb.from);
-            const safeMsg = escapeHTML(trb.msg);
-            const cardId = `tribute-card-${idx}`;
-            const currentPhotos = Array.isArray(trb.photos) ? trb.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http'))) : []; // Ensure valid photos
-
-             let photoPreviewHtml = currentPhotos.length > 0
-                 ? `<div class="edit-photo-preview">
-                     ${currentPhotos.map((ph, i) => `
-                         <div class="edit-photo-item" data-photo-src="${escapeHTML(ph)}"> <!-- Store src here -->
-                             <img src="${escapeHTML(ph)}" alt="Photo ${i+1}"/>
-                             <button type="button" data-photoidx="${i}" class="remove-photo-btn" title="Remove photo">×</button>
-                         </div>`).join("")}
-                    </div>`
-                 : '<p class="text-xs text-gray-400 my-1 text-center">No photos currently.</p><div class="edit-photo-preview"></div>'; // Keep preview div structure
-
-             const fileInputDisabled = currentPhotos.length >= MAX_PHOTOS;
-             const fileInputLabelClass = fileInputDisabled ? 'file-input-disabled' : '';
-
-
-             const editModeHtml = `
-                 <div id="${cardId}" class="tribute-card editing p-5 pt-6 pb-6 relative flex flex-col shadow-lg">
-                   <form class="edit-tribute-form w-full flex flex-col h-full" data-id="${idx}">
-                     <input type="text" name="editName" value="${safeFrom}" placeholder="Your Name" maxlength="32" required
-                            class="edit-input font-bold text-purple-600 text-lg text-center mb-2"/>
-                     <textarea name="editMsg" rows="3" placeholder="Your message..." maxlength="220" required
-                            class="edit-textarea text-gray-700 text-center mb-2">${safeMsg}</textarea>
-                     <div class="text-sm text-purple-500 mb-1 text-center">Photos (${currentPhotos.length}/${MAX_PHOTOS}):</div>
-                     ${photoPreviewHtml}
-                     <label class="block text-center my-2 ${fileInputLabelClass}">
-                         <span class="text-sm text-purple-500">${fileInputDisabled ? 'Max photos reached' : `Add/Replace Photos (max ${MAX_PHOTOS})`}</span>
-                         <input type="file" name="editPhoto" accept="image/png, image/jpeg, image/gif, image/webp" multiple
-                                class="add-photo-input text-xs w-full mt-1 bg-purple-50 border border-purple-200 rounded p-1"
-                                ${fileInputDisabled ? 'disabled' : ''}
-                                />
-                     </label>
-                     <p class="text-xs text-gray-400 mb-3 text-center">Uploading new files will replace existing photos.</p>
-                     <div class="flex justify-center gap-3 mt-auto">
-                       <button type="submit" class="bg-gradient-to-r from-green-400 to-blue-400 text-white rounded-lg px-4 py-1 font-semibold shadow hover:from-green-500 hover:to-blue-500 active:scale-95">Save</button>
-                       <button type="button" class="cancel-edit-btn bg-gray-300 text-gray-700 rounded-lg px-4 py-1 font-semibold hover:bg-gray-400 active:scale-95">Cancel</button>
-                     </div>
-                   </form>
-                 </div>`;
-            return editModeHtml;
-        }
-
-
-        function renderAllTributes() {
-            loadTributes(); // Load/refresh data into tributesData
-            const grid = document.getElementById('tributesGrid');
-            const emptyState = document.getElementById('emptyState');
-
-            if (!grid || !emptyState) {
-                 console.error("Grid or empty state element not found!");
-                 return;
-            }
-            grid.innerHTML = ""; // Clear previous tributes
-
-            if (!tributesData || tributesData.length === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                tributesData.forEach((trb, idx) => {
-                    const cardWrapper = document.createElement('div');
-                    cardWrapper.classList.add('tribute-card-wrapper'); // Use wrapper for stability
-                    if (currentlyEditingIdx === idx) {
-                        cardWrapper.innerHTML = renderEditForm(trb, idx);
-                    } else {
-                         cardWrapper.innerHTML = renderTributeCard(trb, idx);
-                    }
-                    // Use dataset for easy access to index
-                    cardWrapper.dataset.index = idx;
-                    grid.appendChild(cardWrapper);
-                });
-            }
-            attachCardEventListeners(); // Re-attach listeners after rendering
-        }
-
-        // --- Event Handling ---
-
-        function attachCardEventListeners() {
-             const grid = document.getElementById('tributesGrid');
-             if (!grid) return;
-
-             // Remove any old listeners to prevent duplicates, or rely solely on delegation
-             // The delegation approach used below is robust as it doesn't need re-attaching to specific card elements.
-
-             grid.onclick = function(event) { // Use single click handler on grid
-                 const target = event.target;
-                 const cardWrapper = target.closest('.tribute-card-wrapper');
-                 if (!cardWrapper) return; // Click wasn't on a card wrapper
-
-                 const tributeIdx = parseInt(cardWrapper.dataset.index); // Get index from wrapper
-
-                 // --- Delete Button ---
-                 const deleteButton = target.closest('.delete-btn');
-                 if (deleteButton && deleteButton.dataset.id == tributeIdx) { // Verify ID matches wrapper
-                     if (confirm('Are you sure you want to delete this tribute?')) {
-                         handleDeleteTribute(tributeIdx);
-                     }
-                     return; // Handled
-                 }
-
-                 // --- Edit Button ---
-                 const editButton = target.closest('.edit-btn');
-                 if (editButton && editButton.dataset.id == tributeIdx) { // Verify ID matches wrapper
-                      // Prevent starting edit if already editing another card
-                     if (currentlyEditingIdx !== null && currentlyEditingIdx !== tributeIdx) {
-                         alert('Please finish editing the current tribute first.');
-                         return;
-                     }
-                     handleStartEdit(tributeIdx);
-                     return; // Handled
-                 }
-
-                 // --- Cancel Edit Button ---
-                 const cancelEditButton = target.closest('.cancel-edit-btn');
-                 if (cancelEditButton) { // No need to check data-id here, only one edit form exists
-                     handleCancelEdit();
-                     return; // Handled
-                 }
-
-                 // --- Remove Photo Button (within Edit Form) ---
-                 const removePhotoButton = target.closest('.remove-photo-btn');
-                 if (removePhotoButton) { // No need to check data-id here, only one edit form exists
-                      event.preventDefault(); // Prevent form submission
-                      const photoIdx = parseInt(removePhotoButton.dataset.photoidx);
-                      const form = removePhotoButton.closest('.edit-tribute-form');
-                      if (!isNaN(photoIdx) && form && parseInt(form.dataset.id) === tributeIdx) {
-                          handleRemovePhotoDuringEdit(form, photoIdx);
-                      }
-                      return; // Handled
-                 }
-
-                  // --- Photo Thumbnail Click (to open Lightbox) ---
-                  const galleryThumb = target.closest('.gallery-thumb');
-                  if (galleryThumb && currentlyEditingIdx === null) { // Only open lightbox in view mode
-                       const allThumbsInCard = cardWrapper.querySelectorAll('.gallery-thumb');
-                       let photoIdx = -1;
-                       allThumbsInCard.forEach((thumb, i) => {
-                            if (thumb === galleryThumb) {
-                                photoIdx = i;
-                            }
-                       });
-                       if (photoIdx !== -1) {
-                            openLightbox(tributeIdx, photoIdx);
-                       }
-                       return; // Handled
-                   }
-             };
-
-              // --- Handle Edit Form Submission ---
-              // Find the edit form if it's currently rendered and attach submit listener
-             const editForm = grid.querySelector(".edit-tribute-form");
-             if (editForm) {
-                  // Remove potential old listener if this function is called multiple times while form is active
-                  editForm.onsubmit = null; // Clear previous handler
-                  editForm.onsubmit = handleSaveEdit; // Attach new handler
-             }
-        }
-
-         function handleStartEdit(id) {
-             // Check if another card is already being edited
-             if (currentlyEditingIdx !== null && currentlyEditingIdx !== id) {
-                 alert('Please finish editing the current tribute first.');
-                 return;
-             }
-             currentlyEditingIdx = id;
-             renderAllTributes(); // Re-render to show the edit form
-         }
-
-         function handleCancelEdit() {
-             currentlyEditingIdx = null;
-             renderAllTributes(); // Re-render to show view mode
-         }
-
-         function handleDeleteTribute(id) {
-              if (id < 0 || id >= tributesData.length) return;
-              // No special cleanup needed for Data URLs or external URLs on delete
-              tributesData.splice(id, 1);
-              saveTributes();
-              currentlyEditingIdx = null; // Ensure not stuck in edit mode
-              renderAllTributes();
-         }
-
-          function handleRemovePhotoDuringEdit(formElement, photoIndexToRemove) {
-             // This function modifies the displayed preview in the form *without* saving yet
-             const photoPreviewDiv = formElement.querySelector('.edit-photo-preview');
-             if (!photoPreviewDiv) return;
-             const photoItems = photoPreviewDiv.querySelectorAll('.edit-photo-item');
-             if (photoIndexToRemove >= 0 && photoIndexToRemove < photoItems.length) {
-                  photoItems[photoIndexToRemove].remove(); // Remove the visual element
-
-                  // Update the photo count display and file input state
-                  const currentItems = photoPreviewDiv.querySelectorAll('.edit-photo-item');
-                  const currentCount = currentItems.length;
-                  const countSpan = formElement.querySelector('.text-sm.text-purple-500');
-                  const fileInputLabel = formElement.querySelector('.add-photo-input').closest('label');
-                  const fileInput = formElement.querySelector('.add-photo-input');
-
-                  if(countSpan) {
-                     countSpan.textContent = `Photos (${currentCount}/${MAX_PHOTOS}):`;
-                  }
-                  if (fileInputLabel && fileInput) {
-                     if (currentCount < MAX_PHOTOS) {
-                          fileInputLabel.classList.remove('file-input-disabled');
-                          fileInputLabel.querySelector('span').textContent = `Add/Replace Photos (max ${MAX_PHOTOS})`;
-                          fileInput.disabled = false;
-                     }
-                     // If count is still >= MAX_PHOTOS, it stays disabled
-                  }
-             }
-         }
-
-         async function handleSaveEdit(event) {
-              event.preventDefault();
-              const form = event.target;
-              const id = parseInt(form.dataset.id);
-              if (isNaN(id) || id < 0 || id >= tributesData.length) {
-                  console.error("Invalid tribute ID for saving edit.");
-                  handleCancelEdit(); // Exit edit mode
-                  return;
-              }
-
-              const editedName = form.elements.editName.value.trim();
-              const editedMsg = form.elements.editMsg.value.trim();
-              const fileInput = form.elements.editPhoto;
-
-              if (!editedName || !editedMsg) {
-                  alert("Please enter your name and message.");
-                  return;
-              }
-
-              let finalPhotos = []; // Will hold the URLs for the saved tribute
-
-              // Check if new files were uploaded
-              if (fileInput.files && fileInput.files.length > 0) {
-                  // New files replace ALL existing photos
-                  const files = Array.from(fileInput.files);
-                  const photoPromises = [];
-
-                  for (let i = 0; i < Math.min(MAX_PHOTOS, files.length); i++) {
-                      const file = files[i];
-                      if (file.type.startsWith('image/') && file.size <= PHOTO_SIZE_LIMIT) {
-                          photoPromises.push(fileToDataUrl(file));
-                      } else {
-                          console.warn(`Skipped file during edit: ${file.name} (invalid type or size)`);
-                          alert(`Skipped file "${file.name}": Invalid type or size exceeds ${PHOTO_SIZE_LIMIT / 1024 / 1024}MB.`);
-                      }
-                  }
-                  try {
-                       finalPhotos = await Promise.all(photoPromises);
-                  } catch(error) {
-                       console.error("Error converting files during edit save:", error);
-                       alert("An error occurred processing photos. Save cancelled.");
-                       return; // Stop saving if photo processing fails
-                  }
-
-              } else {
-                  // No new files uploaded, keep the photos currently shown in the preview
-                  const photoPreviewDiv = form.querySelector('.edit-photo-preview');
-                  if (photoPreviewDiv) {
-                       // Read the 'data-photo-src' attribute which holds the original URL
-                       const currentPreviewItems = photoPreviewDiv.querySelectorAll('.edit-photo-item');
-                       currentPreviewItems.forEach(item => {
-                           const src = item.dataset.photoSrc;
-                            if (src && (src.startsWith('data:image/') || src.startsWith('http'))) {
-                                finalPhotos.push(src);
-                            }
-                       });
-                  }
-              }
-
-              // Ensure finalPhotos doesn't exceed MAX_PHOTOS (should already be handled by loop limits, but as a safeguard)
-              finalPhotos = finalPhotos.slice(0, MAX_PHOTOS);
-
-
-              // Update the tribute data
-              tributesData[id] = {
-                  ...tributesData[id], // Keep original date etc.
-                  from: editedName,
-                  msg: editedMsg,
-                  photos: finalPhotos // Use the collected Data/External URLs
-              };
-
-              saveTributes();
-              currentlyEditingIdx = null; // Exit edit mode
-              renderAllTributes();
-         }
-
-         // --- Form Submission for New Card ---
-        document.getElementById('tributeForm').onsubmit = async function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const fromInput = form.elements.fromName;
-            const messageInput = form.elements.message;
-            const fileInput = form.elements.photo;
-
-            const from = fromInput.value.trim();
-            const msg = messageInput.value.trim();
-
-            if (!from || !msg) {
-                alert("Please enter your name and a message.");
-                return;
-            }
-
-            const date = formatNow();
-            const photos = [];
-            const photoPromises = [];
-
-
-            if (fileInput.files && fileInput.files.length > 0) {
-                 const files = Array.from(fileInput.files);
-                 for (let i = 0; i < Math.min(MAX_PHOTOS, files.length); i++) {
-                     const file = files[i];
-                     if (file.type.startsWith('image/') && file.size <= PHOTO_SIZE_LIMIT) {
-                          photoPromises.push(fileToDataUrl(file)); // Convert to Data URL
-                      } else {
-                          console.warn(`Skipped file during upload: ${file.name} (invalid type or size)`);
-                          alert(`Skipped file "${file.name}": Invalid type or size exceeds ${PHOTO_SIZE_LIMIT / 1024 / 1024}MB.`);
-                      }
-                 }
-            }
-
-            try {
-                 const dataUrls = await Promise.all(photoPromises);
-                 photos.push(...dataUrls); // Add generated Data URLs to photos array
-            } catch(error) {
-                 console.error("Error converting files during new post:", error);
-                 alert("An error occurred processing photos. Post cancelled.");
-                 return; // Stop posting if photo processing fails
-            }
-
-
-            // Add to the beginning of the data array
-            tributesData.unshift({ from: from || "Anonymous", msg, date, photos });
-            saveTributes();
+    // Remove Button
+    card.querySelector('.remove-btn')?.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent card touch event
+        if(confirm("Remove this tribute? This cannot be undone.")){
+            const currentTribs = loadTributes();
+            currentTribs.splice(idx, 1);
+            saveTributes(currentTribs);
             renderAllTributes(); // Re-render the whole grid
-            form.reset(); // Clear the form
-
-            // Reset file input state if needed (though reset() should handle this)
-             const photoInputLabel = document.getElementById('photoInputLabel');
-             const photoInput = document.getElementById('photo');
-             photoInputLabel.classList.remove('file-input-disabled');
-             photoInputLabel.querySelector('span').textContent = `Photos (max ${MAX_PHOTOS})`; // Assuming max 5 is default text
-             photoInput.disabled = false;
-        };
-
-        // --- Handle file input change for new form (to update label) ---
-        document.getElementById('photo').addEventListener('change', function() {
-            const fileCount = this.files.length;
-            const labelSpan = this.closest('div').querySelector('label span');
-            if (labelSpan) {
-                labelSpan.textContent = `Photos (${fileCount}/${MAX_PHOTOS})`;
-            }
-        });
-
-
-        // --- Lightbox Modal Logic ---
-        let lightboxPhotoUrls = [];
-        let lightboxCurrentIndex = 0;
-        let lightboxCurrentFrom = "";
-
-        function openLightbox(tributeIdx, photoIdx) {
-            if (tributeIdx < 0 || tributeIdx >= tributesData.length) return;
-            const tribute = tributesData[tributeIdx];
-            if (!tribute.photos || tribute.photos.length === 0) return;
-
-            // Ensure we only use valid URLs
-            lightboxPhotoUrls = tribute.photos.filter(p => typeof p === 'string' && (p.startsWith('data:image/') || p.startsWith('http')));
-
-            if (photoIdx < 0 || photoIdx >= lightboxPhotoUrls.length) return;
-
-            lightboxCurrentIndex = photoIdx;
-            lightboxCurrentFrom = tribute.from || "Anonymous";
-
-            updateLightboxView();
-            document.getElementById('galleryModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
         }
+    });
 
-        function updateLightboxView() {
-            const imgTag = document.getElementById('galleryImage');
-            const captionTag = document.getElementById('lightboxCaption');
-            const prevBtn = document.getElementById('prevPhoto');
-            const nextBtn = document.getElementById('nextPhoto');
+    // Edit Button
+    card.querySelector('.edit-btn')?.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent card touch event
+        startEditCard(idx, card);
+    });
 
-            if (!imgTag || !captionTag || !prevBtn || !nextBtn || lightboxPhotoUrls.length === 0) {
-                closeLightbox();
-                return;
-            }
+    // ** IMPROVEMENT: Mobile Touch Listener for Hover Effect **
+    card.addEventListener('touchstart', function(e) {
+        // Add 'touched' class only if not clicking on a button/image inside
+         if (!e.target.closest('button') && !e.target.closest('img.gallery-thumb')) {
+            this.classList.add('touched');
+         }
+    }, { passive: true }); // Use passive for better scroll performance
 
-            imgTag.src = escapeHTML(lightboxPhotoUrls[lightboxCurrentIndex]);
-            imgTag.alt = `Photo ${lightboxCurrentIndex + 1} from ${escapeHTML(lightboxCurrentFrom)}`;
-            captionTag.textContent = `${escapeHTML(lightboxCurrentFrom)}'s photo ${lightboxCurrentIndex + 1} of ${lightboxPhotoUrls.length}`;
+    card.addEventListener('touchend', function() {
+        this.classList.remove('touched');
+    });
+    card.addEventListener('touchcancel', function() { // Handle interruption
+        this.classList.remove('touched');
+    });
 
-            prevBtn.style.display = lightboxCurrentIndex > 0 ? 'flex' : 'none';
-            nextBtn.style.display = lightboxCurrentIndex < lightboxPhotoUrls.length - 1 ? 'flex' : 'none';
+    // Optional: Remove 'touched' if user scrolls significantly while touching
+    // let touchStartY = 0;
+    // card.addEventListener('touchstart', function(e) { touchStartY = e.touches[0].clientY; }, { passive: true });
+    // card.addEventListener('touchmove', function(e) {
+    //     if (Math.abs(e.touches[0].clientY - touchStartY) > 10) { // Threshold
+    //         this.classList.remove('touched');
+    //     }
+    // }, { passive: true });
+
+
+  });
+}
+
+// --- Form Submission ---
+document.getElementById('tributeForm').onsubmit = async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const fromInput = document.getElementById('fromName');
+  const msgInput = document.getElementById('message');
+  const fileInput = document.getElementById('photo');
+
+  const from = fromInput.value.trim() || "Anonymous";
+  const msg = msgInput.value.trim();
+  const date = formatNow();
+  let photos = [];
+  const MAX_PHOTOS = 3;
+  const MAX_SIZE_MB = 3.3;
+
+  if (fileInput.files.length) {
+    // Use Promise.all for cleaner async handling if needed, but simple loop is ok here
+    for (let i = 0; i < fileInput.files.length && photos.length < MAX_PHOTOS; i++) {
+      const file = fileInput.files[i];
+      if (file.type.startsWith('image/') && file.size < MAX_SIZE_MB * 1024 * 1024) {
+        try {
+            // Using ObjectURL is simple for client-side only
+            const objectURL = URL.createObjectURL(file);
+            photos.push(objectURL);
+        } catch (error) {
+            console.error("Error creating object URL:", error);
+            // Optionally notify user about the failed file
         }
+      } else {
+          console.warn(`Skipping file ${file.name}: Invalid type or size.`);
+          // Optionally notify user about skipped files
+      }
+    }
+  }
 
-        function closeLightbox() {
-            const modal = document.getElementById('galleryModal');
-            if (modal) modal.classList.remove('active');
-            document.body.style.overflow = '';
-             // Clear photo URLs when closing to free memory/references (Data URLs are fine, but good practice)
-             lightboxPhotoUrls = [];
-             lightboxCurrentIndex = 0;
-             lightboxCurrentFrom = "";
-             document.getElementById('galleryImage').src = ''; // Clear image src
-             document.getElementById('lightboxCaption').textContent = ''; // Clear caption
+  let tributes = loadTributes();
+  tributes.unshift({ from, msg, date, photos });
+  saveTributes(tributes);
+  renderAllTributes();
+  form.reset(); // Reset the form
+
+  // Clean up Object URLs after a delay to ensure images have rendered
+  if (photos.length > 0) {
+    setTimeout(() => {
+        photos.forEach(ph => {
+            if (ph && ph.startsWith('blob:')) {
+                try { URL.revokeObjectURL(ph); } catch (e) { console.error("Error revoking URL:", e); }
+            }
+        });
+    }, 10000); // Increased delay slightly
+  }
+};
+
+// --- Edit Functionality ---
+function startEditCard(idx, cardElem) {
+  let tributes = loadTributes();
+  let t = tributes[idx];
+  // Keep track of Object URLs created during this edit session
+  let newObjectUrls = [];
+
+  // Build edit form inside the card
+  cardElem.classList.remove('touched'); // Ensure no hover state while editing
+  cardElem.innerHTML = `<form class='edit-tribute-form w-full h-full flex flex-col items-center justify-between p-3' autocomplete="off">
+    <input type="text" class="edit-input font-bold px-2 py-1 rounded-lg border border-purple-300 w-11/12 my-2 text-purple-500 text-base text-center" maxlength="32" value="${escapeHtml(t.from || '')}">
+    <textarea class="edit-textarea px-2 py-1 rounded-lg border border-purple-300 w-11/12 my-1 mb-2 text-gray-700 text-center resize-y min-h-[60px]" maxlength="230" rows="3">${escapeHtml(t.msg || '')}</textarea>
+    <div class='edit-photos-container flex justify-center flex-wrap gap-2 mb-1 w-full px-2 overflow-y-auto max-h-[100px] custom-scroll'>
+      ${(t.photos || []).map((ph, i) =>
+        `<span class="relative rounded-lg group/img">
+          <img src="${escapeHtml(ph)}" class="inline-block w-14 h-14 object-cover rounded-lg border border-purple-200 shadow-sm">
+          <button title="Remove" type="button" class="remove-img absolute -top-1 -right-1 text-xs text-center w-5 h-5 leading-5 bg-white border border-pink-400 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white shadow opacity-50 group-hover/img:opacity-100 transition-opacity" data-phidx="${i}"><i class="fa fa-times"></i></button>
+        </span>`).join("")}
+    </div>
+    <label class="w-full text-purple-500 font-medium text-xs mt-2 mb-1 text-center cursor-pointer hover:text-pink-500">
+        <i class="fa fa-image"></i> Add Photo(s) (Max 3 total)
+        <input type="file" accept="image/*" class="edit-photo-uploader sr-only" multiple> <!-- Use sr-only to hide default input, style label instead -->
+    </label>
+    <div class="edit-actions mt-auto pt-2 w-full flex justify-center gap-2">
+      <button type="submit" class="bg-violet-200 hover:bg-violet-300 text-indigo-700 font-semibold py-1 px-3 rounded-lg">Save</button>
+      <button type="button" class="bg-pink-200 hover:bg-pink-300 text-pink-700 font-semibold py-1 px-3 rounded-lg cancel-edit-btn">Cancel</button>
+    </div>
+  </form>`;
+
+  const photosContainer = cardElem.querySelector('.edit-photos-container');
+
+  // Remove image button listener
+  cardElem.querySelectorAll('.remove-img').forEach(btn => {
+    btn.onclick = function() {
+      const phidx = parseInt(btn.getAttribute('data-phidx'));
+      // Ensure photos array exists and index is valid
+       if (t.photos && t.photos[phidx] !== undefined) {
+           // If it's a temporary blob URL created in this edit session, revoke it now
+           const urlToRemove = t.photos[phidx];
+           if (newObjectUrls.includes(urlToRemove)) {
+               try { URL.revokeObjectURL(urlToRemove); } catch (e) { console.error("Error revoking URL:", e); }
+               newObjectUrls = newObjectUrls.filter(url => url !== urlToRemove); // Remove from temp list
+           }
+           t.photos.splice(phidx, 1); // Remove from the tribute's photo array
+           // Re-render only the photo thumbnails part of the edit form for efficiency
+           renderEditPhotoThumbnails(t.photos, photosContainer, newObjectUrls);
+           // Need to re-attach remove listeners after re-rendering thumbnails
+            attachRemoveImageListeners(cardElem, t, photosContainer, newObjectUrls);
+       }
+    }
+  });
+
+  // Add photo listener (Improved Logic)
+  cardElem.querySelector('.edit-photo-uploader').onchange = function(e) {
+    let files = Array.from(e.target.files);
+    let currentPhotoCount = t.photos ? t.photos.length : 0;
+    const MAX_PHOTOS = 3;
+    const MAX_SIZE_MB = 3.3;
+    let addedCount = 0;
+
+    files.forEach(file => {
+      if (currentPhotoCount + addedCount < MAX_PHOTOS && file.type.startsWith('image/') && file.size < MAX_SIZE_MB * 1024 * 1024) {
+        try {
+            const objectURL = URL.createObjectURL(file);
+            if (!t.photos) t.photos = []; // Initialize if it doesn't exist
+            t.photos.push(objectURL);
+            newObjectUrls.push(objectURL); // Track new URL for potential cleanup on cancel
+            addedCount++;
+        } catch (error) {
+             console.error("Error creating object URL during edit:", error);
         }
+      } else {
+          console.warn(`Skipping file during edit ${file.name}: Max photos reached, invalid type, or size.`);
+      }
+    });
 
-        document.getElementById('closeGalleryBtn')?.addEventListener('click', closeLightbox);
-        document.getElementById('galleryModal')?.addEventListener('click', function(e) {
-            // Check if the click was directly on the modal background
-             if (e.target === this || e.target.classList.contains('gallery-img-viewer')) { // Also close if clicking the image directly (optional)
-                closeLightbox();
+    if (addedCount > 0) {
+      // Re-render only the photo thumbnails part of the edit form
+       renderEditPhotoThumbnails(t.photos, photosContainer, newObjectUrls);
+       attachRemoveImageListeners(cardElem, t, photosContainer, newObjectUrls); // Re-attach listeners
+    }
+    // Clear the file input value so the same file can be selected again if removed then re-added
+    e.target.value = null;
+  };
+
+  // Cancel button listener
+  cardElem.querySelector('.cancel-edit-btn').onclick = function() {
+    // Revoke any temporary object URLs created during this cancelled edit
+    newObjectUrls.forEach(url => {
+        try { URL.revokeObjectURL(url); } catch (e) { console.error("Error revoking URL on cancel:", e); }
+    });
+    renderAllTributes(); // Re-render the original card state
+  }
+
+  // Save button listener (form submit)
+  cardElem.querySelector('.edit-tribute-form').onsubmit = function(e) {
+    e.preventDefault();
+    t.from = cardElem.querySelector('.edit-input').value.trim().slice(0, 32) || "";
+    t.msg = cardElem.querySelector('.edit-textarea').value.trim().slice(0, 230) || "";
+    // t.photos is already updated by the add/remove actions
+    saveTributes(tributes); // Save the modified tributes array
+    renderAllTributes(); // Re-render the board
+    // Note: newObjectUrls don't need explicit revoke here, as they are now part of saved data.
+    // The general onbeforeunload will attempt cleanup later, or they persist if needed.
+  }
+}
+// Helper to render just the photo thumbnails in edit mode
+function renderEditPhotoThumbnails(photos, container, newObjectUrls) {
+    container.innerHTML = (photos || []).map((ph, i) =>
+        `<span class="relative rounded-lg group/img">
+          <img src="${escapeHtml(ph)}" class="inline-block w-14 h-14 object-cover rounded-lg border border-purple-200 shadow-sm">
+          <button title="Remove" type="button" class="remove-img absolute -top-1 -right-1 text-xs text-center w-5 h-5 leading-5 bg-white border border-pink-400 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white shadow opacity-50 group-hover/img:opacity-100 transition-opacity" data-phidx="${i}"><i class="fa fa-times"></i></button>
+        </span>`).join("");
+}
+// Helper to re-attach remove image listeners after thumbnail re-render
+function attachRemoveImageListeners(cardElem, tributeData, photosContainer, newObjectUrls) {
+     cardElem.querySelectorAll('.remove-img').forEach(btn => {
+        btn.onclick = function() {
+           const phidx = parseInt(btn.getAttribute('data-phidx'));
+           if (tributeData.photos && tributeData.photos[phidx] !== undefined) {
+               const urlToRemove = tributeData.photos[phidx];
+               if (newObjectUrls.includes(urlToRemove)) {
+                   try { URL.revokeObjectURL(urlToRemove); } catch (e) { console.error("Error revoking URL:", e); }
+                   newObjectUrls = newObjectUrls.filter(url => url !== urlToRemove);
+               }
+               tributeData.photos.splice(phidx, 1);
+               renderEditPhotoThumbnails(tributeData.photos, photosContainer, newObjectUrls); // Re-render thumbnails
+               attachRemoveImageListeners(cardElem, tributeData, photosContainer, newObjectUrls); // Recursively re-attach
+           }
+        }
+    });
+}
+
+
+// --- Gallery Modal Logic ---
+function openGalleryModal() {
+  const modal = document.getElementById('galleryModal');
+  updateGalleryView();
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden'; // Prevent body scroll when modal is open
+}
+
+function closeGalleryModal() {
+  const modal = document.getElementById('galleryModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = ''; // Restore body scroll
+}
+
+function updateGalleryView() {
+  const img = document.getElementById('galleryImage');
+  if (galleryPhotoSet && galleryPhotoSet.length > 0) {
+    // Ensure index is within bounds
+    galleryPhotoIdx = (galleryPhotoSet.length + galleryPhotoIdx) % galleryPhotoSet.length;
+    img.src = escapeHtml(galleryPhotoSet[galleryPhotoIdx] || ''); // Escape URL just in case
+    img.alt = `Gallery Photo ${galleryPhotoIdx + 1}`;
+    img.style.display = 'block'; // Ensure visible
+    img.onerror = () => { img.style.display = 'none'; /* Hide if image fails to load */ };
+  } else {
+      img.style.display = 'none'; // Hide if no photos
+  }
+}
+
+document.getElementById('closeGalleryBtn').onclick = closeGalleryModal;
+document.getElementById('prevPhoto').onclick = function(e) {
+  if (galleryPhotoSet.length > 1) { // Only navigate if more than one photo
+    galleryPhotoIdx = (galleryPhotoSet.length + galleryPhotoIdx - 1) % galleryPhotoSet.length;
+    updateGalleryView();
+  }
+}
+document.getElementById('nextPhoto').onclick = function(e) {
+  if (galleryPhotoSet.length > 1) {
+    galleryPhotoIdx = (galleryPhotoIdx + 1) % galleryPhotoSet.length;
+    updateGalleryView();
+  }
+}
+// Close modal on clicking background or pressing Esc
+document.getElementById('galleryModal').onclick = function(e) {
+  // Close only if clicking the dark background itself, not the image or buttons
+  if (e.target === this) {
+    closeGalleryModal();
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('galleryModal').classList.contains('active')) {
+    if (e.key === 'Escape') { closeGalleryModal(); }
+    if (e.key === 'ArrowRight') { document.getElementById('nextPhoto').click(); }
+    if (e.key === 'ArrowLeft') { document.getElementById('prevPhoto').click(); }
+  }
+});
+
+// --- Initial Load & Cleanup ---
+document.addEventListener("DOMContentLoaded", function() {
+  renderAllTributes();
+  // Subtle load animation (optional)
+  const grid = document.getElementById('tributesGrid');
+  if (grid) {
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+          grid.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+          grid.style.opacity = '1';
+          grid.style.transform = 'translateY(0)';
+      }, 100); // Short delay
+  }
+});
+
+window.onbeforeunload = () => {
+    // Attempt to clean up *all* remaining blob URLs associated with tributes in storage
+    try {
+        const tributes = loadTributes();
+        tributes.forEach(t => {
+            (t.photos || []).forEach(ph => {
+            if (ph && ph.startsWith('blob:')) {
+                try { URL.revokeObjectURL(ph); } catch (e) { /* Ignore cleanup errors */ }
             }
+            });
         });
-        document.getElementById('nextPhoto')?.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent modal background click if controls are clicked
-            if (lightboxCurrentIndex < lightboxPhotoUrls.length - 1) {
-                lightboxCurrentIndex++;
-                updateLightboxView();
-            }
-        });
-        document.getElementById('prevPhoto')?.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent modal background click if controls are clicked
-            if (lightboxCurrentIndex > 0) {
-                lightboxCurrentIndex--;
-                updateLightboxView();
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            const modal = document.getElementById('galleryModal');
-            if (modal?.classList.contains('active')) {
-                if (e.key === 'Escape') closeLightbox();
-                else if (e.key === 'ArrowRight') document.getElementById('nextPhoto')?.click();
-                else if (e.key === 'ArrowLeft') document.getElementById('prevPhoto')?.click();
-            }
-        });
-
-
-        // --- Initialization ---
-        document.addEventListener("DOMContentLoaded", function() {
-            renderAllTributes();
-            // Initial animation effect
-            setTimeout(() => {
-                const grid = document.getElementById('tributesGrid');
-                if(grid) {
-                    // grid.style.transition = 'transform 0.7s ease-out'; // Removed, can interfere with card animations
-                    // grid.style.transform = 'scale(1.03)';
-                    // setTimeout(() => {
-                    //      grid.style.transform = 'scale(1)';
-                    // }, 550);
-                }
-            }, 320);
-        });
-
-        // No window.addEventListener('beforeunload') needed with Data URLs
-
-    </script>
+    } catch (e) {
+        console.error("Error during beforeunload cleanup:", e);
+    }
+};
+</script>
 </body>
 </html>
