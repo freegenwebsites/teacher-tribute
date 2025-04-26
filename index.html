@@ -228,16 +228,32 @@ function escapeHtml(str) {
   }[s]));
 }
 
-  function formatDateString(dbDateString) {
-      if (!dbDateString) return '';
-      try {
-          const date = new Date(dbDateString);
-          return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-      } catch (e) {
-          console.error("Error formatting date:", dbDateString, e);
-          return '';
-      }
-  }
+function formatDateString(dbDateString) {
+    if (!dbDateString) return '';
+    try {
+        // Replace the first space with 'T' to help the parser
+        // Handles formats like "YYYY-MM-DD HH:MM:SS" -> "YYYY-MM-DDTHH:MM:SS"
+        const isoFriendlyString = dbDateString.replace(' ', 'T');
+        const date = new Date(isoFriendlyString);
+
+        // Check if the date is valid after parsing
+        if (isNaN(date.getTime())) {
+             console.error("Failed to parse date string:", dbDateString);
+             return 'Invalid Date'; // Or return empty string ''
+        }
+
+        // If valid, format it
+        return date.toLocaleDateString("en-US", {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+            // Optionally add time: hour: 'numeric', minute: '2-digit'
+        });
+    } catch (e) {
+        console.error("Error formatting date:", dbDateString, e);
+        return ''; // Return empty on error
+    }
+}
 
   // --->>> NEW HELPER FUNCTION FOR IMAGE PROCESSING <<<---
   // Reads selected files and returns an array of Base64 Data URLs
