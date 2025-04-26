@@ -255,59 +255,36 @@
     setupCardAnimations();
   }
 
-  function renderFanGallery(photos, tributeIdx) {
-    // ... (keep existing function definition) ...
-    if(!photos || !photos.length) return `
-      <div class="w-20 h-20 flex items-center justify-center text-pink-300 rounded-full bg-pink-50 border-2 border-pink-100 shadow mb-3 text-3xl"><i class="fa-solid fa-flower"></i></div>
-    `;
-    let imgMarkup = "";
-    let n = Math.min(photos.length, 4);
-    let spread = (n === 1) ? [0] :
-                 (n === 2) ? [-18, 18] :
-                 (n === 3) ? [-18, 0, 18] :
-                             [-24, -8, 8, 24];
-    let shiftBase = (n > 1) ? (n - 1) * 49 / 2 : 0;
-    for(let i = 0; i < n; i++) {
-      if (typeof photos[i] !== 'string' || !photos[i]) continue;
-      let ang = spread[i];
-      let l = (n > 1) ? (i * 49) - shiftBase : 0;
-      imgMarkup += `<img
-        src="${escapeHtml(photos[i])}"
-        class="fan-img"
-        data-tidx="${tributeIdx}"
-        data-pidx="${i}"
-        tabindex="0"
-        style="transform:rotate(${ang}deg) translateX(${l}px);"
-        alt="Tribute Photo ${i+1}"
-      >`;
-    }
-    return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
-  }
+// Updated renderTributeCard to use data from backend and include DB ID
+function renderTributeCard(tribute, idx) {
+  // tribute object structure from backend: { id, from, msg, photos, date }
+  const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
+  const tributeId = tribute.id; // The unique ID from the database
 
-  function renderTributeCard(tribute, idx) {
-    // ... (keep existing function definition) ...
-    const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
-    const tributeId = tribute.id;
-    return `
-      <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}" data-id="${tributeId}">
-        <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
-          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-pen"></i>
-          </button>
-          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-purple-400 hover:text-pink-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
-        ${renderFanGallery(tribute.photos || [], idx)}
-        <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
-        <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
-        <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-          <i class="fa-solid ${icons[idx % icons.length]}"></i>
-          <span>${formatDateString(tribute.date) || ''}</span>
-        </div>
+  // **Important:** Add data-id attribute to the main card div
+  return `
+    <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}" data-id="${tributeId}">
+      <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
+        <!-- Edit/Delete buttons now need data-id -->
+        <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-purple-400 hover:text-pink-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
+          <i class="fa-solid fa-trash"></i>
+        </button>
       </div>
-    `;
-  }
+      <!-- Pass the photos array and original index for fan gallery logic -->
+      ${renderFanGallery(tribute.photos || [], idx)}
+      <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
+      <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
+      <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
+        <i class="fa-solid ${icons[idx % icons.length]}"></i>
+        <!-- Use the formatted date from the backend -->
+        <span>${formatDateString(tribute.date) || ''}</span>
+      </div>
+    </div>
+  `;
+}
 
   // --- API INTERACTIONS ---
   async function fetchAndRenderTributes() {
