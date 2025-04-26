@@ -213,8 +213,8 @@
 
 <script>
   // --- STATE ---
-  let tributes = []; // Will be populated by fetching from the backend
-  let editingTributeId = null; // Use null to indicate not editing, store DB ID when editing
+  let tributes = [];
+  let editingTributeId = null;
 
   // --- UTILS ---
   function escapeHtml(str) {
@@ -224,26 +224,22 @@
     })[s]);
   }
 
-  // Helper to format date string from backend (adjust format as needed)
   function formatDateString(dbDateString) {
       if (!dbDateString) return '';
       try {
           const date = new Date(dbDateString);
-          // Example: "May 20, 2024"
           return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
       } catch (e) {
           console.error("Error formatting date:", dbDateString, e);
-          return ''; // Fallback
+          return '';
       }
   }
 
   // --- RENDERING ---
-
-  // Render the grid with data fetched from the backend
   function renderAllTributes() {
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = ""; // Clear previous content
+    grid.innerHTML = "";
 
     if (!tributes || !tributes.length) {
       emptyState.classList.remove('hidden');
@@ -252,37 +248,28 @@
 
     emptyState.classList.add('hidden');
     tributes.forEach((trb, idx) => {
-      // Pass the actual tribute object from the DB (contains id, from, msg, photos, date)
-      // Also pass the array index 'idx' if needed by fan gallery/modal logic relying on it
       grid.innerHTML += renderTributeCard(trb, idx);
     });
 
-    // Re-attach event listeners after rendering cards
     attachCardEventListeners();
-    // Re-run card animations if needed (or handle via IntersectionObserver setup)
     setupCardAnimations();
   }
 
-  // Keep your existing renderFanGallery - it uses the photos array and index
   function renderFanGallery(photos, tributeIdx) {
+    // ... (keep existing function definition) ...
     if(!photos || !photos.length) return `
       <div class="w-20 h-20 flex items-center justify-center text-pink-300 rounded-full bg-pink-50 border-2 border-pink-100 shadow mb-3 text-3xl"><i class="fa-solid fa-flower"></i></div>
     `;
     let imgMarkup = "";
-    let n = Math.min(photos.length, 4); // Ensure max 4 photos
+    let n = Math.min(photos.length, 4);
     let spread = (n === 1) ? [0] :
                  (n === 2) ? [-18, 18] :
                  (n === 3) ? [-18, 0, 18] :
                              [-24, -8, 8, 24];
-    // Adjust shiftBase calculation slightly if needed, original seems fine
     let shiftBase = (n > 1) ? (n - 1) * 49 / 2 : 0;
-
     for(let i = 0; i < n; i++) {
-      // Ensure photos[i] contains a valid URL string
       if (typeof photos[i] !== 'string' || !photos[i]) continue;
-
       let ang = spread[i];
-      // Adjust positioning calculation if needed, original seems fine
       let l = (n > 1) ? (i * 49) - shiftBase : 0;
       imgMarkup += `<img
         src="${escapeHtml(photos[i])}"
@@ -297,18 +284,13 @@
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
 
-
-  // Updated renderTributeCard to use data from backend and include DB ID
   function renderTributeCard(tribute, idx) {
-    // tribute object structure from backend: { id, from, msg, photos, date }
+    // ... (keep existing function definition) ...
     const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
-    const tributeId = tribute.id; // The unique ID from the database
-
-    // **Important:** Add data-id attribute to the main card div
+    const tributeId = tribute.id;
     return `
       <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}" data-id="${tributeId}">
         <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
-          {/* Edit/Delete buttons now need data-id="${tributeId}" */}
           <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
             <i class="fa-solid fa-pen"></i>
           </button>
@@ -316,13 +298,11 @@
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
-        {/* Pass the photos array and original index for fan gallery logic */}
         ${renderFanGallery(tribute.photos || [], idx)}
         <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
         <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
         <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
           <i class="fa-solid ${icons[idx % icons.length]}"></i>
-          {/* Use the formatted date from the backend */}
           <span>${formatDateString(tribute.date) || ''}</span>
         </div>
       </div>
@@ -330,22 +310,19 @@
   }
 
   // --- API INTERACTIONS ---
-
-  // Fetch all tributes from the backend
   async function fetchAndRenderTributes() {
+    // ... (keep existing function definition) ...
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = '<p class="text-purple-400 text-center col-span-full italic">Loading tributes...</p>'; // Show loading state
+    grid.innerHTML = '<p class="text-purple-400 text-center col-span-full italic">Loading tributes...</p>';
     emptyState.classList.add('hidden');
-
     try {
       const response = await fetch('/.netlify/functions/get-tributes');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      tributes = await response.json(); // Update global tributes array
-      renderAllTributes(); // Render the fetched data
-
+      tributes = await response.json();
+      renderAllTributes();
     } catch (error) {
       console.error("Failed to fetch tributes:", error);
       grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>';
@@ -353,75 +330,62 @@
     }
   }
 
-  // Add or Update a tribute via the backend
   async function submitTribute(tributeData, idToUpdate = null) {
+    // ... (keep existing function definition) ...
     const isUpdating = idToUpdate !== null;
     const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
-    const method = isUpdating ? 'PUT' : 'POST'; // Or POST for both if your backend handles it
-
-    // If updating, include the ID in the payload
+    const method = isUpdating ? 'PUT' : 'POST';
     const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData;
-
     try {
       const response = await fetch(endpoint, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
-
-      // Success! Refresh the list to show the new/updated tribute
       await fetchAndRenderTributes();
-      return true; // Indicate success
-
+      return true;
     } catch (error) {
       console.error(`Failed to ${isUpdating ? 'update' : 'add'} tribute:`, error);
       alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`);
-      return false; // Indicate failure
+      return false;
     }
   }
 
-   // Delete a tribute via the backend
    async function deleteTribute(tributeId) {
+    // ... (keep existing function definition) ...
     if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) {
         return false;
     }
-
     try {
         const response = await fetch('/.netlify/functions/delete-tribute', {
-            method: 'DELETE', // Or 'POST' if your function expects that
+            method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            // Send ID in the body (common practice, adjust if function expects differently)
             body: JSON.stringify({ id: tributeId })
         });
-
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
-
-        // Success! Refresh the list
         await fetchAndRenderTributes();
-        return true; // Indicate success
-
+        return true;
     } catch (error) {
         console.error("Failed to delete tribute:", error);
         alert(`Error deleting tribute: ${error.message}`);
-        return false; // Indicate failure
+        return false;
     }
   }
 
-
-  // --- FORM LOGIC ---
-  document.getElementById('tributeForm').onsubmit = async function(e) {
-    e.preventDefault();
+  // --- FORM LOGIC (Function Definitions) ---
+  // Define the actual function logic here
+  async function handleFormSubmit(e) {
+    e.preventDefault(); // Prevent default now happens inside the assigned function
     const submitBtn = document.getElementById('submitBtn');
     const submitBtnText = document.getElementById('submitBtnText');
-    const originalBtnText = editingTributeId ? "Update" : "Share"; // Get correct original text
+    const originalBtnText = editingTributeId ? "Update" : "Share";
     const actionText = editingTributeId ? 'Updating...' : 'Sharing...';
 
     submitBtn.disabled = true;
@@ -429,143 +393,105 @@
 
     const from = document.getElementById('fromName').value.trim() || "Anonymous";
     const msg = document.getElementById('message').value.trim();
+    const photos = []; // Image limitation still applies
 
-    // **Image Handling Limitation:** Still applies. Blob URLs won't work long-term.
-    // For now, we pass an empty array. Implement proper uploads for real images.
-    const photos = [];
-    // If you were implementing file uploads, you'd handle them here and get permanent URLs.
-    // Example (conceptual): const photoURLs = await uploadFiles(fileInput.files);
+    const tributeData = { from, msg, photos };
 
-    const tributeData = { from, msg, photos }; // Data to send
-
-    // Call the combined submit function, passing the ID if we are editing
     const success = await submitTribute(tributeData, editingTributeId);
 
     if (success) {
-        resetForm(); // Reset form fields and editing state
+        resetForm();
     } else {
-        // Re-enable button but keep text if submission failed
         submitBtn.disabled = false;
         submitBtnText.textContent = originalBtnText;
     }
-  };
+  }
 
   function resetForm() {
+      // ... (keep existing function definition) ...
       document.getElementById('tributeForm').reset();
       document.getElementById('submitBtnText').textContent = "Share";
       document.getElementById('cancelEditBtn').classList.add('hidden');
-      document.getElementById('editIndex').value = ""; // Clear hidden input (used for ID now)
-      editingTributeId = null; // Clear the editing state variable
+      document.getElementById('editIndex').value = "";
+      editingTributeId = null;
       const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = false; // Ensure button is enabled
+      submitBtn.disabled = false;
   }
 
-
-  // --- EDIT/CANCEL LOGIC ---
+  // --- EDIT/CANCEL LOGIC (Function Definitions) ---
   function loadEditForm(tributeId) {
-    // Find the tribute object in the current 'tributes' array using the ID
+    // ... (keep existing function definition) ...
     const tributeToEdit = tributes.find(t => t.id === tributeId);
-
     if (!tributeToEdit) {
         console.error("Could not find tribute with ID:", tributeId);
         alert("Could not load tribute for editing.");
         return;
     }
-
     document.getElementById('fromName').value = tributeToEdit.from;
     document.getElementById('message').value = tributeToEdit.msg;
-    // Don't try to re-populate file input - browser security prevents this.
-    // If photos were editable, you'd show existing ones and allow removal/addition.
-
-    document.getElementById('editIndex').value = tributeId; // Store the DB ID in the hidden input
-    editingTributeId = tributeId; // Set the state variable
-
+    document.getElementById('editIndex').value = tributeId;
+    editingTributeId = tributeId;
     document.getElementById('submitBtnText').textContent = "Update";
     document.getElementById('cancelEditBtn').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'}); // Scroll to form
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  // Cancel Edit Button
-  document.getElementById('cancelEditBtn').onclick = function() {
-    resetForm();
-  };
-
-
-  // --- CARD BUTTONS / IMAGE EVENTS ---
+  // --- CARD BUTTONS / IMAGE EVENTS (Function Definitions) ---
   function attachCardEventListeners() {
-    // Use event delegation on the grid for potentially better performance
+    // ... (keep existing function definition) ...
     const grid = document.getElementById('tributesGrid');
     if (!grid) return;
-
     grid.onclick = function(event) {
         const target = event.target;
-        const button = target.closest('button[data-act]'); // Find closest button with data-act
-        const img = target.closest('.fan-img'); // Find closest fan image
-
+        const button = target.closest('button[data-act]');
+        const img = target.closest('.fan-img');
         if (button) {
-            event.stopPropagation(); // Prevent triggering other clicks if needed
+            event.stopPropagation();
             const action = button.getAttribute('data-act');
-            const id = button.getAttribute('data-id'); // Get the DB ID
-
-            if (action === 'edit') {
-                 loadEditForm(id); // Pass the DB ID
-            } else if (action === 'delete') {
-                 deleteTribute(id); // Pass the DB ID
-            }
+            const id = button.getAttribute('data-id');
+            if (action === 'edit') { loadEditForm(id); }
+            else if (action === 'delete') { deleteTribute(id); }
         } else if (img) {
             event.stopPropagation();
             const tIdx = parseInt(img.getAttribute("data-tidx"));
             const pIdx = parseInt(img.getAttribute("data-pidx"));
-            // Ensure the tribute data is available for the modal
-            if (tributes[tIdx]) {
-                 showModalGallery(tIdx, pIdx);
-            } else {
-                 console.error("Tribute data not found for modal at index:", tIdx);
-            }
+            if (tributes[tIdx]) { showModalGallery(tIdx, pIdx); }
+            else { console.error("Tribute data not found for modal at index:", tIdx); }
         }
     };
-
-     // Add keydown listeners for accessibility on images if needed (delegation harder here)
      document.querySelectorAll('.fan-img').forEach(img => {
          img.onkeydown = function(e) {
-             if (e.key === 'Enter' || e.key === ' ') {
-                 e.preventDefault(); // Prevent spacebar scroll
-                 img.click(); // Trigger the click handler set up by delegation
-             }
+             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); }
          }
-         // Keep hover animations attached directly as before
          img.addEventListener('mouseenter', function() { img.classList.add('fan-expanded'); });
          img.addEventListener('mouseleave', function() { img.classList.remove('fan-expanded'); });
      });
   }
 
-  // Setup Intersection Observers for animations (run once after initial load/render)
   function setupCardAnimations() {
-      // Animate fan images on hover/mobile in-view (keep existing logic)
+      // ... (keep existing function definition) ...
       if ('IntersectionObserver' in window) {
           document.querySelectorAll('.fan-img').forEach(img => {
-              img.classList.remove('fan-anim', 'fan-pop'); // Reset animation classes
-              let obs = new IntersectionObserver(function(entries, observerInstance){ // Get observer instance
+              img.classList.remove('fan-anim', 'fan-pop');
+              let obs = new IntersectionObserver(function(entries, observerInstance){
                   entries.forEach(entry => {
                       if(entry.isIntersecting){
                           img.classList.add('fan-pop');
                           setTimeout(() => img.classList.remove('fan-pop'), 700);
-                          observerInstance.unobserve(img); // Optional: Stop observing after animation
+                          observerInstance.unobserve(img);
                       }
                   });
               }, {threshold: 0.5});
               obs.observe(img);
           });
-
-          // Animate cards on mobile/in-viewport (keep existing logic)
           document.querySelectorAll('.tribute-card').forEach(card => {
-              card.classList.remove('card-mobile-anim'); // Reset
+              card.classList.remove('card-mobile-anim');
               let observer = new IntersectionObserver(function(entries, observerInstance){
                   entries.forEach(entry => {
                       if(entry.isIntersecting){
                           card.classList.add('card-mobile-anim');
                           setTimeout(() => card.classList.remove('card-mobile-anim'), 690);
-                          observerInstance.unobserve(card); // Optional: Stop observing
+                          observerInstance.unobserve(card);
                       }
                   });
               }, {threshold: 0.42});
@@ -574,16 +500,12 @@
       }
   }
 
-
-  // --- MODAL GALLERY LOGIC --- (Keep existing modal functions)
+  // --- MODAL GALLERY LOGIC (Function Definitions) ---
   let modalTributeIdx = 0, modalPhotoIdx = 0;
 
   function showModalGallery(tributeIdx, photoIdx) {
-    // Use the global 'tributes' array which is now populated from the backend
-    if (!tributes[tributeIdx]) {
-        console.error("Tribute data unavailable for modal index:", tributeIdx);
-        return;
-    }
+    // ... (keep existing function definition) ...
+    if (!tributes[tributeIdx]) { console.error("Tribute data unavailable for modal index:", tributeIdx); return; }
     modalTributeIdx = tributeIdx;
     modalPhotoIdx = photoIdx;
     renderModalImage();
@@ -592,17 +514,10 @@
   }
 
   function renderModalImage() {
-    let t = tributes[modalTributeIdx]; // Get tribute from the global array
-    // Ensure photos exist and are an array
+    // ... (keep existing function definition) ...
+    let t = tributes[modalTributeIdx];
     let photos = Array.isArray(t.photos) ? t.photos : [];
-
-    if(!photos.length || !photos[modalPhotoIdx]){
-        // Maybe close modal or show placeholder if specific photo is missing
-        console.warn("Photos array empty or photo index invalid for modal.");
-        closeModalGallery(); // Close if no valid photo
-        return;
-    }
-
+    if(!photos.length || !photos[modalPhotoIdx]){ console.warn("Photos array empty or photo index invalid for modal."); closeModalGallery(); return; }
     document.getElementById('modalImg').src = photos[modalPhotoIdx];
     document.getElementById('galleryCaption').textContent = (t.from || "Anonymous")+": "+(modalPhotoIdx+1)+" / "+photos.length;
     document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0);
@@ -610,44 +525,86 @@
   }
 
   function closeModalGallery(){
+    // ... (keep existing function definition) ...
     document.getElementById("galleryModal").classList.add("hidden");
-    document.getElementById('modalImg').src=''; // Clear image src
-    document.body.style.overflow=''; // Restore body scroll
+    document.getElementById('modalImg').src='';
+    document.body.style.overflow='';
   }
-
-  // Keep modal event listeners
-  document.getElementById('closeModalBtn').onclick = closeModalGallery;
-  document.getElementById('modalBG').onclick = closeModalGallery;
-  document.getElementById('prevImgBtn').onclick = function(e){
-    e.stopPropagation();
-    if(modalPhotoIdx > 0){
-      modalPhotoIdx--;
-      renderModalImage();
-    }
-  };
-  document.getElementById('nextImgBtn').onclick = function(e){
-    e.stopPropagation();
-    let t = tributes[modalTributeIdx];
-    let photos = Array.isArray(t.photos) ? t.photos : [];
-    if(modalPhotoIdx < photos.length - 1){
-      modalPhotoIdx++;
-      renderModalImage();
-    }
-  };
-  window.addEventListener("keydown", function(e){
-    if(document.getElementById("galleryModal").classList.contains("hidden")) return;
-    if(e.key === "ArrowLeft") document.getElementById('prevImgBtn').click();
-    if(e.key === "ArrowRight") document.getElementById('nextImgBtn').click();
-    if(e.key === "Escape") closeModalGallery();
-  });
 
   // --- INITIALIZE ---
   document.addEventListener("DOMContentLoaded", function() {
-    fetchAndRenderTributes(); // Fetch data and render on load
-    // Keep the initial grid animation if desired, maybe trigger after fetch?
-    // setTimeout(()=>{document.getElementById('tributesGrid').classList.add('transition','duration-700','ease-out','scale-105');
-    //   setTimeout(()=>{document.getElementById('tributesGrid').classList.remove('scale-105');}, 420);
-    // }, 800); // Delay slightly longer to allow fetch/render
+    // Fetch initial data
+    fetchAndRenderTributes();
+
+    // ---> Assign event listeners AFTER DOM is ready <---
+    try {
+        // Form submission
+        const tributeForm = document.getElementById('tributeForm');
+        if (tributeForm) {
+            tributeForm.onsubmit = handleFormSubmit; // Assign the named function
+        } else {
+            console.error("Could not find element with ID 'tributeForm'");
+        }
+
+        // Cancel button
+        const cancelBtn = document.getElementById('cancelEditBtn');
+        if (cancelBtn) {
+            cancelBtn.onclick = resetForm; // Assign the named function
+        } else {
+            console.error("Could not find element with ID 'cancelEditBtn'");
+        }
+
+        // Modal buttons
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        if (closeModalBtn) {
+            closeModalBtn.onclick = closeModalGallery;
+        } else {
+            console.error("Could not find element with ID 'closeModalBtn'");
+        }
+
+        const modalBG = document.getElementById('modalBG');
+        if (modalBG) {
+            modalBG.onclick = closeModalGallery;
+        } else {
+            console.error("Could not find element with ID 'modalBG'");
+        }
+
+        const prevImgBtn = document.getElementById('prevImgBtn');
+        if (prevImgBtn) {
+            prevImgBtn.onclick = function(e){ // Keep anonymous function or define named one
+                e.stopPropagation();
+                if(modalPhotoIdx > 0){ modalPhotoIdx--; renderModalImage(); }
+            };
+        } else {
+            console.error("Could not find element with ID 'prevImgBtn'");
+        }
+
+        const nextImgBtn = document.getElementById('nextImgBtn');
+        if (nextImgBtn) {
+            nextImgBtn.onclick = function(e){ // Keep anonymous function or define named one
+                e.stopPropagation();
+                let t = tributes[modalTributeIdx];
+                let photos = Array.isArray(t.photos) ? t.photos : [];
+                if(modalPhotoIdx < photos.length - 1){ modalPhotoIdx++; renderModalImage(); }
+            };
+        } else {
+            console.error("Could not find element with ID 'nextImgBtn'");
+        }
+
+    } catch (error) {
+        console.error("Error attaching event listeners:", error);
+    }
+
+    // Modal keyboard listener (window always exists, so this is okay here or outside)
+    window.addEventListener("keydown", function(e){
+        if(document.getElementById("galleryModal")?.classList.contains("hidden")) return; // Optional chaining for safety
+        if(e.key === "ArrowLeft") document.getElementById('prevImgBtn')?.click(); // Optional chaining
+        if(e.key === "ArrowRight") document.getElementById('nextImgBtn')?.click(); // Optional chaining
+        if(e.key === "Escape") closeModalGallery();
+    });
+
+    // Optional: Keep the initial grid animation if desired
+    // setTimeout(()=>{ ... });
   });
 
   // No longer need onbeforeunload for blob URLs
