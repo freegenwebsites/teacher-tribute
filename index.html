@@ -217,16 +217,16 @@
   let editingTributeId = null;
 
 // --- UTILS ---
-  function escapeHtml(str) {
-    // Escapes special characters for safe HTML insertion
-    return String(str).replace(/[&<>"']/g, s => ({
-      '&': '&',  // Use & for ampersand
-      '<': '<',   // Use < for less than
-      '>': '>',   // Use > for greater than
-      '"': '"', // Use " for double quote
-      "'": '''  // Use ' for single quote (corrected line)
-    }[s]));
-  }
+function escapeHtml(str) {
+  // Escapes special characters for safe HTML insertion
+  return String(str).replace(/[&<>"']/g, s => ({
+    '&': '&',  // Use & for ampersand
+    '<': '<',   // Use < for less than
+    '>': '>',   // Use > for greater than
+    '"': '"', // Use " for double quote
+    "'": '''  // Use ' for single quote (THE CORRECT LINE)
+  }[s]));
+}
 
   function formatDateString(dbDateString) {
       if (!dbDateString) return '';
