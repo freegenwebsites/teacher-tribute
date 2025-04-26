@@ -347,7 +347,7 @@ function escapeHtml(str) {
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
-        ${renderFanGallery(tribute.photos, idx)} //Call renderFanGallery 
+        ${renderFanGallery(tribute.photos, idx)} 
         <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
         <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
         <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
