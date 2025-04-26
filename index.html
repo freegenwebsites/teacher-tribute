@@ -240,6 +240,7 @@ function escapeHtml(str) {
   }
 
   // --- RENDERING ---
+
   function renderAllTributes() {
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
@@ -252,47 +253,93 @@ function escapeHtml(str) {
 
     emptyState.classList.add('hidden');
     tributes.forEach((trb, idx) => {
+      // Pass the full tribute object and index
       grid.innerHTML += renderTributeCard(trb, idx);
     });
 
+    // Re-attach necessary event listeners after re-rendering
     attachCardEventListeners();
     setupCardAnimations();
   }
 
-// Updated renderTributeCard to use data from backend and include DB ID
-function renderTributeCard(tribute, idx) {
-  // tribute object structure from backend: { id, from, msg, photos, date }
-  const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
-  const tributeId = tribute.id; // The unique ID from the database
+  // --->>> FUNCTION DEFINITION ADDED HERE <<<---
+  // Renders the fan-out image gallery for a card
+  function renderFanGallery(photos, tributeIdx) {
+    // Ensure photos is treated as an array, even if null/undefined
+    const photoArray = Array.isArray(photos) ? photos : [];
 
-  // **Important:** Add data-id attribute to the main card div
-  return `
-    <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}" data-id="${tributeId}">
-      <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
-        <!-- Edit/Delete buttons now need data-id -->
-        <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
-          <i class="fa-solid fa-pen"></i>
-        </button>
-        <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-purple-400 hover:text-pink-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
-          <i class="fa-solid fa-trash"></i>
-        </button>
+    if (!photoArray.length) {
+      // Return placeholder if no photos
+      return `
+        <div class="w-20 h-20 flex items-center justify-center text-pink-300 rounded-full bg-pink-50 border-2 border-pink-100 shadow mb-3 text-3xl"><i class="fa-solid fa-flower"></i></div>
+      `;
+    }
+
+    let imgMarkup = "";
+    // Limit to max 4 photos for the fan effect
+    let n = Math.min(photoArray.length, 4);
+    let spread = (n === 1) ? [0] :
+                 (n === 2) ? [-18, 18] :
+                 (n === 3) ? [-18, 0, 18] :
+                             [-24, -8, 8, 24]; // Angles for 1, 2, 3, or 4 images
+    // Calculate horizontal offset base for centering
+    let shiftBase = (n > 1) ? (n - 1) * 49 / 2 : 0; // Adjust 49px based on image width/spacing if needed
+
+    for (let i = 0; i < n; i++) {
+      // Basic check if the item is a string URL
+      if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue; // Skip if not a valid string
+
+      let ang = spread[i];
+      // Calculate horizontal position for each image
+      let l = (n > 1) ? (i * 49) - shiftBase : 0; // Adjust 49px if needed
+
+      // Add the image tag with calculated style, escaping the src
+      imgMarkup += `<img
+        src="${escapeHtml(photoArray[i])}"
+        class="fan-img"
+        data-tidx="${tributeIdx}"
+        data-pidx="${i}"
+        tabindex="0"
+        style="transform:rotate(${ang}deg) translateX(${l}px);"
+        alt="Tribute Photo ${i + 1}"
+      >`;
+    }
+    // Return the container with all the image tags
+    return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
+  }
+  // --->>> END OF ADDED FUNCTION <<<---
+
+
+  // Renders a single tribute card
+  function renderTributeCard(tribute, idx) {
+    const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
+    const tributeId = tribute.id;
+
+    return `
+      <div class="tribute-card stripe-bg relative min-h-[310px]" data-cardidx="${idx}" data-id="${tributeId}">
+        <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
+          <!-- Edit/Delete buttons now need data-id -->
+          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-purple-400 hover:text-yellow-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-purple-400 hover:text-pink-500 bg-white rounded-full shadow border border-purple-100 px-2 py-1 focus:outline-none transition">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        <!-- Call the renderFanGallery function -->
+        ${renderFanGallery(tribute.photos, idx)}
+        <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
+        <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
+        <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
+          <i class="fa-solid ${icons[idx % icons.length]}"></i>
+          <span>${formatDateString(tribute.date) || ''}</span>
+        </div>
       </div>
-      <!-- Pass the photos array and original index for fan gallery logic -->
-      ${renderFanGallery(tribute.photos || [], idx)}
-      <div class="text-purple-500 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
-      <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.12rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
-      <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-        <i class="fa-solid ${icons[idx % icons.length]}"></i>
-        <!-- Use the formatted date from the backend -->
-        <span>${formatDateString(tribute.date) || ''}</span>
-      </div>
-    </div>
-  `;
-}
+    `;
+  }
 
   // --- API INTERACTIONS ---
   async function fetchAndRenderTributes() {
-    // ... (keep existing function definition) ...
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
     grid.innerHTML = '<p class="text-purple-400 text-center col-span-full italic">Loading tributes...</p>';
@@ -300,11 +347,13 @@ function renderTributeCard(tribute, idx) {
     try {
       const response = await fetch('/.netlify/functions/get-tributes');
       if (!response.ok) {
+        // Throw error to be caught below, including status
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       tributes = await response.json();
-      renderAllTributes();
+      renderAllTributes(); // Render the fetched data
     } catch (error) {
+      // Log the specific error and display user message
       console.error("Failed to fetch tributes:", error);
       grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>';
       emptyState.classList.add('hidden');
@@ -312,7 +361,6 @@ function renderTributeCard(tribute, idx) {
   }
 
   async function submitTribute(tributeData, idToUpdate = null) {
-    // ... (keep existing function definition) ...
     const isUpdating = idToUpdate !== null;
     const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
     const method = isUpdating ? 'PUT' : 'POST';
@@ -324,20 +372,26 @@ function renderTributeCard(tribute, idx) {
         body: JSON.stringify(payload)
       });
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        // Try to get error message from response body
+        let errorMsg = `HTTP error! status: ${response.status}`;
+        try {
+            const errorData = await response.json();
+            errorMsg = errorData.error || errorMsg; // Use backend error if available
+        } catch (e) { /* Ignore if response is not JSON */ }
+        throw new Error(errorMsg);
       }
+      // Success! Refresh the list
       await fetchAndRenderTributes();
-      return true;
+      return true; // Indicate success
     } catch (error) {
+      // Log the specific error and alert the user
       console.error(`Failed to ${isUpdating ? 'update' : 'add'} tribute:`, error);
       alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`);
-      return false;
+      return false; // Indicate failure
     }
   }
 
    async function deleteTribute(tributeId) {
-    // ... (keep existing function definition) ...
     if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) {
         return false;
     }
@@ -348,9 +402,14 @@ function renderTributeCard(tribute, idx) {
             body: JSON.stringify({ id: tributeId })
         });
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            let errorMsg = `HTTP error! status: ${response.status}`;
+             try {
+                 const errorData = await response.json();
+                 errorMsg = errorData.error || errorMsg;
+             } catch (e) { /* Ignore */ }
+            throw new Error(errorMsg);
         }
+        // Success! Refresh
         await fetchAndRenderTributes();
         return true;
     } catch (error) {
@@ -361,9 +420,8 @@ function renderTributeCard(tribute, idx) {
   }
 
   // --- FORM LOGIC (Function Definitions) ---
-  // Define the actual function logic here
   async function handleFormSubmit(e) {
-    e.preventDefault(); // Prevent default now happens inside the assigned function
+    e.preventDefault();
     const submitBtn = document.getElementById('submitBtn');
     const submitBtnText = document.getElementById('submitBtnText');
     const originalBtnText = editingTributeId ? "Update" : "Share";
@@ -381,27 +439,27 @@ function renderTributeCard(tribute, idx) {
     const success = await submitTribute(tributeData, editingTributeId);
 
     if (success) {
-        resetForm();
+        resetForm(); // Reset only on success
     } else {
+        // Restore button state on failure
         submitBtn.disabled = false;
         submitBtnText.textContent = originalBtnText;
     }
   }
 
   function resetForm() {
-      // ... (keep existing function definition) ...
       document.getElementById('tributeForm').reset();
       document.getElementById('submitBtnText').textContent = "Share";
       document.getElementById('cancelEditBtn').classList.add('hidden');
-      document.getElementById('editIndex').value = "";
-      editingTributeId = null;
+      document.getElementById('editIndex').value = ""; // This hidden input might not be needed anymore
+      editingTributeId = null; // Clear editing state
       const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = false;
+      submitBtn.disabled = false; // Re-enable button
   }
 
   // --- EDIT/CANCEL LOGIC (Function Definitions) ---
   function loadEditForm(tributeId) {
-    // ... (keep existing function definition) ...
+    // Find tribute using the unique database ID
     const tributeToEdit = tributes.find(t => t.id === tributeId);
     if (!tributeToEdit) {
         console.error("Could not find tribute with ID:", tributeId);
@@ -410,72 +468,103 @@ function renderTributeCard(tribute, idx) {
     }
     document.getElementById('fromName').value = tributeToEdit.from;
     document.getElementById('message').value = tributeToEdit.msg;
-    document.getElementById('editIndex').value = tributeId;
-    editingTributeId = tributeId;
+    // Note: Cannot programmatically set file input value
+    // document.getElementById('editIndex').value = tributeId; // Store ID if needed, but editingTributeId state is primary
+    editingTributeId = tributeId; // Set the editing state
     document.getElementById('submitBtnText').textContent = "Update";
     document.getElementById('cancelEditBtn').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({top: 0, behavior: 'smooth'}); // Scroll to form
   }
 
   // --- CARD BUTTONS / IMAGE EVENTS (Function Definitions) ---
   function attachCardEventListeners() {
-    // ... (keep existing function definition) ...
+    // Using event delegation on the grid container
     const grid = document.getElementById('tributesGrid');
     if (!grid) return;
-    grid.onclick = function(event) {
+
+    // Remove previous listener to prevent duplicates if called multiple times
+    // Note: This simple approach requires the handler function not to be anonymous
+    // grid.removeEventListener('click', handleGridClick); // Need to define handleGridClick separately if using removeEventListener
+    // For simplicity here, we rely on it being set once or overwritten if renderAllTributes is called again.
+
+    grid.onclick = function handleGridClick(event) { // Named the function for potential removal later if needed
         const target = event.target;
+        // Find the closest relevant element (button or image)
         const button = target.closest('button[data-act]');
         const img = target.closest('.fan-img');
+
         if (button) {
-            event.stopPropagation();
+            event.stopPropagation(); // Stop click bubbling up further
             const action = button.getAttribute('data-act');
-            const id = button.getAttribute('data-id');
+            const id = button.getAttribute('data-id'); // Get DB ID
+            if (!id) return; // Should have an ID
+
             if (action === 'edit') { loadEditForm(id); }
             else if (action === 'delete') { deleteTribute(id); }
+
         } else if (img) {
             event.stopPropagation();
+            // Get indices from data attributes
             const tIdx = parseInt(img.getAttribute("data-tidx"));
             const pIdx = parseInt(img.getAttribute("data-pidx"));
-            if (tributes[tIdx]) { showModalGallery(tIdx, pIdx); }
-            else { console.error("Tribute data not found for modal at index:", tIdx); }
+            // Check if indices are valid numbers and tribute exists
+            if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) {
+                 showModalGallery(tIdx, pIdx);
+            } else {
+                 console.error("Invalid index or tribute data for modal. tIdx:", tIdx, "pIdx:", pIdx);
+            }
         }
     };
+
+     // Attach keydown listeners directly to images after they are rendered
      document.querySelectorAll('.fan-img').forEach(img => {
-         img.onkeydown = function(e) {
-             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); }
+         // Remove old listener before adding new one? Might be overkill.
+         img.onkeydown = function(e) { // Overwrites previous onkeydown
+             if (e.key === 'Enter' || e.key === ' ') {
+                 e.preventDefault(); // Prevent default scroll on space
+                 img.click(); // Trigger the delegated click handler
+             }
          }
-         img.addEventListener('mouseenter', function() { img.classList.add('fan-expanded'); });
-         img.addEventListener('mouseleave', function() { img.classList.remove('fan-expanded'); });
+         // Add hover listeners (these are safe to re-add)
+         img.removeEventListener('mouseenter', handleFanMouseEnter); // Remove potential old listener
+         img.removeEventListener('mouseleave', handleFanMouseLeave); // Remove potential old listener
+         img.addEventListener('mouseenter', handleFanMouseEnter);
+         img.addEventListener('mouseleave', handleFanMouseLeave);
      });
   }
+  // Define hover handlers separately for add/removeEventListener
+  function handleFanMouseEnter() { this.classList.add('fan-expanded'); }
+  function handleFanMouseLeave() { this.classList.remove('fan-expanded'); }
+
 
   function setupCardAnimations() {
-      // ... (keep existing function definition) ...
       if ('IntersectionObserver' in window) {
+          // Animate fan images on view
           document.querySelectorAll('.fan-img').forEach(img => {
-              img.classList.remove('fan-anim', 'fan-pop');
-              let obs = new IntersectionObserver(function(entries, observerInstance){
+              img.classList.remove('fan-anim', 'fan-pop'); // Reset state
+              const observer = new IntersectionObserver((entries, observerInstance) => {
                   entries.forEach(entry => {
-                      if(entry.isIntersecting){
+                      if (entry.isIntersecting) {
                           img.classList.add('fan-pop');
                           setTimeout(() => img.classList.remove('fan-pop'), 700);
-                          observerInstance.unobserve(img);
+                          observerInstance.unobserve(img); // Animate only once
                       }
                   });
-              }, {threshold: 0.5});
-              obs.observe(img);
+              }, { threshold: 0.5 });
+              observer.observe(img);
           });
+          // Animate cards on view
           document.querySelectorAll('.tribute-card').forEach(card => {
-              card.classList.remove('card-mobile-anim');
-              let observer = new IntersectionObserver(function(entries, observerInstance){
+              card.classList.remove('card-mobile-anim'); // Reset state
+              const observer = new IntersectionObserver((entries, observerInstance) => {
                   entries.forEach(entry => {
-                      if(entry.isIntersecting){
+                      if (entry.isIntersecting) {
                           card.classList.add('card-mobile-anim');
                           setTimeout(() => card.classList.remove('card-mobile-anim'), 690);
-                          observerInstance.unobserve(card);
+                          observerInstance.unobserve(card); // Animate only once
                       }
                   });
-              }, {threshold: 0.42});
+              }, { threshold: 0.42 });
               observer.observe(card);
           });
       }
@@ -485,108 +574,105 @@ function renderTributeCard(tribute, idx) {
   let modalTributeIdx = 0, modalPhotoIdx = 0;
 
   function showModalGallery(tributeIdx, photoIdx) {
-    // ... (keep existing function definition) ...
     if (!tributes[tributeIdx]) { console.error("Tribute data unavailable for modal index:", tributeIdx); return; }
     modalTributeIdx = tributeIdx;
     modalPhotoIdx = photoIdx;
-    renderModalImage();
+    renderModalImage(); // Render the specific image
     document.getElementById("galleryModal").classList.remove("hidden");
-    document.body.style.overflow='hidden';
+    document.body.style.overflow = 'hidden'; // Prevent body scroll when modal is open
   }
 
   function renderModalImage() {
-    // ... (keep existing function definition) ...
     let t = tributes[modalTributeIdx];
     let photos = Array.isArray(t.photos) ? t.photos : [];
-    if(!photos.length || !photos[modalPhotoIdx]){ console.warn("Photos array empty or photo index invalid for modal."); closeModalGallery(); return; }
-    document.getElementById('modalImg').src = photos[modalPhotoIdx];
-    document.getElementById('galleryCaption').textContent = (t.from || "Anonymous")+": "+(modalPhotoIdx+1)+" / "+photos.length;
+    let currentPhotoSrc = photos[modalPhotoIdx];
+
+    // Ensure photo index is valid and src is a string
+    if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) {
+        console.warn("Photos array empty or photo index/src invalid for modal.");
+        closeModalGallery(); // Close if no valid photo
+        return;
+    }
+
+    document.getElementById('modalImg').src = currentPhotoSrc;
+    document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`;
+    // Toggle visibility of nav buttons
     document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0);
     document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1);
   }
 
-  function closeModalGallery(){
-    // ... (keep existing function definition) ...
+  function closeModalGallery() {
     document.getElementById("galleryModal").classList.add("hidden");
-    document.getElementById('modalImg').src='';
-    document.body.style.overflow='';
+    document.getElementById('modalImg').src = ''; // Clear src to prevent brief flash of old image
+    document.body.style.overflow = ''; // Restore body scrolling
   }
 
-  // --- INITIALIZE ---
+  // --- INITIALIZE & EVENT LISTENERS ---
   document.addEventListener("DOMContentLoaded", function() {
     // Fetch initial data
     fetchAndRenderTributes();
 
-    // ---> Assign event listeners AFTER DOM is ready <---
+    // Assign event listeners AFTER DOM is ready
     try {
-        // Form submission
         const tributeForm = document.getElementById('tributeForm');
         if (tributeForm) {
-            tributeForm.onsubmit = handleFormSubmit; // Assign the named function
-        } else {
-            console.error("Could not find element with ID 'tributeForm'");
-        }
+            tributeForm.onsubmit = handleFormSubmit;
+        } else { console.error("Could not find element with ID 'tributeForm'"); }
 
-        // Cancel button
         const cancelBtn = document.getElementById('cancelEditBtn');
         if (cancelBtn) {
-            cancelBtn.onclick = resetForm; // Assign the named function
-        } else {
-            console.error("Could not find element with ID 'cancelEditBtn'");
-        }
+            cancelBtn.onclick = resetForm;
+        } else { console.error("Could not find element with ID 'cancelEditBtn'"); }
 
-        // Modal buttons
+        // Modal listeners
         const closeModalBtn = document.getElementById('closeModalBtn');
-        if (closeModalBtn) {
-            closeModalBtn.onclick = closeModalGallery;
-        } else {
-            console.error("Could not find element with ID 'closeModalBtn'");
-        }
+        if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
+        else { console.error("Could not find element with ID 'closeModalBtn'"); }
 
         const modalBG = document.getElementById('modalBG');
-        if (modalBG) {
-            modalBG.onclick = closeModalGallery;
-        } else {
-            console.error("Could not find element with ID 'modalBG'");
-        }
+        if (modalBG) { modalBG.onclick = closeModalGallery; }
+        else { console.error("Could not find element with ID 'modalBG'"); }
 
         const prevImgBtn = document.getElementById('prevImgBtn');
         if (prevImgBtn) {
-            prevImgBtn.onclick = function(e){ // Keep anonymous function or define named one
+            prevImgBtn.onclick = function(e) {
                 e.stopPropagation();
-                if(modalPhotoIdx > 0){ modalPhotoIdx--; renderModalImage(); }
+                if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); }
             };
-        } else {
-            console.error("Could not find element with ID 'prevImgBtn'");
-        }
+        } else { console.error("Could not find element with ID 'prevImgBtn'"); }
 
         const nextImgBtn = document.getElementById('nextImgBtn');
         if (nextImgBtn) {
-            nextImgBtn.onclick = function(e){ // Keep anonymous function or define named one
+            nextImgBtn.onclick = function(e) {
                 e.stopPropagation();
                 let t = tributes[modalTributeIdx];
                 let photos = Array.isArray(t.photos) ? t.photos : [];
-                if(modalPhotoIdx < photos.length - 1){ modalPhotoIdx++; renderModalImage(); }
+                if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); }
             };
-        } else {
-            console.error("Could not find element with ID 'nextImgBtn'");
-        }
+        } else { console.error("Could not find element with ID 'nextImgBtn'"); }
 
     } catch (error) {
         console.error("Error attaching event listeners:", error);
     }
 
-    // Modal keyboard listener (window always exists, so this is okay here or outside)
-    window.addEventListener("keydown", function(e){
-        if(document.getElementById("galleryModal")?.classList.contains("hidden")) return; // Optional chaining for safety
-        if(e.key === "ArrowLeft") document.getElementById('prevImgBtn')?.click(); // Optional chaining
-        if(e.key === "ArrowRight") document.getElementById('nextImgBtn')?.click(); // Optional chaining
-        if(e.key === "Escape") closeModalGallery();
+    // Keyboard listener for modal navigation
+    window.addEventListener("keydown", function(e) {
+        const modal = document.getElementById("galleryModal");
+        // Check if modal exists and is visible
+        if (!modal || modal.classList.contains("hidden")) return;
+
+        if (e.key === "ArrowLeft") {
+            // Trigger click only if button is visible
+            document.getElementById('prevImgBtn')?.click();
+        } else if (e.key === "ArrowRight") {
+            // Trigger click only if button is visible
+            document.getElementById('nextImgBtn')?.click();
+        } else if (e.key === "Escape") {
+            closeModalGallery();
+        }
     });
 
-    // Optional: Keep the initial grid animation if desired
-    // setTimeout(()=>{ ... });
-  });
+  }); // End of DOMContentLoaded
 
   // No longer need onbeforeunload for blob URLs
 </script>
