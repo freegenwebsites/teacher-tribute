@@ -229,32 +229,22 @@ function escapeHtml(str) {
 }
 
 function formatDateString(dbDateString) {
-    if (!dbDateString) return '';
+    if (!dbDateString || typeof dbDateString !== 'string') return ''; // Add type check
     try {
-        // Replace the first space with 'T' to help the parser
-        // Handles formats like "YYYY-MM-DD HH:MM:SS" -> "YYYY-MM-DDTHH:MM:SS"
-        const isoFriendlyString = dbDateString.replace(' ', 'T');
+        const isoFriendlyString = dbDateString.replace(' ', 'T'); // Replace space
         const date = new Date(isoFriendlyString);
-
-        // Check if the date is valid after parsing
-        if (isNaN(date.getTime())) {
+        if (isNaN(date.getTime())) { // Check if valid
              console.error("Failed to parse date string:", dbDateString);
-             return 'Invalid Date'; // Or return empty string ''
+             return 'Invalid Date';
         }
-
-        // If valid, format it
-        return date.toLocaleDateString("en-US", {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-            // Optionally add time: hour: 'numeric', minute: '2-digit'
+        return date.toLocaleDateString("en-US", { // Format valid date
+            month: 'short', day: 'numeric', year: 'numeric'
         });
     } catch (e) {
         console.error("Error formatting date:", dbDateString, e);
-        return ''; // Return empty on error
+        return '';
     }
 }
-
   // --->>> NEW HELPER FUNCTION FOR IMAGE PROCESSING <<<---
   // Reads selected files and returns an array of Base64 Data URLs
   async function filesToDataURLs(fileList) {
