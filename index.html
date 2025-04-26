@@ -216,12 +216,16 @@
   let tributes = [];
   let editingTributeId = null;
 
-  // --- UTILS ---
+// --- UTILS ---
   function escapeHtml(str) {
-    // Keep your existing escapeHtml function
-    return String(str).replace(/[&<>"']/g, s=>({
-      '&':'&','<':'<','>':'>','"':'"',"'":'''
-    })[s]);
+    // Escapes special characters for safe HTML insertion
+    return String(str).replace(/[&<>"']/g, s => ({
+      '&': '&',  // Use & for ampersand
+      '<': '<',   // Use < for less than
+      '>': '>',   // Use > for greater than
+      '"': '"', // Use " for double quote
+      "'": '''  // Use ' for single quote (corrected line)
+    }[s]));
   }
 
   function formatDateString(dbDateString) {
