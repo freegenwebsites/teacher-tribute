@@ -3,3 +3,7 @@
 
 [functions]
   node_bundler = "esbuild"
+# Add the following section:
+[functions."*"] # Apply to all functions
+  included_files = ["node_modules/@libsql/linux-x64-gnu/**"]
+  # You might also need other platform files if they exist, check node_modules/@libsql/
