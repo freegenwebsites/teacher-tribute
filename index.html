@@ -2,445 +2,389 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Illustrated Retiring Teacher Tribute Board</title>
+  <title>Modern Illustrated Tribute Board</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Tailwind CSS 2.2.19 -->
+  <!-- Tailwind CSS via CDN -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Font Awesome 6.5.2 -->
+  <!-- Font Awesome via jsdelivr -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
-  <!-- Google Fonts: Indie Flower & Quicksand -->
-  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Indie Flower, Quicksand & Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;500;700&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Quicksand', 'Indie Flower', cursive, sans-serif;
+      font-family: 'Quicksand', 'Poppins', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #fdf6e3 0%, #e0e7ff 100%);
+      background: linear-gradient(135deg, #f0f9ff 0%, #e6fffa 100%);
+      color: #3a506b;
     }
-    /* Card base style */
+    
+    /* Card base style with soft gradient */
     .tribute-card {
       position: relative;
-      background: linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%);
-      box-shadow: 0 8px 32px 0 rgba(156, 195, 255, 0.13);
+      background: linear-gradient(145deg, #ffffff 0%, #f7fbff 100%);
+      box-shadow: 0 6px 28px rgba(149, 157, 165, 0.15);
       border-radius: 1.6rem;
-      padding: 1.9rem 1.6rem 1.2rem 1.6rem;
-      /* Keep card hover animation */
-      transition:
-        transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
-        box-shadow 0.19s;
-      margin-bottom: 0.7rem;
+      padding: 1.8rem 1.6rem 1.2rem 1.6rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 1rem;
       min-height: 325px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      border: 1px solid rgba(232, 240, 254, 0.8);
     }
-    .tribute-card:hover, .tribute-card.card-mobile-anim {
-      transform: translateY(-12px) scale(1.04) rotate(-1.6deg);
-      z-index:10;
-      box-shadow: 0 24px 62px 0 rgba(194, 180, 255, 0.23), 0 1.5px 8px rgba(122,122,216,.10);
+    
+    .tribute-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 14px 34px rgba(149, 157, 165, 0.2);
     }
-
-    /* --- Fan image stack (Static Version) --- */
+    
+    /* Fan gallery style for photos */
     .fan-stack {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      min-height: 112px;
-      width: 176px;
+      min-height: 120px;
+      width: 180px;
       position: relative;
       margin: 0 auto 1.2rem auto;
-      pointer-events: none; /* Container doesn't need events */
     }
+    
     .fan-img {
-      width: 96px;
-      height: 96px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
-      border-radius: 1.12rem;
-      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24); /* Static shadow */
+      border-radius: 1.1rem;
+      box-shadow: 0 8px 20px rgba(149, 157, 165, 0.18);
       transform-origin: 50% 80%;
       position: absolute;
-      background: #f9fafb;
-      border: 2.5px solid #d6edea;
-      z-index: 1; /* Base z-index */
-      cursor: pointer; /* Still clickable */
-      pointer-events: auto; /* Images are clickable */
-      /* Remove transition for hover effects */
-      /* transition: ... */
-      filter: brightness(.99) saturate(98%);
-      /* Inline transform sets the static fan position */
+      cursor: pointer;
+      border: 3px solid #ffffff;
+      z-index: 1;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
-    /* --- DELETE CSS Rules for Fan Animation --- */
-    /*
-    .fan-img.fan-expanded,
-    .fan-img.fan-anim,
+    
     .fan-img:hover {
-      z-index: 10 !important;
-      transform: scale(1.18) translateY(-7px) !important;
-      box-shadow: 0 13px 44px 0 rgba(180,176,255,0.22);
-      filter: brightness(1.08);
+      z-index: 10;
+      transform: scale(1.1) translateY(-10px);
     }
-    @keyframes fanPop {
-      0%   { transform: scale(.82) rotate(0deg);}
-      72%  { transform: scale(1.17) rotate(3deg);}
-      100% { transform: scale(1)   rotate(0deg);}
-    }
-    .fan-img.fan-pop {
-      animation: fanPop 0.78s cubic-bezier(.65,1.7,.5,.8);
-    }
-    */
-    /* --- End Deleted CSS Rules --- */
-
-
-    /* Placeholder style (reusing school-illustration for size/shape) */
-    /* Also added .initial-placeholder for potential targeting */
-    .school-illustration, .initial-placeholder {
-      width: 97px;
-      height: 97px;
-      border-radius: 1.12rem;
+    
+    /* Illustration placeholder for cards without photos */
+    .teacher-illustration {
+      width: 120px;
+      height: 120px;
+      border-radius: 30%;
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Background set by inline style in JS now */
-      border: 2.5px solid #e2e6f7;
-      box-shadow: 0 6px 19px rgba(180, 210, 255, 0.16);
-      font-size: 2.9rem; /* Base size for SVG */
-      margin: 0 auto 0.3rem auto; /* Keep margin consistent */
+      margin-bottom: 1rem;
       position: relative;
       overflow: hidden;
-      will-change: transform;
-      transition: transform .22s;
-      animation: bounceInCircle .60s 1; /* Keep entry animation */
+      background-size: cover;
+      background-position: center;
     }
-    /* Remove specific SVG styling if not needed */
-    /* .tribute-card .school-illustration svg { ... } */
-    @keyframes bounceInCircle {
-      0%   { transform: scale(.78) rotate(-6deg); opacity:.2;}
-      70%  { transform: scale(1.12) rotate(9deg); opacity:1;}
-      100% { transform: scale(1) rotate(0deg);}
+    
+    /* Themed illustration backgrounds with soft gradients */
+    .illustration-bg-1 {
+      background: linear-gradient(145deg, #dbf4ff 0%, #bbdeff 100%);
     }
-
+    
+    .illustration-bg-2 {
+      background: linear-gradient(145deg, #e6f8e6 0%, #c2f0c2 100%);
+    }
+    
+    .illustration-bg-3 {
+      background: linear-gradient(145deg, #fff0e0 0%, #ffd8b5 100%);
+    }
+    
+    .illustration-bg-4 {
+      background: linear-gradient(145deg, #f0e6ff 0%, #dac2f0 100%);
+    }
+    
+    .illustration-bg-5 {
+      background: linear-gradient(145deg, #ffe6ec 0%, #ffccd6 100%);
+    }
+    
+    /* Themed icons for illustrations */
+    .teacher-icon {
+      font-size: 3rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
     /* Floating celebration elements */
     .floating-celebrate {
       position: absolute;
-      font-size: 1.23rem;
-      opacity: 0.14;
+      font-size: 1.25rem;
+      opacity: 0.15;
       pointer-events: none;
-      animation: floatCelebrate 9.2s linear infinite;
+      animation: floatCelebrate 10s linear infinite;
       z-index: 0;
     }
+    
     @keyframes floatCelebrate {
-      0%   {transform: translateY(46px) scale(1.17);}
-      100% {transform: translateY(-220px) scale(1);}
+      0% {transform: translateY(50px) scale(1.1) rotate(0deg);}
+      50% {transform: translateY(-120px) scale(1) rotate(10deg);}
+      100% {transform: translateY(-250px) scale(0.9) rotate(0deg); opacity: 0;}
     }
-    /* Custom scrollbar only for browser, not PDF */
-    .custom-scrollbar::-webkit-scrollbar {width: 7px;}
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #bbdefb; border-radius: 10px;}
-    .custom-scrollbar::-webkit-scrollbar-track { background: #e6eeff;}
-    /* Remove num arrows */
-    input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0;}
-    input[type="number"] { -moz-appearance: textfield; }
-
-    html, body {
-      overflow: initial !important;
-      box-sizing: border-box;
-      width: 100%;
+    
+    /* Custom scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {width: 6px;}
+    .custom-scrollbar::-webkit-scrollbar-thumb {background: #c7d2fe; border-radius: 10px;}
+    .custom-scrollbar::-webkit-scrollbar-track {background: #f1f5f9;}
+    
+    /* Form styling */
+    .tribute-form {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid rgba(226, 232, 240, 0.8);
     }
-    /* Form styling tweak */
-    .stripe-bg {
-      background: linear-gradient(105deg, #f7fbff 0, #e3f9ed 85%);
-    }
-    /* Confetti animation container for success */
-    .confetti {
-      position: fixed;
-      left: 0; top: 0; width: 100%; height: 100%; z-index: 9999;
-      pointer-events: none;
-      display: flex; align-items: flex-start; justify-content: center;
-      overflow: visible;
-    }
-    .confetti__dot {
-      position: absolute;
-      width: 18px; height: 18px; border-radius: 99px;
-      opacity: 0.84;
-      pointer-events: none;
-      will-change: transform, opacity;
-      animation: confetti-fall 1.7s linear forwards;
-    }
-    @keyframes confetti-fall {
-      0% { transform: translateY(-80px) scale(.9) rotate(-20deg);}
-      80% { opacity: 1;}
-      95% { opacity: .8;}
-      100% { transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;}
-    }
-    /* Footer animated teacher and caps */
-    .footer-party {
-      min-height: 90px;
-      padding-bottom: 0.1rem;
-      position: relative;
-      margin-top: 2.5rem;
-      background: linear-gradient(88deg, #e1f5fe 70%, #ffe0b2 100%);
-      border-radius: 28px 28px 0px 0px;
-      box-shadow: 0 0 0 #fff;
-      overflow: visible;
-    }
-    .cap-throw {
-      position: absolute;
-      left: 25%;
-      top: 14px;
-      animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .cap-throw2 {
-      left: 68%; top: 12px;
-      animation-delay: 1.1s;
-      animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite;
-    }
-    @keyframes capThrow {
-      0%   { transform: translateY(0px) rotate(3deg);}
-      60%  { transform: translateY(-50px) rotate(-30deg);}
-      100% { transform: translateY(0px) rotate(2deg);}
-    }
-    @keyframes capThrow2 {
-      0%   { transform: translateY(0px) rotate(-7deg);}
-      62%  { transform: translateY(-46px) rotate(20deg);}
-      100% { transform: translateY(0px) rotate(-5deg);}
-    }
-    /* Teacher waving */
-    .footer-teacher {
-      position: absolute;
-      right: 12%; bottom: 12px;
-      z-index:3;
-      animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01);
-      transform-origin: bottom right;
-    }
-    @keyframes waveHand {
-      0%,100% { transform: rotate(0);}
-      14% { transform: rotate(-7deg);}
-      19% { transform: rotate(11deg);}
-      25% { transform: rotate(-12deg);}
-      36% { transform: rotate(8deg);}
-      47% { transform: rotate(0);}
-    }
-    /* Hide scroll in PDF */
+    
+    /* Unique for PDF optimization */
     @media print {
-      .custom-scrollbar { overflow: visible !important;}
+      body { 
+        width: 100%; 
+        margin: 0; 
+        padding: 0;
+      }
+      .custom-scrollbar {
+        overflow: visible !important;
+      }
+    }
+    
+    /* Modal styling */
+    .modal-container {
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    
+    /* Footer decoration */
+    .footer-decoration {
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(225, 239, 254, 0.6) 100%);
+      height: 120px;
+      position: relative;
+      overflow: visible;
+    }
+    
+    /* Confetti animation for success */
+    @keyframes confetti-fall {
+      0% {transform: translateY(-80px) rotate(0deg);}
+      100% {transform: translateY(400px) rotate(90deg); opacity: 0;}
+    }
+    
+    .confetti-particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: confetti-fall 3s forwards ease-out;
+    }
+    
+    /* Card illustrations with SVG patterns */
+    .card-pattern-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.04;
+      pointer-events: none;
+      background-size: 180px 180px;
+      border-radius: 1.6rem;
+    }
+    
+    .pattern-dots {
+      background-image: radial-gradient(#3b82f6 8%, transparent 8%);
+      background-position: 0 0;
+      background-size: 20px 20px;
+    }
+    
+    .pattern-lines {
+      background-image: linear-gradient(45deg, #3b82f6 25%, transparent 25%, transparent 50%, #3b82f6 50%, #3b82f6 75%, transparent 75%, transparent);
+      background-size: 10px 10px;
+    }
+    
+    .pattern-waves {
+      background: repeating-radial-gradient(
+        circle at 50%,
+        rgba(59, 130, 246, 0),
+        rgba(59, 130, 246, 0) 10px,
+        rgba(59, 130, 246, 0.1) 10px,
+        rgba(59, 130, 246, 0.1) 20px
+      );
+    }
+    
+    /* Progress bar animation for form submission */
+    @keyframes progress-fill {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    
+    .progress-animation {
+      animation: progress-fill 2s ease-out;
     }
   </style>
 </head>
-<body class="pb-10 selection:bg-yellow-100">
-  <!-- Floating celebration elements (school theme) -->
-  <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#6093e5;"><i class="fa-solid fa-book"></i></span>
-  <span class="floating-celebrate left-1/4 top-56" style="animation-delay:1.6s; color:#fdb253;"><i class="fa-solid fa-apple-whole"></i></span>
-  <span class="floating-celebrate right-14 top-28" style="animation-delay:0.9s; color:#a3de83;"><i class="fa-solid fa-seedling"></i></span>
-  <span class="floating-celebrate left-1/3 top-44" style="animation-delay:2.1s; color:#bb57df;"><i class="fa-solid fa-flower"></i></span>
-  <span class="floating-celebrate right-1/4 top-56" style="animation-delay:1.2s; color:#ff8b94;"><i class="fa-solid fa-star"></i></span>
-  <span class="floating-celebrate left-3/5 top-96" style="animation-delay:2.36s; color:#5bcfc2;"><i class="fa-solid fa-pencil"></i></span>
-  <span class="floating-celebrate left-2/3 top-20" style="animation-delay:0.5s; color:#eab308;"><i class="fa-solid fa-bell"></i></span>
+<body class="pb-16">
+  <!-- Floating celebration elements -->
+  <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#60a5fa;"><i class="fa-solid fa-book"></i></span>
+  <span class="floating-celebrate left-1/4 top-56" style="animation-delay:1.6s; color:#f59e0b;"><i class="fa-solid fa-apple-whole"></i></span>
+  <span class="floating-celebrate right-14 top-28" style="animation-delay:0.9s; color:#34d399;"><i class="fa-solid fa-seedling"></i></span>
+  <span class="floating-celebrate left-1/3 top-44" style="animation-delay:2.1s; color:#8b5cf6;"><i class="fa-solid fa-award"></i></span>
+  <span class="floating-celebrate right-1/4 top-56" style="animation-delay:1.2s; color:#ec4899;"><i class="fa-solid fa-graduation-cap"></i></span>
+  <span class="floating-celebrate left-3/5 top-96" style="animation-delay:2.36s; color:#10b981;"><i class="fa-solid fa-pencil"></i></span>
+  <span class="floating-celebrate left-2/3 top-20" style="animation-delay:0.5s; color:#fbbf24;"><i class="fa-solid fa-bell-school"></i></span>
 
-  <div class="max-w-5xl mx-auto mt-11 px-3">
+  <div class="max-w-5xl mx-auto mt-12 px-4">
     <!-- Title & Description -->
-    <div class="text-center mb-7">
-      <h1 class="mb-2" style="font-family:'Indie Flower',cursive;font-size:2.28rem;color:#4e83e1;text-shadow:0 2px 7px #deedffd0;letter-spacing:1.8px;">
-        🌼 Happy Retirement, Teacher!
+    <div class="text-center mb-10">
+      <h1 class="mb-3" style="font-family:'Indie Flower',cursive;font-size:2.5rem;color:#3b82f6;text-shadow:0 2px 10px rgba(59, 130, 246, 0.15);letter-spacing:1.2px;">
+        🌟 Happy Retirement, Teacher!
       </h1>
-      <p style="font-family:'Indie Flower',cursive;color:#2e577b;font-size: 1.11rem;opacity:.93;text-align:center;">
-        A wonderful teacher leaves a mark on hearts forever.<br>
-        <span class="text-green-500 font-semibold">Share your words, memories & photos below!</span>
+      <p style="font-family:'Quicksand',sans-serif;color:#475569;font-size:1.15rem;max-width:700px;margin:0 auto;">
+        The influence of a great teacher stays with us forever. Share your memories, gratitude, and well-wishes below.
       </p>
+      <div class="flex justify-center mt-4">
+        <div class="h-1 w-24 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full"></div>
+      </div>
     </div>
+
     <!-- Add/Edit Tribute Form -->
-    <form id="tributeForm" class="mb-8 stripe-bg border border-yellow-200 rounded-2xl py-5 px-4 shadow-lg flex flex-wrap items-center justify-between">
+    <form id="tributeForm" class="mb-12 tribute-form rounded-2xl py-6 px-5 shadow-lg">
       <input type="hidden" id="editIndex" value="">
-      <div class="flex flex-col w-full md:w-1/4 mb-2 md:mb-0 md:pr-3">
-        <label for="fromName" class="text-blue-500 font-semibold mb-1">Your Name</label>
-        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-green-200 px-3 py-2 focus:ring-2 focus:ring-yellow-200 focus:outline-none" maxlength="32" required placeholder="E.g. Jamie">
+      
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-1/4 px-2 mb-4">
+          <label for="fromName" class="block text-blue-600 font-semibold mb-2">Your Name</label>
+          <input id="fromName" name="fromName" type="text" class="w-full rounded-xl border border-blue-100 px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-300 focus:outline-none transition duration-200" maxlength="32" required placeholder="E.g. Jamie">
+        </div>
+        
+        <div class="w-full md:w-1/2 px-2 mb-4">
+          <label for="message" class="block text-blue-600 font-semibold mb-2">Your Message</label>
+          <textarea id="message" name="message" rows="2" class="w-full rounded-xl border border-blue-100 px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-300 focus:outline-none transition duration-200" maxlength="220" required placeholder="Share your favorite memory or wish..."></textarea>
+        </div>
+        
+        <div class="w-full md:w-1/4 px-2 mb-4">
+          <label for="photos" class="block text-blue-600 font-semibold mb-2">
+            Photos <span class="text-xs font-normal text-gray-400">(optional, up to 4)</span>
+          </label>
+          <input id="photos" name="photos" type="file" multiple accept="image/*" class="w-full border rounded-xl py-2 px-2 text-sm bg-blue-50 border-blue-100">
+        </div>
       </div>
-      <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-2 md:mb-0">
-        <label for="message" class="text-blue-500 font-semibold mb-1">Message</label>
-        <textarea id="message" name="message" rows="2" class="rounded-xl border border-green-200 px-3 py-2 focus:ring-2 focus:ring-yellow-200 focus:outline-none" maxlength="220" required placeholder="Write your message..."></textarea>
-      </div>
-      <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-2 md:mb-0">
-        <label for="photos" class="text-blue-500 font-semibold mb-1">
-          Photos<br>
-          <span class="text-xs font-normal text-gray-400">(up to 4)</span>
-        </label>
-        <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-yellow-50">
-      </div>
-      <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-2 md:mt-0">
-        <button id="submitBtn" type="submit" class="bg-gradient-to-r from-green-300 to-blue-400 hover:from-yellow-200 hover:to-green-700 font-bold py-2 px-7 text-white rounded-xl focus:outline-none transition duration-150 transform active:scale-95 shadow">
+      
+      <div class="flex justify-end mt-2">
+        <button id="cancelEditBtn" class="hidden px-5 py-2 mr-3 rounded-xl bg-gray-100 text-gray-600 font-medium hover:bg-gray-200 focus:outline-none transition duration-200" type="button">
+          Cancel
+        </button>
+        <button id="submitBtn" type="submit" class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-bold py-2 px-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200 transform active:scale-95 shadow-md">
           <i class="fa-solid fa-paper-plane mr-1"></i>
           <span id="submitBtnText">Share</span>
         </button>
-        <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button>
       </div>
     </form>
+
     <!-- Tribute Cards Grid -->
-    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 custom-scrollbar"></div>
-    <div id="emptyState" class="text-center text-blue-200 italic mt-10 text-lg hidden">
-      <i class="fa-solid fa-star fa-bounce mr-2"></i>No tributes yet. Be the first to post your memory!
+    <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    
+    <!-- Empty State -->
+    <div id="emptyState" class="text-center text-blue-300 italic mt-16 mb-10 text-lg hidden">
+      <div class="mx-auto w-24 h-24 mb-6">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-blue-200">
+          <path d="M20 12V8H4V12M20 12V16H4V12M20 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path d="M8 18H16M12 4V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </div>
+      <p>No tributes yet. Be the first to share your appreciation!</p>
     </div>
   </div>
   
   <!-- Modal for single photo view -->
-  <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+  <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 modal-container z-50 hidden flex items-center justify-center">
     <div class="absolute inset-0 cursor-pointer" id="modalBG"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border-2 border-green-100">
-      <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-green-500 hover:text-yellow-400 focus:outline-none z-10" title="Close">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 flex flex-col items-center px-4 py-6 border modal-content">
+      <button type="button" id="closeModalBtn" class="absolute right-3 top-3 text-2xl text-gray-400 hover:text-gray-600 focus:outline-none z-10" title="Close">
         <i class="fa-solid fa-xmark"></i>
       </button>
-      <div class="w-full flex items-center justify-center mb-3">
-        <button type="button" id="prevImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden">
+      
+      <div class="w-full flex items-center justify-center mb-4">
+        <button type="button" id="prevImgBtn" class="text-xl text-blue-400 hover:text-blue-600 px-3 focus:outline-none hidden">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow">
-          <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;">
+        <div id="modalImgContainer" class="max-w-lg rounded-xl overflow-hidden bg-gray-50 shadow">
+          <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:60vh;">
         </div>
-        <button type="button" id="nextImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden">
+        <button type="button" id="nextImgBtn" class="text-xl text-blue-400 hover:text-blue-600 px-3 focus:outline-none hidden">
           <i class="fa-solid fa-chevron-right"></i>
         </button>
       </div>
-      <div id="galleryCaption" class="text-center text-xs mt-2 mb-2 text-gray-500"></div>
+      
+      <div id="galleryCaption" class="text-center text-sm mt-2 text-gray-500"></div>
     </div>
   </div>
 
-  <!-- Animated Celebration Footer -->
-  <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
-    <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-blue-400 text-2xl"></i></div>
-    <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-yellow-500 text-2xl"></i></div>
-    <span class="footer-teacher">
-      <svg width="56" height="70" viewBox="0 0 56 70" fill="none">
-        <ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/>
-        <circle cx="28" cy="34" r="20" fill="#fff"/>
-        <ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/>
-        <ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/>
-        <ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/>
-        <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/>
-        <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/>
-        <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/>
-        <!-- Waving hand (ultra simple) -->
-        <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/>
-      </svg>
-    </span>
-    <span class="block font-semibold pt-10 pb-1" style="font-family:'Indie Flower',cursive;font-size:1.23rem;color:#356ec5;text-shadow:0 1px 7px #c5eaeeda;">
-      🎉 With heartfelt wishes for your next amazing chapter! 🎉
-    </span>
-    <span class="block text-gray-400 pb-1" style="font-family:Quicksand,sans-serif;font-size:1rem;">
-      Made with <i class="fa-solid fa-heart text-pink-300"></i> by everyone who is grateful for you.
-    </span>
+  <!-- Footer with decoration -->
+  <footer class="w-full text-center mt-16 pt-8 pb-6 relative">
+    <div class="footer-decoration absolute inset-x-0 top-0 -z-10"></div>
+    
+    <div class="max-w-md mx-auto px-4">
+      <div class="flex justify-center mb-4">
+        <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
+          <i class="fa-solid fa-award text-2xl text-blue-400"></i>
+        </div>
+      </div>
+      
+      <p class="text-xl mb-2" style="font-family:'Indie Flower', cursive; color:#3b82f6;">
+        Wishing you joy in your next chapter!
+      </p>
+      
+      <p class="text-gray-500 text-sm">
+        Made with appreciation by everyone whose lives you've touched.
+      </p>
+    </div>
   </footer>
-  <!-- Confetti effect container (JS) -->
-  <div id="confettiBox" class="confetti" style="pointer-events: none; display:none;"></div>
+
+  <!-- Progress indicator (hidden by default) -->
+  <div id="progressIndicator" class="fixed bottom-0 left-0 w-full h-1 bg-gray-200 hidden">
+    <div class="h-full bg-gradient-to-r from-blue-400 to-indigo-500 progress-animation"></div>
+  </div>
 
 <script>
   // --- STATE ---
   let tributes = [];
   let editingTributeId = null;
-
-  // --- CONSTANTS ---
-  // Removed SCHOOL_SVGS array as it's replaced by initials
+  
+  // --- THEMED ILLUSTRATIONS ---
+  // Icons for cards without photos
+  const THEMED_ICONS = [
+    { icon: 'fa-graduation-cap', bg: 'illustration-bg-1' },
+    { icon: 'fa-book', bg: 'illustration-bg-2' },
+    { icon: 'fa-apple-whole', bg: 'illustration-bg-3' },
+    { icon: 'fa-award', bg: 'illustration-bg-4' },
+    { icon: 'fa-pencil', bg: 'illustration-bg-5' },
+    { icon: 'fa-heart', bg: 'illustration-bg-1' },
+  ];
+  
+  // Card patterns for visual interest
+  const CARD_PATTERNS = [
+    'pattern-dots',
+    'pattern-lines',
+    'pattern-waves'
+  ];
 
   // --- UTILS ---
-
-  // --->>> ADDED Color Palette and Hash Function <<<---
-  const INITIAL_BG_COLORS = [
-    '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
-    '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe' // Added more colors
-  ];
-  function getNameColorIndex(name) {
-    if (!name) return 0;
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = (hash << 5) - hash + name.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash) % INITIAL_BG_COLORS.length;
-  }
-    // --->>> ADDED Color Manipulation Utilities <<<---
-  function hexToRgb(hex) {
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
-  }
-
-  function rgbToHsl(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-    let max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
-    if (max == min) {
-      h = s = 0; // achromatic
-    } else {
-      let d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-      }
-      h /= 6;
-    }
-    return { h: h * 360, s: s * 100, l: l * 100 };
-  }
-
-  function hslToRgb(h, s, l) {
-    h /= 360; s /= 100; l /= 100;
-    let r, g, b;
-    if (s == 0) {
-      r = g = b = l; // achromatic
-    } else {
-      const hue2rgb = (p, q, t) => {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1/6) return p + (q - p) * 6 * t;
-        if (t < 1/2) return q;
-        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-        return p;
-      }
-      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      let p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1/3);
-      g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1/3);
-    }
-    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
-  }
-
-  function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0');
-  }
-
-  // Function to adjust HSL lightness
-  function adjustLightness(hsl, amount) {
-    // amount is percentage points, e.g., 10 for 10% lighter, -10 for 10% darker
-    let newL = Math.max(0, Math.min(100, hsl.l + amount));
-    return { h: hsl.h, s: hsl.s, l: newL };
-  }
-  // --->>> END ADDED Color Utilities <<<---
-
-  // Simple hash function to pick a color based on name
-  function getNameColorIndex(name) {
-    if (!name) return 0;
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = (hash << 5) - hash + name.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash) % INITIAL_BG_COLORS.length;
-  }
-  // --->>> END ADDED UTILS <<<---
-
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
-      '&': '&',
-      '<': '<',
-      '>': '>',
-      '"': '"',
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
       "'": '&#39;'
     }[s]));
   }
+  
   function formatDateString(dbDateString) {
     if (!dbDateString || typeof dbDateString !== 'string') return '';
     try {
@@ -452,19 +396,34 @@
       return '';
     }
   }
+  
+  function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+  
   async function filesToDataURLs(fileList) {
     const dataURLs = [];
     const filesToProcess = Array.from(fileList).slice(0, 4);
+    
     const readerPromises = filesToProcess.map(file => {
       return new Promise((resolve, reject) => {
-        if (!file.type.startsWith('image/')) return resolve(null);
-        if (file.size > 5 * 1024 * 1024) return resolve(null); // 5MB Limit
+        if (!file.type.startsWith('image/')) {
+          console.warn(`Skipping non-image file: ${file.name}`);
+          return resolve(null);
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+          console.warn(`Skipping large file (>5MB): ${file.name}`);
+          return resolve(null);
+        }
+        
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(file);
       });
     });
+    
     const results = await Promise.all(readerPromises);
     return results.filter(url => url !== null);
   }
@@ -473,213 +432,295 @@
   function renderAllTributes() {
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
+    
     grid.innerHTML = "";
+    
     if (!tributes || !tributes.length) {
       emptyState.classList.remove('hidden');
       return;
     }
+    
     emptyState.classList.add('hidden');
-    tributes.forEach((trb, idx) => {
-      grid.innerHTML += renderTributeCard(trb, idx);
+    tributes.forEach((tribute, idx) => {
+      grid.innerHTML += renderTributeCard(tribute, idx);
     });
+    
     attachCardEventListeners();
-    setupCardAnimations(); // Keep card animations, fan animations removed below
   }
-
-      
-// --->>> MODIFIED renderFanGallery for Cuter Initials <<<---
+  
+  function renderTeacherIllustration(tribute, index) {
+    // Select a themed icon based on the tribute or index
+    const nameHash = tribute.from ? tribute.from.charCodeAt(0) : index;
+    const iconIndex = nameHash % THEMED_ICONS.length;
+    const theme = THEMED_ICONS[iconIndex];
+    
+    return `
+      <div class="teacher-illustration ${theme.bg} flex items-center justify-center">
+        <i class="fa-solid ${theme.icon} teacher-icon"></i>
+      </div>
+    `;
+  }
+  
   function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const fromName = tribute.from || "A";
-
+    
     if (!photoArray.length) {
-      // Generate Initial Placeholder
-      const initial = fromName.charAt(0).toUpperCase();
-      const colorIndex = getNameColorIndex(fromName);
-      const baseHexColor = INITIAL_BG_COLORS[colorIndex];
-
-      // --- Create Gradient ---
-      let gradientColor1 = baseHexColor;
-      let gradientColor2 = baseHexColor; // Default if conversion fails
-      try {
-          const baseRgb = hexToRgb(baseHexColor);
-          if (baseRgb) {
-              const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
-              // Create a second color ~15% lighter
-              const lighterHsl = adjustLightness(baseHsl, 15);
-              const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l);
-              gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b);
-          }
-      } catch (e) { console.error("Color conversion error:", e); }
-      // --- End Create Gradient ---
-
-      // Use a slightly different border color, maybe softer
-      const borderColor = '#e0e7ff'; // Example: light blue/purple
-
-      // Apply gradient and updated styles
-      return `
-        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center"
-             style="background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%);
-                    border: 2px solid ${borderColor}; /* Thinner, different color border */ "
-             title="From: ${escapeHtml(fromName)}">
-          <span style="font-family: 'Quicksand', sans-serif;
-                       font-size: 2.8rem; /* Slightly larger */
-                       font-weight: 700; /* Bolder */
-                       color: rgba(0,0,0,0.6); /* Darker text for contrast */
-                       text-shadow: 1px 1px 2px rgba(255,255,255,0.3);"> {/* Subtle shadow */}
-            ${escapeHtml(initial)}
-          </span>
-        </div>
-      `;
+      // If no photos, render a themed illustration
+      return renderTeacherIllustration(tribute, tributeIdx);
     }
-
-    // --- Original Photo Fan Logic (Static positioning) ---
+    
+    // Otherwise render the fan gallery of photos
     let imgMarkup = "";
     let n = Math.min(photoArray.length, 4);
-    let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-    let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0;
+    let spread = (n === 1) ? [0] : (n === 2) ? [-12, 12] : (n === 3) ? [-16, 0, 16] : [-20, -7, 7, 20];
+    
     for (let i = 0; i < n; i++) {
       if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue;
+      
       let ang = spread[i];
-      let l = (n > 1) ? (i * 40) - shiftBase : 0;
-      let z = n - i;
+      let depth = n - i;
+      
       imgMarkup += `<img
         src="${escapeHtml(photoArray[i])}"
         class="fan-img"
         data-tidx="${tributeIdx}"
         data-pidx="${i}"
         tabindex="0"
-        style="transform:rotate(${ang}deg) translateX(${l}px); z-index: ${z};"
-        alt="Tribute Photo ${i + 1}">
-      `;
+        style="transform:rotate(${ang}deg); z-index:${depth};"
+        alt="Memory photo ${i + 1}"
+      >`;
     }
-    return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
+    
+    return `<div class="fan-stack">${imgMarkup}</div>`;
   }
-  // --->>> END MODIFIED renderFanGallery <<<---
-
-  // --->>> MODIFIED renderTributeCard to pass full tribute object <<<---
+  
   function renderTributeCard(tribute, idx) {
-    const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
+    const pattern = CARD_PATTERNS[idx % CARD_PATTERNS.length];
     const tributeId = tribute.id;
+    
     return `
-      <div class="tribute-card stripe-bg relative min-h-[325px]" data-cardidx="${idx}" data-id="${tributeId}">
-        <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
-          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-pen"></i>
+      <div class="tribute-card relative overflow-hidden" data-cardidx="${idx}" data-id="${tributeId}">
+        <div class="card-pattern-overlay ${pattern}"></div>
+        <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-70 hover:opacity-100 transition-all">
+          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-500 hover:text-amber-500 bg-white rounded-full shadow-sm border border-blue-50 w-8 h-8 flex items-center justify-center focus:outline-none transition">
+            <i class="fa-solid fa-pen text-sm"></i>
           </button>
-          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-400 hover:text-pink-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-trash"></i>
+          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-500 hover:text-rose-500 bg-white rounded-full shadow-sm border border-blue-50 w-8 h-8 flex items-center justify-center focus:outline-none transition">
+            <i class="fa-solid fa-trash text-sm"></i>
           </button>
         </div>
-        ${renderFanGallery(tribute, idx)} {/* Pass full tribute object */}
-        <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
-        <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
-        <div class="text-xs text-green-500 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-          <i class="fa-solid ${icons[idx % icons.length]}"></i>
+        
+        ${renderFanGallery(tribute, idx)}
+        
+        <div class="text-blue-600 font-bold mb-2 text-center" style="font-family:'Quicksand',sans-serif">
+          ${escapeHtml(tribute.from || "Anonymous")}
+        </div>
+        
+        <div class="text-gray-700 mb-6 text-center" style="font-family:'Indie Flower',cursive;font-size:1.15rem;line-height:1.4;">
+          ${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}
+        </div>
+        
+        <div class="text-xs text-blue-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+          <i class="fa-solid fa-calendar-heart"></i>
           <span>${formatDateString(tribute.date) || ''}</span>
         </div>
       </div>
     `;
   }
-  // --->>> END MODIFIED renderTributeCard <<<---
 
-  // --- API INTERACTIONS --- (No changes needed here)
+  // --- API INTERACTIONS ---
   async function fetchAndRenderTributes() {
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>';
+    
+    grid.innerHTML = `
+      <div class="col-span-full flex justify-center py-10">
+        <div class="animate-pulse flex flex-col items-center">
+          <div class="rounded-full bg-blue-200 h-14 w-14 mb-4 flex items-center justify-center">
+            <i class="fa-solid fa-hourglass text-blue-300 text-xl"></i>
+          </div>
+          <p class="text-blue-300">Loading tributes...</p>
+        </div>
+      </div>
+    `;
+    
     emptyState.classList.add('hidden');
+    
     try {
-      const resp = await fetch('/.netlify/functions/get-tributes');
-      if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
-      tributes = await resp.json();
+      const response = await fetch('/.netlify/functions/get-tributes');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
+      tributes = await response.json();
       renderAllTributes();
     } catch (error) {
-      grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>';
+      console.error("Failed to fetch tributes:", error);
+      
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-10">
+          <div class="mx-auto w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mb-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 text-xl"></i>
+          </div>
+          <p class="text-red-400 mb-2">Could not load tributes</p>
+          <p class="text-gray-500 text-sm">Please check your connection or try again later</p>
+        </div>
+      `;
+      
       emptyState.classList.add('hidden');
     }
   }
+  
   async function submitTribute(tributeData, idToUpdate = null) {
     const isUpdating = idToUpdate !== null;
     const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
     const method = isUpdating ? 'PUT' : 'POST';
     const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData;
+    
+    // Show progress indicator
+    document.getElementById('progressIndicator').classList.remove('hidden');
+    
     try {
       const response = await fetch(endpoint, {
-        method: method, headers: { 'Content-Type': 'application/json' },
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+      
       if (!response.ok) {
         let errorMsg = `HTTP error! status: ${response.status}`;
-        try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { }
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) { /* Ignore parsing errors */ }
+        
         throw new Error(errorMsg);
       }
-      showConfetti(); // Keep confetti
+      
+      // On success, show confetti effect
+      if (!isUpdating) {
+        showConfetti();
+      }
+      
       await fetchAndRenderTributes();
       return true;
     } catch (error) {
+      console.error(`Failed to ${isUpdating ? 'update' : 'add'} tribute:`, error);
       alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`);
       return false;
+    } finally {
+      // Hide progress indicator
+      setTimeout(() => {
+        document.getElementById('progressIndicator').classList.add('hidden');
+      }, 200);
     }
   }
+  
   async function deleteTribute(tributeId) {
     const idToDelete = parseInt(tributeId, 10);
     if (isNaN(idToDelete)) return false;
-    if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
+    
+    if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) {
+      return false;
+    }
+    
+    // Show progress indicator
+    document.getElementById('progressIndicator').classList.remove('hidden');
+    
     try {
       const response = await fetch('/.netlify/functions/delete-tribute', {
-        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: idToDelete })
       });
+      
       if (!response.ok) {
         let errorMsg = `HTTP error! status: ${response.status}`;
-        try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { }
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) { /* Ignore parsing errors */ }
+        
         throw new Error(errorMsg);
       }
+      
       await fetchAndRenderTributes();
       return true;
     } catch (error) {
+      console.error("Failed to delete tribute:", error);
       alert(`Error deleting tribute: ${error.message}`);
       return false;
+    } finally {
+      // Hide progress indicator
+      setTimeout(() => {
+        document.getElementById('progressIndicator').classList.add('hidden');
+      }, 200);
     }
   }
 
-  // --- FORM LOGIC --- (No changes needed here)
+  // --- FORM LOGIC ---
   async function handleFormSubmit(e) {
     e.preventDefault();
+    
     const submitBtn = document.getElementById('submitBtn');
     const submitBtnText = document.getElementById('submitBtnText');
     const fileInput = document.getElementById('photos');
+    
+    // Disable button immediately
     submitBtn.disabled = true;
+    
+    // Set loading text based on edit state
     const originalBtnText = editingTributeId ? "Update" : "Share";
-    const actionText = editingTributeId ? 'Updating...' : 'Sharing...';
-    submitBtnText.textContent = actionText;
+    submitBtnText.textContent = editingTributeId ? 'Updating...' : 'Sharing...';
+    
+    // Show a "processing" message if files are selected
     if (fileInput.files.length > 0) {
-      submitBtnText.textContent = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
+      submitBtnText.textContent = editingTributeId ? 'Processing images...' : 'Processing images...';
     }
+    
     let photos = [];
+    
     try {
+      // Process any selected files
       if (fileInput.files.length > 0) {
         photos = await filesToDataURLs(fileInput.files);
       }
+      
+      // Get other form data
       const from = document.getElementById('fromName').value.trim() || "Anonymous";
       const msg = document.getElementById('message').value.trim();
+      
+      if (!msg) {
+        throw new Error("Please enter a message.");
+      }
+      
+      // Create the data payload
       const tributeData = { from, msg, photos };
+      
+      // Get the ID to update (will be null if adding)
       const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null;
-      if (editingTributeId && isNaN(idToUpdate)) throw new Error("Invalid tribute ID for update.");
+      if (editingTributeId && isNaN(idToUpdate)) {
+        throw new Error("Invalid tribute ID for update.");
+      }
+      
+      // Submit the tribute
       const success = await submitTribute(tributeData, idToUpdate);
+      
       if (success) {
-        resetForm();
+        resetForm(); // Reset form only on success
       } else {
+        // Re-enable the button on failure
         submitBtn.disabled = false;
         submitBtnText.textContent = originalBtnText;
       }
     } catch (error) {
-      alert("An error occurred while processing your tribute. Please try again.");
+      // Show error and re-enable button
+      console.error("Error during form submission:", error);
+      alert(error.message || "An error occurred while processing your tribute. Please try again.");
+      
       submitBtn.disabled = false;
       submitBtnText.textContent = originalBtnText;
     }
   }
+  
   function resetForm() {
     document.getElementById('tributeForm').reset();
     document.getElementById('submitBtnText').textContent = "Share";
@@ -687,197 +728,201 @@
     editingTributeId = null;
     document.getElementById('submitBtn').disabled = false;
   }
+  
   function loadEditForm(tributeId) {
     const tributeIdAsNumber = parseInt(tributeId, 10);
     if (isNaN(tributeIdAsNumber)) return;
+    
     const tributeToEdit = tributes.find(t => t.id === tributeIdAsNumber);
+    
     if (!tributeToEdit) {
+      console.error("Could not find tribute with ID:", tributeIdAsNumber);
       alert("Could not load tribute for editing.");
       return;
     }
-    document.getElementById('fromName').value = tributeToEdit.from;
-    document.getElementById('message').value = tributeToEdit.msg;
+    
+    document.getElementById('fromName').value = tributeToEdit.from || '';
+    document.getElementById('message').value = tributeToEdit.msg || '';
+    
     editingTributeId = tributeIdAsNumber;
     document.getElementById('submitBtnText').textContent = "Update";
     document.getElementById('cancelEditBtn').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    
+    // Smooth scroll to form
+    window.scrollTo({
+      top: document.getElementById('tributeForm').offsetTop - 100,
+      behavior: 'smooth'
+    });
   }
 
   // --- CARD BUTTONS / IMAGE EVENTS ---
-  // --->>> MODIFIED attachCardEventListeners to remove fan hover <<<---
   function attachCardEventListeners() {
     const grid = document.getElementById('tributesGrid');
     if (!grid) return;
-
-    grid.onclick = function handleGridClick(event) {
+    
+    // Use event delegation for all card interactions
+    grid.addEventListener('click', function(event) {
       const target = event.target;
+      
+      // Handle button clicks
       const button = target.closest('button[data-act]');
-      const img = target.closest('.fan-img'); // Click listener for modal still needed
-
       if (button) {
         event.stopPropagation();
         const action = button.getAttribute('data-act');
         const id = button.getAttribute('data-id');
+        
         if (!id) return;
+        
         if (action === 'edit') {
           loadEditForm(id);
         } else if (action === 'delete') {
           deleteTribute(id);
         }
-      } else if (img) { // If a fan image was clicked, open modal
+        return;
+      }
+      
+      // Handle photo clicks
+      const img = target.closest('.fan-img');
+      if (img) {
         event.stopPropagation();
         const tIdx = parseInt(img.getAttribute("data-tidx"));
         const pIdx = parseInt(img.getAttribute("data-pidx"));
+        
         if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) {
           showModalGallery(tIdx, pIdx);
         }
       }
-    };
-
-    // Attach keydown listeners directly to images for accessibility (modal opening)
-     document.querySelectorAll('.fan-img').forEach(img => {
-         img.onkeydown = function(e) {
-             if (e.key === 'Enter' || e.key === ' ') {
-                 e.preventDefault();
-                 img.click(); // Trigger the delegated click handler to open modal
-             }
-         }
-         // REMOVED hover listener attachments
-         // img.removeEventListener('mouseenter', handleFanMouseEnter);
-         // img.removeEventListener('mouseleave', handleFanMouseLeave);
-         // img.addEventListener('mouseenter', handleFanMouseEnter);
-         // img.addEventListener('mouseleave', handleFanMouseLeave);
-     });
+    });
+    
+    // Add keyboard accessibility for images
+    document.querySelectorAll('.fan-img').forEach(img => {
+      img.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          img.click();
+        }
+      });
+    });
   }
-  // REMOVED hover handler functions as they are no longer used
-  // function handleFanMouseEnter() { this.classList.add('fan-expanded'); }
-  // function handleFanMouseLeave() { this.classList.remove('fan-expanded'); }
-  // --->>> END MODIFIED attachCardEventListeners <<<---
 
-
-  // --->>> MODIFIED setupCardAnimations to remove fan animation <<<---
-  function setupCardAnimations() {
-    if ('IntersectionObserver' in window) {
-
-        // REMOVED IntersectionObserver for .fan-img
-        /*
-        document.querySelectorAll('.fan-img').forEach(img => {
-            img.classList.remove('fan-anim', 'fan-pop');
-            const observer = new IntersectionObserver((entries, observerInstance) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        img.classList.add('fan-pop');
-                        setTimeout(() => img.classList.remove('fan-pop'), 800);
-                        observerInstance.unobserve(img);
-                    }
-                });
-            }, { threshold: 0.5 });
-            observer.observe(img);
-        });
-        */
-
-        // Keep IntersectionObserver for .tribute-card animation
-        document.querySelectorAll('.tribute-card').forEach(card => {
-            card.classList.remove('card-mobile-anim');
-            const observer = new IntersectionObserver((entries, observerInstance) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        card.classList.add('card-mobile-anim');
-                        setTimeout(() => card.classList.remove('card-mobile-anim'), 700);
-                        observerInstance.unobserve(card);
-                    }
-                });
-            }, { threshold: 0.42 });
-            observer.observe(card);
-        });
-    }
-  }
-  // --->>> END MODIFIED setupCardAnimations <<<---
-
-
-  // --- MODAL GALLERY LOGIC --- (No changes needed here)
+  // --- MODAL GALLERY LOGIC ---
   let modalTributeIdx = 0, modalPhotoIdx = 0;
+  
   function showModalGallery(tributeIdx, photoIdx) {
     if (!tributes[tributeIdx]) return;
+    
     modalTributeIdx = tributeIdx;
     modalPhotoIdx = photoIdx;
     renderModalImage();
+    
     document.getElementById("galleryModal").classList.remove("hidden");
     document.body.style.overflow = 'hidden';
   }
+  
   function renderModalImage() {
-    let t = tributes[modalTributeIdx];
-    let photos = Array.isArray(t.photos) ? t.photos : [];
+    let tribute = tributes[modalTributeIdx];
+    let photos = Array.isArray(tribute.photos) ? tribute.photos : [];
     let currentPhotoSrc = photos[modalPhotoIdx];
+    
     if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) {
-      closeModalGallery(); return;
+      closeModalGallery();
+      return;
     }
+    
     document.getElementById('modalImg').src = currentPhotoSrc;
-    document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`;
+    document.getElementById('galleryCaption').textContent = 
+      `${tribute.from || "Anonymous"} - Photo ${modalPhotoIdx + 1} of ${photos.length}`;
+    
+    // Show/hide navigation buttons
     document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0);
     document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1);
   }
+  
   function closeModalGallery() {
     document.getElementById("galleryModal").classList.add("hidden");
     document.getElementById('modalImg').src = '';
     document.body.style.overflow = '';
   }
 
-  // --- CONFETTI LOGIC --- (No changes needed here)
+  // --- VISUAL EFFECTS ---
   function showConfetti() {
-    const confettiBox = document.getElementById('confettiBox');
-    confettiBox.style.display = 'flex';
-    confettiBox.innerHTML = '';
-    const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0'];
-    let n = 20 + Math.floor(8 * Math.random());
-    for (let i = 0; i < n; i++) {
-      let dot = document.createElement('span');
-      dot.className = 'confetti__dot';
-      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
-      let left = 4 + 92 * Math.random();
-      dot.style.left = left + '%';
-      dot.style.top = (5 + Math.random() * 1.6) + '%';
-      dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's';
-      dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2);
-      confettiBox.appendChild(dot);
+    // Create confetti container if not exists
+    let confettiContainer = document.querySelector('.confetti-container');
+    
+    if (!confettiContainer) {
+      confettiContainer = document.createElement('div');
+      confettiContainer.className = 'fixed inset-0 pointer-events-none z-50';
+      document.body.appendChild(confettiContainer);
     }
-    setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900);
+    
+    confettiContainer.innerHTML = '';
+    
+    // Generate random confetti particles
+    const colors = ['#60a5fa', '#34d399', '#fbbf24', '#f87171', '#a78bfa', '#f472b6'];
+    const count = 60;
+    
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('div');
+      
+      particle.className = 'confetti-particle';
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      particle.style.opacity = (0.6 + Math.random() * 0.4).toString();
+      particle.style.width = (5 + Math.random() * 7) + 'px';
+      particle.style.height = (5 + Math.random() * 7) + 'px';
+      particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+      particle.style.animationDelay = (Math.random() * 0.5) + 's';
+      
+      confettiContainer.appendChild(particle);
+    }
+    
+    // Clean up after animation completes
+    setTimeout(() => {
+      confettiContainer.innerHTML = '';
+    }, 4000);
   }
 
-  // --- INITIALIZE & EVENTS --- (No changes needed here)
+  // --- INITIALIZE & EVENT LISTENERS ---
   document.addEventListener("DOMContentLoaded", function() {
     fetchAndRenderTributes();
-    try {
-      const tributeForm = document.getElementById('tributeForm');
-      if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; }
-      const cancelBtn = document.getElementById('cancelEditBtn');
-      if (cancelBtn) { cancelBtn.onclick = resetForm; }
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
-      const modalBG = document.getElementById('modalBG');
-      if (modalBG) { modalBG.onclick = closeModalGallery; }
-      const prevImgBtn = document.getElementById('prevImgBtn');
-      if (prevImgBtn) {
-        prevImgBtn.onclick = function(e) {
-          e.stopPropagation(); if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); }
-        };
+    
+    // Set up form event listeners
+    document.getElementById('tributeForm').addEventListener('submit', handleFormSubmit);
+    document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+    
+    // Set up modal event listeners
+    document.getElementById('closeModalBtn').addEventListener('click', closeModalGallery);
+    document.getElementById('modalBG').addEventListener('click', closeModalGallery);
+    
+    document.getElementById('prevImgBtn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (modalPhotoIdx > 0) {
+        modalPhotoIdx--;
+        renderModalImage();
       }
-      const nextImgBtn = document.getElementById('nextImgBtn');
-      if (nextImgBtn) {
-        nextImgBtn.onclick = function(e) {
-          e.stopPropagation();
-          let t = tributes[modalTributeIdx];
-          let photos = Array.isArray(t.photos) ? t.photos : [];
-          if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); }
-        };
+    });
+    
+    document.getElementById('nextImgBtn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      const photos = Array.isArray(tributes[modalTributeIdx].photos) ? tributes[modalTributeIdx].photos : [];
+      if (modalPhotoIdx < photos.length - 1) {
+        modalPhotoIdx++;
+        renderModalImage();
       }
-    } catch (error) {}
+    });
+    
+    // Keyboard shortcuts for modal
     window.addEventListener("keydown", function(e) {
       const modal = document.getElementById("galleryModal");
-      if (!modal || modal.classList.contains("hidden")) return;
-      if (e.key === "ArrowLeft") { document.getElementById('prevImgBtn')?.click(); }
-      else if (e.key === "ArrowRight") { document.getElementById('nextImgBtn')?.click(); }
-      else if (e.key === "Escape") { closeModalGallery(); }
+      if (modal.classList.contains("hidden")) return;
+      
+      if (e.key === "ArrowLeft") {
+        document.getElementById('prevImgBtn').click();
+      } else if (e.key === "ArrowRight") {
+        document.getElementById('nextImgBtn').click();
+      } else if (e.key === "Escape") {
+        closeModalGallery();
+      }
     });
   });
 </script>
