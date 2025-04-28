@@ -540,11 +540,11 @@
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
 
-  function renderTributeCard(tribute, idx) {
+function renderTributeCard(tribute, idx) {
     const tributeId = tribute.id;
     const fromName = tribute.from || "Anonymous";
     const message = tribute.msg || "";
-    const date = tribute.date || "";
+    //const date = tribute.date || "";
 
     // --- Select Card Background Gradient (using updated softer pairs) ---
     const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
@@ -590,14 +590,7 @@
     // Card HTML with adjusted text/icon colors for pink theme
     return `
       <div class="tribute-card relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBackgroundStyle}">
-        <div class="absolute right-3 top-3 flex space-x-2">
-          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition"> <!-- Adjusted colors -->
-            <i class="fa-solid fa-pen"></i>
-          </button>
-          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition"> <!-- Adjusted colors -->
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
+
 
         ${renderFanGallery(tribute, idx)}
 
@@ -614,7 +607,16 @@
       </div>
     `;
   }
-
+//        <!-- Button Div Commented Out
+        //<div class="absolute right-3 top-3 flex space-x-2">
+         //<button title="Edit" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition">
+            //<i class="fa-solid fa-pen"></i>
+          //</button>
+          //<button title="Delete" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition">
+            //<i class="fa-solid fa-trash"></i>
+          //</button>
+        //</div>
+        //-->
 
   // --- API INTERACTIONS --- (No changes needed here)
   async function fetchAndRenderTributes() {
