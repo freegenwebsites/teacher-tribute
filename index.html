@@ -23,7 +23,6 @@
       box-shadow: 0 8px 32px 0 rgba(156, 195, 255, 0.13);
       border-radius: 1.6rem;
       padding: 1.9rem 1.6rem 1.2rem 1.6rem;
-      /* Keep card hover animation */
       transition:
         transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
         box-shadow 0.19s;
@@ -49,61 +48,67 @@
       width: 176px;
       position: relative;
       margin: 0 auto 1.2rem auto;
-      pointer-events: none; /* Container doesn't need events */
+      pointer-events: none;
     }
     .fan-img {
       width: 96px;
       height: 96px;
       object-fit: cover;
       border-radius: 1.12rem;
-      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24); /* Static shadow */
+      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24);
       transform-origin: 50% 80%;
       position: absolute;
       background: #f9fafb;
       border: 2.5px solid #d6edea;
-      z-index: 1; /* Base z-index */
-      cursor: pointer; /* Still clickable */
-      pointer-events: auto; /* Images are clickable */
+      z-index: 1;
+      cursor: pointer;
+      pointer-events: auto;
       filter: brightness(.99) saturate(98%);
-      /* Inline transform sets the static fan position */
     }
 
-    /* Placeholder style (reusing school-illustration for size/shape) */
-    /* Also added .initial-placeholder for potential targeting */
+    /* --- Placeholder style (reusing school-illustration for size/shape) --- */
     .school-illustration, .initial-placeholder {
       width: 97px;
       height: 97px;
-      border-radius: 1.12rem;
+      border-radius: 1.12rem; /* Default, might be overridden by JS */
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Background set by inline style in JS now */
-      border: 2.5px solid #e2e6f7;
-      box-shadow: 0 6px 19px rgba(180, 210, 255, 0.16);
-      font-size: 2.9rem; /* Base size for SVG */
       margin: 0 auto 0.3rem auto; /* Keep margin consistent */
-      position: relative;
-      overflow: hidden;
+      position: relative; /* Needed for inner absolute elements */
+      overflow: hidden; /* Important for patterns/borders */
       will-change: transform;
-      transition: transform .22s;
-      animation: bounceInCircle .60s 1; /* Keep entry animation */
+      transition: transform .22s, box-shadow .22s; /* Added transition for hover */
+      animation: bounceInCircle .60s 1;
+      /* Styles like background, border, shadow applied inline by JS */
     }
-
     @keyframes bounceInCircle {
       0%   { transform: scale(.78) rotate(-6deg); opacity:.2;}
       70%  { transform: scale(1.12) rotate(9deg); opacity:1;}
       100% { transform: scale(1) rotate(0deg);}
     }
 
-    /* Character movement animation */
-    .character-wiggle {
-      animation: wiggle 3s ease-in-out infinite;
-      transform-origin: 50% 50%;
+    /* --- NEW: Initial Placeholder Enhancements --- */
+    @keyframes pulseGlow { /* Subtle glow animation for the initial */
+      0%, 100% { text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
+      50% { text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4); }
     }
-    @keyframes wiggle {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-3px) scale(1.03); }
+    .initial-placeholder .initial-text { /* Target the span holding the initial */
+      animation: pulseGlow 2.5s ease-in-out infinite;
+      position: relative; /* Ensure it's above patterns */
+      z-index: 2;
     }
+    .initial-placeholder { /* Add perspective for 3D effect */
+      transform-style: preserve-3d;
+      perspective: 800px;
+    }
+    .initial-placeholder:hover { /* Add 3D hover effect */
+      transform: rotateY(5deg) rotateX(3deg) translateZ(5px) scale(1.05); /* Slight scale on hover too */
+      /* transition: transform 0.3s ease; */ /* Included in base transition */
+      box-shadow: 0 10px 25px rgba(150, 180, 230, 0.45), inset 0 0 15px rgba(255,255,255,0.2); /* Enhance shadow on hover */
+    }
+    /* --- END NEW --- */
+
 
     /* Floating celebration elements */
     .floating-celebrate {
@@ -157,56 +162,31 @@
       95% { opacity: .8;}
       100% { transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;}
     }
-    /* Footer animated teacher and caps */
+    /* --- Footer animations (Verified - No Changes Needed) --- */
     .footer-party {
-      min-height: 90px;
-      padding-bottom: 0.1rem;
-      position: relative;
-      margin-top: 2.5rem;
-      background: linear-gradient(88deg, #e1f5fe 70%, #ffe0b2 100%);
-      border-radius: 28px 28px 0px 0px;
-      box-shadow: 0 0 0 #fff;
-      overflow: visible;
+      min-height: 90px; padding-bottom: 0.1rem; position: relative;
+      margin-top: 2.5rem; background: linear-gradient(88deg, #e1f5fe 70%, #ffe0b2 100%);
+      border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible;
     }
     .cap-throw {
-      position: absolute;
-      left: 25%;
-      top: 14px;
+      position: absolute; left: 25%; top: 14px;
       animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite;
-      pointer-events: none;
-      z-index: 2;
+      pointer-events: none; z-index: 2;
     }
     .cap-throw2 {
-      left: 68%; top: 12px;
-      animation-delay: 1.1s;
+      left: 68%; top: 12px; animation-delay: 1.1s;
       animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite;
     }
-    @keyframes capThrow {
-      0%   { transform: translateY(0px) rotate(3deg);}
-      60%  { transform: translateY(-50px) rotate(-30deg);}
-      100% { transform: translateY(0px) rotate(2deg);}
-    }
-    @keyframes capThrow2 {
-      0%   { transform: translateY(0px) rotate(-7deg);}
-      62%  { transform: translateY(-46px) rotate(20deg);}
-      100% { transform: translateY(0px) rotate(-5deg);}
-    }
-    /* Teacher waving */
+    @keyframes capThrow { 0% { transform: translateY(0px) rotate(3deg);} 60% { transform: translateY(-50px) rotate(-30deg);} 100% { transform: translateY(0px) rotate(2deg);} }
+    @keyframes capThrow2 { 0% { transform: translateY(0px) rotate(-7deg);} 62% { transform: translateY(-46px) rotate(20deg);} 100% { transform: translateY(0px) rotate(-5deg);} }
     .footer-teacher {
-      position: absolute;
-      right: 12%; bottom: 12px;
-      z-index:3;
+      position: absolute; right: 12%; bottom: 12px; z-index:3;
       animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01);
       transform-origin: bottom right;
     }
-    @keyframes waveHand {
-      0%,100% { transform: rotate(0);}
-      14% { transform: rotate(-7deg);}
-      19% { transform: rotate(11deg);}
-      25% { transform: rotate(-12deg);}
-      36% { transform: rotate(8deg);}
-      47% { transform: rotate(0);}
-    }
+    @keyframes waveHand { 0%,100% { transform: rotate(0);} 14% { transform: rotate(-7deg);} 19% { transform: rotate(11deg);} 25% { transform: rotate(-12deg);} 36% { transform: rotate(8deg);} 47% { transform: rotate(0);} }
+    /* --- End Footer Animations --- */
+
     /* Hide scroll in PDF */
     @media print {
       .custom-scrollbar { overflow: visible !important;}
@@ -266,7 +246,7 @@
       <i class="fa-solid fa-star fa-bounce mr-2"></i>No tributes yet. Be the first to post your memory!
     </div>
   </div>
-  
+
   <!-- Modal for single photo view -->
   <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
     <div class="absolute inset-0 cursor-pointer" id="modalBG"></div>
@@ -289,7 +269,7 @@
     </div>
   </div>
 
-  <!-- Animated Celebration Footer -->
+  <!-- Animated Celebration Footer (Verified - No Changes Needed) -->
   <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
     <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-blue-400 text-2xl"></i></div>
     <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-yellow-500 text-2xl"></i></div>
@@ -303,7 +283,6 @@
         <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/>
         <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/>
         <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/>
-        <!-- Waving hand (ultra simple) -->
         <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/>
       </svg>
     </span>
@@ -323,227 +302,106 @@
   let editingTributeId = null;
 
   // --- CONSTANTS ---
-  // Cute character SVGs for placeholders
-  const CUTE_CHARACTERS = [
-    // Bear
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="40" fill="currentColor" opacity="0.9"/>
-      <circle cx="35" cy="40" r="6" fill="#5D4037"/>
-      <circle cx="65" cy="40" r="6" fill="#5D4037"/>
-      <circle cx="50" cy="55" r="6" fill="#8D6E63"/>
-      <circle cx="35" cy="35" r="10" fill="white" opacity="0.5"/>
-      <circle cx="65" cy="35" r="10" fill="white" opacity="0.5"/>
-      <ellipse cx="50" cy="70" rx="15" ry="8" fill="#8D6E63"/>
-    </svg>`,
-    
-    // Cat
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="40" fill="currentColor" opacity="0.9"/>
-      <path d="M30 30 L15 15 L25 35 Z" fill="currentColor"/>
-      <path d="M70 30 L85 15 L75 35 Z" fill="currentColor"/>
-      <circle cx="35" cy="45" r="5" fill="#5D4037"/>
-      <circle cx="65" cy="45" r="5" fill="#5D4037"/>
-      <ellipse cx="50" cy="60" rx="8" ry="5" fill="#8D6E63"/>
-      <path d="M45 70 Q50 75 55 70" fill="none" stroke="#8D6E63" stroke-width="2"/>
-    </svg>`,
-    
-    // Bunny
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="40" fill="currentColor" opacity="0.9"/>
-      <path d="M30 20 L25 5 L35 15 Z" fill="currentColor"/>
-      <path d="M70 20 L75 5 L65 15 Z" fill="currentColor"/>
-      <circle cx="35" cy="45" r="5" fill="#5D4037"/>
-      <circle cx="65" cy="45" r="5" fill="#5D4037"/>
-      <ellipse cx="50" cy="60" rx="5" ry="7" fill="#F8BBD0"/>
-    </svg>`,
-
-    // Happy face
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="40" fill="currentColor" opacity="0.9"/>
-      <circle cx="35" cy="40" r="6" fill="#5D4037"/>
-      <circle cx="65" cy="40" r="6" fill="#5D4037"/>
-      <path d="M30 60 Q50 80 70 60" fill="none" stroke="#5D4037" stroke-width="4" stroke-linecap="round"/>
-    </svg>`,
-
-    // Owl
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="40" fill="currentColor" opacity="0.9"/>
-      <circle cx="35" cy="40" r="12" fill="white"/>
-      <circle cx="65" cy="40" r="12" fill="white"/>
-      <circle cx="35" cy="40" r="6" fill="#5D4037"/>
-      <circle cx="65" cy="40" r="6" fill="#5D4037"/>
-      <path d="M40 60 L50 70 L60 60" fill="none" stroke="#8D6E63" stroke-width="4"/>
-    </svg>`,
-
-    // Pencil face
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M30 85 L50 15 L70 85 Z" fill="currentColor"/>
-      <path d="M40 80 L50 40 L60 80 Z" fill="white" opacity="0.6"/>
-      <circle cx="40" cy="50" r="5" fill="#5D4037"/>
-      <circle cx="60" cy="50" r="5" fill="#5D4037"/>
-      <path d="M40 65 Q50 75 60 65" fill="none" stroke="#5D4037" stroke-width="2"/>
-      <path d="M50 15 L45 10 L55 10 L50 15" fill="#FF9800"/>
-    </svg>`,
-    
-    // Flower
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="20" fill="currentColor"/>
-      <circle cx="30" cy="50" r="15" fill="currentColor" opacity="0.85"/>
-      <circle cx="70" cy="50" r="15" fill="currentColor" opacity="0.85"/>
-      <circle cx="50" cy="30" r="15" fill="currentColor" opacity="0.85"/>
-      <circle cx="50" cy="70" r="15" fill="currentColor" opacity="0.85"/>
-      <circle cx="50" cy="50" r="12" fill="white" opacity="0.7"/>
-      <circle cx="45" cy="45" r="3" fill="#5D4037"/>
-      <circle cx="55" cy="45" r="3" fill="#5D4037"/>
-      <path d="M45 55 Q50 60 55 55" fill="none" stroke="#5D4037" stroke-width="2"/>
-    </svg>`,
-
-    // Apple
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="55" r="35" fill="currentColor" opacity="0.9"/>
-      <path d="M50 20 Q60 10 70 20 L65 40 L50 35 L35 40 L30 20 Q40 10 50 20" fill="#4CAF50"/>
-      <path d="M50 10 L50 20" stroke="#8D6E63" stroke-width="3"/>
-      <circle cx="40" cy="45" r="5" fill="#5D4037"/>
-      <circle cx="60" cy="45" r="5" fill="#5D4037"/>
-      <path d="M40 65 Q50 75 60 65" fill="none" stroke="#5D4037" stroke-width="3"/>
-    </svg>`,
-  
-    // Book friend
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="20" width="60" height="60" rx="5" fill="currentColor" opacity="0.9"/>
-      <rect x="25" y="25" width="50" height="50" rx="3" fill="white" opacity="0.7"/>
-      <rect x="35" y="60" width="30" height="12" rx="6" fill="currentColor" opacity="0.9"/>
-      <circle cx="35" cy="45" r="5" fill="#5D4037"/>
-      <circle cx="65" cy="45" r="5" fill="#5D4037"/>
-      <path d="M40 75 Q50 80 60 75" fill="none" stroke="#5D4037" stroke-width="2.5"/>
-    </svg>`,
-    
-    // Star
-    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 15 L60 40 L85 45 L65 65 L70 90 L50 75 L30 90 L35 65 L15 45 L40 40 Z" fill="currentColor" opacity="0.9"/>
-      <circle cx="40" cy="50" r="5" fill="#5D4037"/>
-      <circle cx="60" cy="50" r="5" fill="#5D4037"/>
-      <path d="M40 65 Q50 75 60 65" fill="none" stroke="#5D4037" stroke-width="3"/>
-    </svg>`
-  ];
-
-  // Color palette for characters and backgrounds
   const INITIAL_BG_COLORS = [
     '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
     '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe'
   ];
+  // NEW: Decorative Elements for Placeholders
+  const decorElements = [
+    { icon: '📝', pos: 'top-0 left-0 translate-x-1 translate-y-1' },
+    { icon: '🎓', pos: 'top-0 right-0 -translate-x-0.5 translate-y-1' }, // Adjusted position slightly
+    { icon: '📚', pos: 'bottom-0 left-0 translate-x-1 -translate-y-0.5' }, // Adjusted position slightly
+    { icon: '🍎', pos: 'bottom-0 right-0 -translate-x-0.5 -translate-y-0.5' }, // Adjusted position slightly
+    { icon: '🌱', pos: 'top-1/2 left-0 -translate-y-1/2 translate-x-0.5' }, // Added more options
+    { icon: '✨', pos: 'top-0 left-1/2 -translate-x-1/2 translate-y-0.5' },
+    { icon: '🔍', pos: 'bottom-0 right-1/2 translate-x-1/2 -translate-y-0.5' },
+    { icon: '✏️', pos: 'top-1/2 right-0 -translate-y-1/2 -translate-x-0.5' }
+  ];
 
   // --- UTILS ---
-  function getNameColorIndex(name) {
-    if (!name) return 0;
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = (hash << 5) - hash + name.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash) % INITIAL_BG_COLORS.length;
-  }
-  
-  // Color Manipulation Utilities
   function hexToRgb(hex) {
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
+    return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
   }
-
   function rgbToHsl(r, g, b) {
     r /= 255, g /= 255, b /= 255;
     let max = Math.max(r, g, b), min = Math.min(r, g, b);
     let h, s, l = (max + min) / 2;
-    if (max == min) {
-      h = s = 0; // achromatic
-    } else {
-      let d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-      }
-      h /= 6;
-    }
-    return { h: h * 360, s: s * 100, l: l * 100 };
+    if (max == min) { h = s = 0; } else {
+      let d = max - min; s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) { case r: h = (g - b) / d + (g < b ? 6 : 0); break; case g: h = (b - r) / d + 2; break; case b: h = (r - g) / d + 4; break; } h /= 6;
+    } return { h: h * 360, s: s * 100, l: l * 100 };
   }
-
   function hslToRgb(h, s, l) {
-    h /= 360; s /= 100; l /= 100;
-    let r, g, b;
-    if (s == 0) {
-      r = g = b = l; // achromatic
-    } else {
-      const hue2rgb = (p, q, t) => {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1/6) return p + (q - p) * 6 * t;
-        if (t < 1/2) return q;
-        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-        return p;
-      }
-      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      let p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1/3);
-      g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1/3);
-    }
-    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+    h /= 360; s /= 100; l /= 100; let r, g, b;
+    if (s == 0) { r = g = b = l; } else {
+      const hue2rgb = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1/6) return p + (q - p) * 6 * t; if (t < 1/2) return q; if (t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; }
+      let q = l < 0.5 ? l * (1 + s) : l + s - l * s; let p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3);
+    } return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
   }
-
   function rgbToHex(r, g, b) {
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0');
   }
-
-  // Function to adjust HSL lightness
   function adjustLightness(hsl, amount) {
-    // amount is percentage points, e.g., 10 for 10% lighter, -10 for 10% darker
-    let newL = Math.max(0, Math.min(100, hsl.l + amount));
-    return { h: hsl.h, s: hsl.s, l: newL };
+    let newL = Math.max(0, Math.min(100, hsl.l + amount)); return { h: hsl.h, s: hsl.s, l: newL };
   }
+  function getNameColorIndex(name) {
+    if (!name) return 0; let hash = 0;
+    for (let i = 0; i < name.length; i++) { hash = (hash << 5) - hash + name.charCodeAt(i); hash |= 0; }
+    return Math.abs(hash) % INITIAL_BG_COLORS.length;
+  }
+
+  // NEW: Helper functions for patterns/borders
+  function hexToRgba(hex, alpha) {
+    const rgb = hexToRgb(hex);
+    return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})` : `rgba(0,0,0,${alpha})`;
+  }
+  function invertColor(hex) { // Basic inversion for contrast in patterns
+    const rgb = hexToRgb(hex);
+    if (!rgb) return '#ffffff';
+    const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+    // Return black or white based on brightness for better contrast
+    return brightness > 125 ? '#000000' : '#FFFFFF';
+    // Original inversion: return rgbToHex(255 - rgb.r, 255 - rgb.g, 255 - rgb.b);
+  }
+  function adjustColor(hex, amount) { // Simple adjustment for borders etc.
+    const rgb = hexToRgb(hex);
+    if (!rgb) return hex;
+    return rgbToHex(
+      Math.max(0, Math.min(255, rgb.r + amount)),
+      Math.max(0, Math.min(255, rgb.g + amount)),
+      Math.max(0, Math.min(255, rgb.b + amount))
+    );
+  }
+  // --- END NEW HELPERS ---
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
+      '&': '&',
+      '<': '<',
+      '>': '>',
+      '"': '"',
       "'": '&#39;'
     }[s]));
   }
-  
   function formatDateString(dbDateString) {
     if (!dbDateString || typeof dbDateString !== 'string') return '';
     try {
-      const isoFriendlyString = dbDateString.replace(' ', 'T');
-      const date = new Date(isoFriendlyString);
+      const isoFriendlyString = dbDateString.replace(' ', 'T'); const date = new Date(isoFriendlyString);
       if (isNaN(date.getTime())) return 'Invalid date';
       return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-    } catch (e) {
-      return '';
-    }
+    } catch (e) { return ''; }
   }
-  
   async function filesToDataURLs(fileList) {
-    const dataURLs = [];
     const filesToProcess = Array.from(fileList).slice(0, 4);
     const readerPromises = filesToProcess.map(file => {
       return new Promise((resolve, reject) => {
-        if (!file.type.startsWith('image/')) return resolve(null);
-        if (file.size > 5 * 1024 * 1024) return resolve(null); // 5MB Limit
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file);
+        if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) return resolve(null);
+        const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file);
       });
     });
-    const results = await Promise.all(readerPromises);
-    return results.filter(url => url !== null);
+    const results = await Promise.all(readerPromises); return results.filter(url => url !== null);
   }
 
   // --- RENDERING ---
@@ -551,75 +409,146 @@
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
     grid.innerHTML = "";
-    if (!tributes || !tributes.length) {
-      emptyState.classList.remove('hidden');
-      return;
-    }
+    if (!tributes || !tributes.length) { emptyState.classList.remove('hidden'); return; }
     emptyState.classList.add('hidden');
-    tributes.forEach((trb, idx) => {
-      grid.innerHTML += renderTributeCard(trb, idx);
-    });
-    attachCardEventListeners();
-    setupCardAnimations();
+    tributes.forEach((trb, idx) => { grid.innerHTML += renderTributeCard(trb, idx); });
+    attachCardEventListeners(); setupCardAnimations();
   }
-      
+
+  // --->>> MODIFIED renderFanGallery with Enhanced Initial Placeholders <<<---
   function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const fromName = tribute.from || "A";
+    const fromName = tribute.from || "A"; // Ensure fromName is never empty
 
+    // --- CASE 1: NO PHOTOS - Render Enhanced Initial Placeholder ---
     if (!photoArray.length) {
-      // Generate cute character placeholder
+      const initial = fromName.charAt(0).toUpperCase();
       const colorIndex = getNameColorIndex(fromName);
       const baseHexColor = INITIAL_BG_COLORS[colorIndex];
-      
-      // Use the name to deterministically select a character
-      const nameSum = fromName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const charIndex = nameSum % CUTE_CHARACTERS.length;
-      const characterSvg = CUTE_CHARACTERS[charIndex];
-      
-      // Create gradient colors
+
+      // Create base and accent colors for gradient
       let gradientColor1 = baseHexColor;
-      let gradientColor2 = baseHexColor;
+      let gradientColor2 = baseHexColor; // Default if conversion fails
       try {
-          const baseRgb = hexToRgb(baseHexColor);
-          if (baseRgb) {
-              const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
-              // Create a second color ~15% lighter
-              const lighterHsl = adjustLightness(baseHsl, 15);
-              const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l);
-              gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b);
-              
-              // Create a border color that's slightly darker
+        const baseRgb = hexToRgb(baseHexColor);
+        if (baseRgb) {
+          const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
+          const lighterHsl = adjustLightness(baseHsl, 18); // Slightly more difference
+          const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l);
+          gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b);
+
+          // Ensure gradient colors are distinct enough
+          if (gradientColor1 === gradientColor2) {
               const darkerHsl = adjustLightness(baseHsl, -10);
               const darkerRgb = hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l);
-              const borderColor = rgbToHex(darkerRgb.r, darkerRgb.g, darkerRgb.b);
-              
-              return `
-                <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center"
-                    style="background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%);
-                          border: 2.5px solid ${borderColor};"
-                    title="From: ${escapeHtml(fromName)}">
-                  <div class="character-wiggle" style="color: rgba(0,0,0,0.75); width: 75%; height: 75%;">
-                    ${characterSvg}
-                  </div>
-                </div>
-              `;
+              gradientColor1 = rgbToHex(darkerRgb.r, darkerRgb.g, darkerRgb.b); // Make first color darker if same
           }
+        }
       } catch (e) { console.error("Color conversion error:", e); }
-      
-      // Fallback if color conversion fails
+
+      // Pick a pattern style based on name hash
+      const patternType = fromName.charCodeAt(0) % 6; // 6 different patterns
+      let patternStyle = '';
+      let backgroundImages = []; // Store multiple background images
+
+      switch (patternType) {
+        case 0: // Polka dots
+          const dotColor = hexToRgba(invertColor(gradientColor1), 0.15); // Use inverted color for contrast
+          backgroundImages.push(`radial-gradient(${dotColor} 10%, transparent 11%)`, `radial-gradient(${dotColor} 10%, transparent 11%)`);
+          patternStyle = `background-size: 18px 18px; background-position: 0 0, 9px 9px;`; // Slightly larger dots
+          break;
+        case 1: // Stripes
+          const stripeColor = hexToRgba(invertColor(gradientColor1), 0.09);
+          backgroundImages.push(`linear-gradient(135deg, ${stripeColor} 25%, transparent 25%, transparent 50%, ${stripeColor} 50%, ${stripeColor} 75%, transparent 75%, transparent)`);
+          patternStyle = `background-size: 20px 20px;`;
+          break;
+        case 2: // Wavy pattern (using SVG)
+          const waveColor = hexToRgba(invertColor(gradientColor2), 0.18).replace('#', '%23'); // URL encode color
+          const svgWave = `<svg width='80' height='16' xmlns='http://www.w3.org/2000/svg'><path d='M0 8 Q 20 16, 40 8 T 80 8' fill='none' stroke='${waveColor}' stroke-width='1.5'/></svg>`;
+          backgroundImages.push(`url("data:image/svg+xml,${encodeURIComponent(svgWave)}")`);
+          patternStyle = `background-size: 40px; background-repeat: repeat;`; // Ensure repeat
+          break;
+        case 5: // Cross-hatching
+          const lineColor = hexToRgba(invertColor(gradientColor1), 0.1);
+          backgroundImages.push(
+             `linear-gradient(45deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`,
+             `linear-gradient(135deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})` // Corrected second gradient angle
+          );
+          patternStyle = `background-size: 16px 16px; background-position: 0 0;`; // Combine positions if needed or let default
+          break;
+        case 3: // Subtle noise (fallback for confetti/ring)
+        case 4:
+           const noiseColor1 = hexToRgba(invertColor(gradientColor1), 0.04);
+           const noiseColor2 = hexToRgba(invertColor(gradientColor2), 0.05);
+           backgroundImages.push(`radial-gradient(${noiseColor1} 1px, transparent 0)`, `radial-gradient(${noiseColor2} 1px, transparent 0)`);
+           patternStyle = `background-size: 5px 5px; background-position: 0 0, 2.5px 2.5px;`;
+          break;
+      }
+
+       // Combine base gradient and pattern images
+       const finalBackground = `background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%), ${backgroundImages.join(', ')};`;
+
+
+      // Random border style variations
+      const borderStyles = [
+        `border: 2.5px solid ${adjustColor(gradientColor1, -30)}`,
+        `border: 2px dashed ${adjustColor(gradientColor2, -20)}`,
+        `border: 3px double ${adjustColor(gradientColor1, -25)}`,
+        `border: 2px solid ${adjustColor(gradientColor2, -15)}; border-bottom: 4px solid ${adjustColor(gradientColor1, -35)}; border-radius: 1.1rem 1.1rem 0.8rem 0.8rem;`, // More complex example
+        `border: 2px solid ${adjustColor(gradientColor1, -10)}; border-radius: 1.3rem;`,
+        `border: 3px dotted ${adjustColor(gradientColor2, -20)}; border-radius: 50%;`, // Circle variant
+        `border-top: 3px solid ${adjustColor(gradientColor1, -20)}; border-right: 3px solid ${adjustColor(gradientColor1, -20)}; border-bottom: 3px solid ${adjustColor(gradientColor2, -10)}; border-left: 3px solid ${adjustColor(gradientColor2, -10)}; border-radius: 1.2rem;` // Two-tone border
+      ];
+      const borderStyle = borderStyles[fromName.length % borderStyles.length];
+      const isCircle = borderStyle.includes('50%'); // Check if it's the circle variant
+
+      // Add decorative icon (small emoji at bottom right)
+      const icons = ['✏️','🎓','📚','🍎','🔍','🌱','✨','📝', '⭐', '💡', '🔔', '🎨']; // Added more icons
+      const iconIndex = (fromName.charCodeAt(0) + fromName.length) % icons.length;
+      const icon = icons[iconIndex];
+
+      // Add secondary decorative element (from decorElements array)
+      const decorIndex = (tributeIdx + fromName.length) % decorElements.length;
+      const decorElement = decorElements[decorIndex];
+      const decorHtml = `<span class="absolute ${decorElement.pos} text-sm opacity-70 pointer-events-none" style="z-index: 1;">${decorElement.icon}</span>`; // Smaller, slightly transparent
+
+      // Define text color based on background brightness
+      let textColor = 'rgba(0,0,0,0.65)';
+      try {
+        const avgRgb = hexToRgb(baseHexColor); // Use base color for check
+        if (avgRgb) {
+            const brightness = (avgRgb.r * 299 + avgRgb.g * 587 + avgRgb.b * 114) / 1000;
+            if (brightness < 128) { // If background is dark
+                textColor = 'rgba(255,255,255,0.85)'; // Use lighter text
+            }
+        }
+      } catch(e) { console.error("Brightness check failed", e); }
+
+
       return `
-        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center"
-             style="background: ${baseHexColor};"
+        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center ${isCircle ? 'rounded-full' : ''}"
+             style="${finalBackground}
+                    ${patternStyle}
+                    ${borderStyle}
+                    box-shadow: 0 6px 19px rgba(180, 210, 255, 0.35), inset 0 0 12px rgba(255,255,255,0.15);"
              title="From: ${escapeHtml(fromName)}">
-          <div class="character-wiggle" style="color: rgba(0,0,0,0.75); width: 75%; height: 75%;">
-            ${characterSvg}
+          <div class="relative flex items-center justify-center w-full h-full">
+            ${decorHtml} {/* Added decorative element */}
+            <span class="initial-text" style="font-family: 'Quicksand', sans-serif;
+                       font-size: ${initial.length > 1 ? '2.2rem' : '2.8rem'}; /* Adjust size for multi-char initials if ever needed */
+                       font-weight: 700;
+                       color: ${textColor}; /* Dynamically set text color */
+                       text-shadow: 1px 1px 3px rgba(0,0,0,0.15); /* Adjusted shadow */
+                       z-index: 2;">
+              ${escapeHtml(initial)}
+            </span>
+            <small style="position: absolute; bottom: 0.5rem; right: 0.8rem; font-size: 0.8rem; opacity: 0.9; z-index: 2;">${icon}</small>
           </div>
         </div>
       `;
     }
 
-    // Photo fan logic (static positioning)
+    // --- CASE 2: HAS PHOTOS - Render Original Photo Fan (Static) ---
     let imgMarkup = "";
     let n = Math.min(photoArray.length, 4);
     let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
@@ -641,12 +570,14 @@
     }
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
+  // --->>> END MODIFIED renderFanGallery <<<---
+
 
   function renderTributeCard(tribute, idx) {
     const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
     const tributeId = tribute.id;
     return `
-      <div class="tribute-card stripe-bg relative min-h-[325px]" data-cardidx="${idx}" data-id="${tributeId}">
+      <div class="tribute-card stripe-bg relative" data-cardidx="${idx}" data-id="${tributeId}">
         <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
           <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
             <i class="fa-solid fa-pen"></i>
@@ -654,8 +585,8 @@
           <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-400 hover:text-pink-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
             <i class="fa-solid fa-trash"></i>
           </button>
-        </div> 
-        ${renderFanGallery(tribute, idx)} 
+        </div>
+        ${renderFanGallery(tribute, idx)} {/* Call the updated function */}
         <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
         <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
         <div class="text-xs text-green-500 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
@@ -666,280 +597,125 @@
     `;
   }
 
-  // --- API INTERACTIONS ---
+  // --- API INTERACTIONS --- (No changes needed here)
   async function fetchAndRenderTributes() {
-    const grid = document.getElementById("tributesGrid");
-    const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>';
-    emptyState.classList.add('hidden');
+    const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
+    grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>'; emptyState.classList.add('hidden');
     try {
-      const resp = await fetch('/.netlify/functions/get-tributes');
-      if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
-      tributes = await resp.json();
-      renderAllTributes();
-    } catch (error) {
-      grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>';
-      emptyState.classList.add('hidden');
-    }
+      const resp = await fetch('/.netlify/functions/get-tributes'); if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`); tributes = await resp.json(); renderAllTributes();
+    } catch (error) { grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>'; emptyState.classList.add('hidden'); }
   }
-  
   async function submitTribute(tributeData, idToUpdate = null) {
-    const isUpdating = idToUpdate !== null;
-    const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
-    const method = isUpdating ? 'PUT' : 'POST';
+    const isUpdating = idToUpdate !== null; const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST';
     const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData;
     try {
-      const response = await fetch(endpoint, {
-        method: method, headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) {
-        let errorMsg = `HTTP error! status: ${response.status}`;
-        try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { }
-        throw new Error(errorMsg);
-      }
-      showConfetti(); // Keep confetti
-      await fetchAndRenderTributes();
-      return true;
-    } catch (error) {
-      alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`);
-      return false;
-    }
+      const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); }
+      showConfetti(); await fetchAndRenderTributes(); return true;
+    } catch (error) { alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`); return false; }
   }
-  
   async function deleteTribute(tributeId) {
-    const idToDelete = parseInt(tributeId, 10);
-    if (isNaN(idToDelete)) return false;
-    if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
+    const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
     try {
-      const response = await fetch('/.netlify/functions/delete-tribute', {
-        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: idToDelete })
-      });
-      if (!response.ok) {
-        let errorMsg = `HTTP error! status: ${response.status}`;
-        try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { }
-        throw new Error(errorMsg);
-      }
-      await fetchAndRenderTributes();
-      return true;
-    } catch (error) {
-      alert(`Error deleting tribute: ${error.message}`);
-      return false;
-    }
+      const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
+      if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); }
+      await fetchAndRenderTributes(); return true;
+    } catch (error) { alert(`Error deleting tribute: ${error.message}`); return false; }
   }
 
-  // --- FORM LOGIC ---
+  // --- FORM LOGIC --- (No changes needed here)
   async function handleFormSubmit(e) {
-    e.preventDefault();
-    const submitBtn = document.getElementById('submitBtn');
-    const submitBtnText = document.getElementById('submitBtnText');
-    const fileInput = document.getElementById('photos');
-    submitBtn.disabled = true;
-    const originalBtnText = editingTributeId ? "Update" : "Share";
-    const actionText = editingTributeId ? 'Updating...' : 'Sharing...';
-    submitBtnText.textContent = actionText;
-    if (fileInput.files.length > 0) {
-      submitBtnText.textContent = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
-    }
-    let photos = [];
+    e.preventDefault(); const submitBtn = document.getElementById('submitBtn'); const submitBtnText = document.getElementById('submitBtnText'); const fileInput = document.getElementById('photos');
+    submitBtn.disabled = true; const originalBtnText = editingTributeId ? "Update" : "Share"; const actionText = editingTributeId ? 'Updating...' : 'Sharing...'; submitBtnText.textContent = actionText;
+    if (fileInput.files.length > 0) { submitBtnText.textContent = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; } let photos = [];
     try {
-      if (fileInput.files.length > 0) {
-        photos = await filesToDataURLs(fileInput.files);
-      }
-      const from = document.getElementById('fromName').value.trim() || "Anonymous";
-      const msg = document.getElementById('message').value.trim();
-      const tributeData = { from, msg, photos };
-      const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null;
-      if (editingTributeId && isNaN(idToUpdate)) throw new Error("Invalid tribute ID for update.");
-      const success = await submitTribute(tributeData, idToUpdate);
-      if (success) {
-        resetForm();
-      } else {
-        submitBtn.disabled = false;
-        submitBtnText.textContent = originalBtnText;
-      }
-    } catch (error) {
-      alert("An error occurred while processing your tribute. Please try again.");
-      submitBtn.disabled = false;
-      submitBtnText.textContent = originalBtnText;
-    }
+      if (fileInput.files.length > 0) { photos = await filesToDataURLs(fileInput.files); }
+      const from = document.getElementById('fromName').value.trim() || "Anonymous"; const msg = document.getElementById('message').value.trim(); const tributeData = { from, msg, photos };
+      const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idToUpdate)) throw new Error("Invalid tribute ID for update.");
+      const success = await submitTribute(tributeData, idToUpdate); if (success) { resetForm(); } else { submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; }
+    } catch (error) { alert("An error occurred while processing your tribute. Please try again."); submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; }
   }
-  
   function resetForm() {
-    document.getElementById('tributeForm').reset();
-    document.getElementById('submitBtnText').textContent = "Share";
-    document.getElementById('cancelEditBtn').classList.add('hidden');
-    editingTributeId = null;
-    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('tributeForm').reset(); document.getElementById('submitBtnText').textContent = "Share"; document.getElementById('cancelEditBtn').classList.add('hidden');
+    editingTributeId = null; document.getElementById('submitBtn').disabled = false;
   }
-  
   function loadEditForm(tributeId) {
-    const tributeIdAsNumber = parseInt(tributeId, 10);
-    if (isNaN(tributeIdAsNumber)) return;
-    const tributeToEdit = tributes.find(t => t.id === tributeIdAsNumber);
-    if (!tributeToEdit) {
-      alert("Could not load tribute for editing.");
-      return;
-    }
-    document.getElementById('fromName').value = tributeToEdit.from;
-    document.getElementById('message').value = tributeToEdit.msg;
-    editingTributeId = tributeIdAsNumber;
-    document.getElementById('submitBtnText').textContent = "Update";
-    document.getElementById('cancelEditBtn').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    const tributeIdAsNumber = parseInt(tributeId, 10); if (isNaN(tributeIdAsNumber)) return; const tributeToEdit = tributes.find(t => t.id === tributeIdAsNumber);
+    if (!tributeToEdit) { alert("Could not load tribute for editing."); return; }
+    document.getElementById('fromName').value = tributeToEdit.from; document.getElementById('message').value = tributeToEdit.msg; editingTributeId = tributeIdAsNumber;
+    document.getElementById('submitBtnText').textContent = "Update"; document.getElementById('cancelEditBtn').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  // --- CARD BUTTONS / IMAGE EVENTS ---
+  // --- CARD BUTTONS / IMAGE EVENTS --- (No changes needed here)
   function attachCardEventListeners() {
-    const grid = document.getElementById('tributesGrid');
-    if (!grid) return;
-
+    const grid = document.getElementById('tributesGrid'); if (!grid) return;
     grid.onclick = function handleGridClick(event) {
-      const target = event.target;
-      const button = target.closest('button[data-act]');
-      const img = target.closest('.fan-img');
-
+      const target = event.target; const button = target.closest('button[data-act]'); const img = target.closest('.fan-img');
       if (button) {
-        event.stopPropagation();
-        const action = button.getAttribute('data-act');
-        const id = button.getAttribute('data-id');
-        if (!id) return;
-        if (action === 'edit') {
-          loadEditForm(id);
-        } else if (action === 'delete') {
-          deleteTribute(id);
-        }
+        event.stopPropagation(); const action = button.getAttribute('data-act'); const id = button.getAttribute('data-id'); if (!id) return;
+        if (action === 'edit') { loadEditForm(id); } else if (action === 'delete') { deleteTribute(id); }
       } else if (img) {
-        event.stopPropagation();
-        const tIdx = parseInt(img.getAttribute("data-tidx"));
-        const pIdx = parseInt(img.getAttribute("data-pidx"));
-        if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) {
-          showModalGallery(tIdx, pIdx);
-        }
+        event.stopPropagation(); const tIdx = parseInt(img.getAttribute("data-tidx")); const pIdx = parseInt(img.getAttribute("data-pidx"));
+        if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); }
       }
     };
-
-    // Attach keydown listeners for accessibility
     document.querySelectorAll('.fan-img').forEach(img => {
-      img.onkeydown = function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          img.click();
-        }
-      }
+      img.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); } }
     });
   }
-  
+
+  // --- CARD ANIMATIONS --- (No changes needed here)
   function setupCardAnimations() {
     if ('IntersectionObserver' in window) {
-      // Card entrance animations
       document.querySelectorAll('.tribute-card').forEach(card => {
         card.classList.remove('card-mobile-anim');
         const observer = new IntersectionObserver((entries, observerInstance) => {
           entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              card.classList.add('card-mobile-anim');
-              setTimeout(() => card.classList.remove('card-mobile-anim'), 700);
-              observerInstance.unobserve(card);
-            }
+            if (entry.isIntersecting) { card.classList.add('card-mobile-anim'); setTimeout(() => card.classList.remove('card-mobile-anim'), 700); observerInstance.unobserve(card); }
           });
-        }, { threshold: 0.42 });
-        observer.observe(card);
+        }, { threshold: 0.42 }); observer.observe(card);
       });
     }
   }
 
-  // --- MODAL GALLERY LOGIC ---
+  // --- MODAL GALLERY LOGIC --- (No changes needed here)
   let modalTributeIdx = 0, modalPhotoIdx = 0;
-  function showModalGallery(tributeIdx, photoIdx) {
-    if (!tributes[tributeIdx]) return;
-    modalTributeIdx = tributeIdx;
-    modalPhotoIdx = photoIdx;
-    renderModalImage();
-    document.getElementById("galleryModal").classList.remove("hidden");
-    document.body.style.overflow = 'hidden';
-  }
-  
+  function showModalGallery(tributeIdx, photoIdx) { if (!tributes[tributeIdx]) return; modalTributeIdx = tributeIdx; modalPhotoIdx = photoIdx; renderModalImage(); document.getElementById("galleryModal").classList.remove("hidden"); document.body.style.overflow = 'hidden'; }
   function renderModalImage() {
-    let t = tributes[modalTributeIdx];
-    let photos = Array.isArray(t.photos) ? t.photos : [];
-    let currentPhotoSrc = photos[modalPhotoIdx];
-    if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) {
-      closeModalGallery(); return;
-    }
-    document.getElementById('modalImg').src = currentPhotoSrc;
-    document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`;
-    document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0);
-    document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1);
+    let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; let currentPhotoSrc = photos[modalPhotoIdx];
+    if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) { closeModalGallery(); return; }
+    document.getElementById('modalImg').src = currentPhotoSrc; document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`;
+    document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0); document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1);
   }
-  
-  function closeModalGallery() {
-    document.getElementById("galleryModal").classList.add("hidden");
-    document.getElementById('modalImg').src = '';
-    document.body.style.overflow = '';
-  }
+  function closeModalGallery() { document.getElementById("galleryModal").classList.add("hidden"); document.getElementById('modalImg').src = ''; document.body.style.overflow = ''; }
 
-  // --- CONFETTI LOGIC ---
+  // --- CONFETTI LOGIC --- (No changes needed here)
   function showConfetti() {
-    const confettiBox = document.getElementById('confettiBox');
-    confettiBox.style.display = 'flex';
-    confettiBox.innerHTML = '';
-    const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0'];
-    let n = 20 + Math.floor(8 * Math.random());
+    const confettiBox = document.getElementById('confettiBox'); confettiBox.style.display = 'flex'; confettiBox.innerHTML = '';
+    const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0']; let n = 20 + Math.floor(8 * Math.random());
     for (let i = 0; i < n; i++) {
-      let dot = document.createElement('span');
-      dot.className = 'confetti__dot';
-      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
-      let left = 4 + 92 * Math.random();
-      dot.style.left = left + '%';
-      dot.style.top = (5 + Math.random() * 1.6) + '%';
-      dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's';
-      dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2);
-      confettiBox.appendChild(dot);
-    }
-    setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900);
+      let dot = document.createElement('span'); dot.className = 'confetti__dot'; dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+      let left = 4 + 92 * Math.random(); dot.style.left = left + '%'; dot.style.top = (5 + Math.random() * 1.6) + '%'; dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's';
+      dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2); confettiBox.appendChild(dot);
+    } setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900);
   }
 
-  // --- INITIALIZE & EVENTS ---
+  // --- INITIALIZE & EVENTS --- (No changes needed here)
   document.addEventListener("DOMContentLoaded", function() {
     fetchAndRenderTributes();
     try {
-      const tributeForm = document.getElementById('tributeForm');
-      if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; }
-      const cancelBtn = document.getElementById('cancelEditBtn');
-      if (cancelBtn) { cancelBtn.onclick = resetForm; }
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
-      const modalBG = document.getElementById('modalBG');
-      if (modalBG) { modalBG.onclick = closeModalGallery; }
-      const prevImgBtn = document.getElementById('prevImgBtn');
-      if (prevImgBtn) {
-        prevImgBtn.onclick = function(e) {
-          e.stopPropagation(); if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); }
-        };
-      }
-      const nextImgBtn = document.getElementById('nextImgBtn');
-      if (nextImgBtn) {
-        nextImgBtn.onclick = function(e) {
-          e.stopPropagation();
-          let t = tributes[modalTributeIdx];
-          let photos = Array.isArray(t.photos) ? t.photos : [];
-          if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); }
-        };
-      }
+      const tributeForm = document.getElementById('tributeForm'); if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; }
+      const cancelBtn = document.getElementById('cancelEditBtn'); if (cancelBtn) { cancelBtn.onclick = resetForm; }
+      const closeModalBtn = document.getElementById('closeModalBtn'); if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
+      const modalBG = document.getElementById('modalBG'); if (modalBG) { modalBG.onclick = closeModalGallery; }
+      const prevImgBtn = document.getElementById('prevImgBtn'); if (prevImgBtn) { prevImgBtn.onclick = function(e) { e.stopPropagation(); if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } }; }
+      const nextImgBtn = document.getElementById('nextImgBtn'); if (nextImgBtn) { nextImgBtn.onclick = function(e) { e.stopPropagation(); let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); } }; }
     } catch (error) {}
     window.addEventListener("keydown", function(e) {
-      const modal = document.getElementById("galleryModal");
-      if (!modal || modal.classList.contains("hidden")) return;
-      if (e.key === "ArrowLeft") { document.getElementById('prevImgBtn')?.click(); }
-      else if (e.key === "ArrowRight") { document.getElementById('nextImgBtn')?.click(); }
-      else if (e.key === "Escape") { closeModalGallery(); }
+      const modal = document.getElementById("galleryModal"); if (!modal || modal.classList.contains("hidden")) return;
+      if (e.key === "ArrowLeft") { document.getElementById('prevImgBtn')?.click(); } else if (e.key === "ArrowRight") { document.getElementById('nextImgBtn')?.click(); } else if (e.key === "Escape") { closeModalGallery(); }
     });
   });
 </script>
 </body>
 </html>
-
-
-
