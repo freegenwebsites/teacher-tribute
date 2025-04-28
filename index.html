@@ -19,16 +19,17 @@
     /* Card base style */
     .tribute-card {
       position: relative;
-      /* Base gradient - will be layered with patterns via inline style */
+      /* Base gradient - layered with patterns via inline style */
       background: linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%);
       box-shadow: 0 8px 32px 0 rgba(156, 195, 255, 0.13);
       border-radius: 1.6rem;
-      padding: 1.9rem 1.6rem 1.2rem 1.6rem;
+      padding: 1.9rem 1.6rem 1.2rem 1.6rem; /* Keep padding */
       transition:
         transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
         box-shadow 0.19s;
       margin-bottom: 0.7rem;
-      min-height: 325px;
+      /* Adjust min-height if cards without photos look too short */
+      min-height: 220px; /* Reduced min-height slightly */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -41,35 +42,21 @@
     }
 
     /* --- Fan image stack (Static Version) --- */
+    /* Container for photos OR becomes an empty spacer */
     .fan-stack {
       display: flex; flex-direction: row; align-items: center; justify-content: center;
-      min-height: 112px; width: 176px; position: relative;
-      margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; /* Ensure stack is above card pattern */
+      /* Set height even when empty to maintain spacing */
+      min-height: 112px;
+      width: 176px; position: relative;
+      margin: 0 auto 1.2rem auto; /* Keep margin */
+      pointer-events: none; z-index: 1;
     }
-    .fan-img {
+    .fan-img { /* Styles for the actual photo images */
       width: 96px; height: 96px; object-fit: cover; border-radius: 1.12rem;
       box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24); transform-origin: 50% 80%;
       position: absolute; background: #f9fafb; border: 2.5px solid #d6edea;
       z-index: 1; cursor: pointer; pointer-events: auto; filter: brightness(.99) saturate(98%);
     }
-
-    /* --- Placeholder style (reusing school-illustration for size/shape) --- */
-    /* This remains for the INITIALS placeholders, styled by renderFanGallery */
-    .school-illustration, .initial-placeholder {
-      width: 97px; height: 97px; border-radius: 1.12rem; /* Default */
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 0.3rem auto; /* Keep margin consistent */
-      position: relative; overflow: hidden; will-change: transform;
-      transition: transform .22s, box-shadow .22s;
-      animation: bounceInCircle .60s 1;
-      z-index: 1; /* Ensure placeholder is above card pattern */
-      /* Specific background, border, shadow applied inline by JS */
-    }
-    @keyframes bounceInCircle { 0% { transform: scale(.78) rotate(-6deg); opacity:.2;} 70% { transform: scale(1.12) rotate(9deg); opacity:1;} 100% { transform: scale(1) rotate(0deg);} }
-    @keyframes pulseGlow { 0%, 100% { text-shadow: 1px 1px 2px rgba(255,255,255,0.3); } 50% { text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4); } }
-    .initial-placeholder .initial-text { animation: pulseGlow 2.5s ease-in-out infinite; position: relative; z-index: 2; }
-    .initial-placeholder { transform-style: preserve-3d; perspective: 800px; }
-    .initial-placeholder:hover { transform: rotateY(5deg) rotateX(3deg) translateZ(5px) scale(1.05); box-shadow: 0 10px 25px rgba(150, 180, 230, 0.45), inset 0 0 15px rgba(255,255,255,0.2); }
 
     /* Floating celebration elements */
     .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.14; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
@@ -105,7 +92,7 @@
     @media print { .custom-scrollbar { overflow: visible !important;} }
 
     /* Ensure content elements are above the card background pattern */
-    .tribute-card > div:not(.fan-stack):not(.initial-placeholder), /* Text divs */
+    .tribute-card > div:not(.fan-stack), /* Text divs */
     .tribute-card > button { /* Edit/Delete buttons */
         position: relative; z-index: 1;
     }
@@ -175,24 +162,6 @@
   let editingTributeId = null;
 
   // --- CONSTANTS ---
-  // Colors used for the initial placeholders if no photo is present
-  const INITIAL_BG_COLORS = [
-    '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
-    '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe'
-  ];
-  // Small decorative icons used in initial placeholders
-  const decorElements = [
-    { icon: '📝', pos: 'top-0 left-0 translate-x-1 translate-y-1' },
-    { icon: '🎓', pos: 'top-0 right-0 -translate-x-0.5 translate-y-1' },
-    { icon: '📚', pos: 'bottom-0 left-0 translate-x-1 -translate-y-0.5' },
-    { icon: '🍎', pos: 'bottom-0 right-0 -translate-x-0.5 -translate-y-0.5' },
-    { icon: '🌱', pos: 'top-1/2 left-0 -translate-y-1/2 translate-x-0.5' },
-    { icon: '✨', pos: 'top-0 left-1/2 -translate-x-1/2 translate-y-0.5' },
-    { icon: '🔍', pos: 'bottom-0 right-1/2 translate-x-1/2 -translate-y-0.5' },
-    { icon: '✏️', pos: 'top-1/2 right-0 -translate-y-1/2 -translate-x-0.5' }
-  ];
-  // Emojis used in initial placeholders (bottom right)
-  const placeholderIcons = ['✏️','🎓','📚','🍎','🔍','🌱','✨','📝', '⭐', '💡', '🔔', '🎨'];
   // Font Awesome icons used on the date line of tribute cards
   const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
 
@@ -307,8 +276,10 @@
   }
   // --- End Color Utilities ---
 
-  // Generates a consistent index based on a name string to pick colors/patterns
+  // Generates a consistent index based on a name string
   function getNameColorIndex(name) {
+    // This function might not be actively used now that initial placeholders are gone,
+    // but it doesn't hurt to keep it for potential future use or if card icons logic changes.
     if (!name) return 0; // Default for empty names
     let hash = 0;
     // Simple hashing algorithm
@@ -316,18 +287,20 @@
       hash = (hash << 5) - hash + name.charCodeAt(i);
       hash |= 0; // Convert to 32bit integer
     }
-    // Use the absolute value of the hash modulo the color array length
-    return Math.abs(hash) % INITIAL_BG_COLORS.length;
+    // Use the absolute value of the hash
+    // Modulo is not strictly needed if just using for variations, but kept for consistency
+    return Math.abs(hash);
   }
 
   // Escapes HTML special characters to prevent XSS
   function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, s => ({
-      '&': '&',
+    if (typeof str !== 'string') return '';
+    return str.replace(/[&<>"']/g, s => ({
+      '&': '&', // Use HTML entities
       '<': '<',
       '>': '>',
       '"': '"',
-      "'": '&#39;'
+      "'": '''
     }[s]));
   }
 
@@ -409,141 +382,22 @@
     }
   }
 
-  // Generates HTML for the top part of a card: either photos fanned out or an initial placeholder
+  // Generates HTML for the photo fan stack, or an empty container if no photos.
   function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const fromName = tribute.from || "Anonymous"; // Use "Anonymous" if name is missing
 
     // --- CASE 1: NO PHOTOS ---
-    // Render an enhanced placeholder with initials, patterns, and icons
+    // Render an empty container to maintain spacing
     if (!photoArray.length) {
-      const initial = fromName.charAt(0).toUpperCase();
-      const colorIndex = getNameColorIndex(fromName);
-      const baseHexColor = INITIAL_BG_COLORS[colorIndex];
-
-      // Calculate gradient colors
-      let gradientColor1 = baseHexColor;
-      let gradientColor2 = baseHexColor;
-      try {
-        const baseRgb = hexToRgb(baseHexColor);
-        if (baseRgb) {
-          const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
-          const lighterHsl = adjustLightness(baseHsl, 18);
-          gradientColor2 = rgbToHex(hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l).r, hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l).g, hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l).b);
-          // Ensure colors are different if base is very light/dark
-          if (gradientColor1 === gradientColor2) {
-            const darkerHsl = adjustLightness(baseHsl, -10);
-            gradientColor1 = rgbToHex(hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l).r, hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l).g, hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l).b);
-          }
-        }
-      } catch (e) { console.error("Placeholder color conversion error:", e); }
-
-      // Select a pattern type based on the first character's code
-      const patternType = fromName.charCodeAt(0) % 6;
-      let patternBgImages = [];
-      let patternBgStyle = '';
-
-      // Define pattern styles (similar to card patterns but for placeholder)
-      switch (patternType) {
-        case 0: // Polka dots
-          const dotColor = hexToRgba(invertColor(gradientColor1), 0.15);
-          patternBgImages.push(`radial-gradient(${dotColor} 10%, transparent 11%)`, `radial-gradient(${dotColor} 10%, transparent 11%)`);
-          patternBgStyle = `background-size: 18px 18px; background-position: 0 0, 9px 9px;`;
-          break;
-        case 1: // Stripes
-          const stripeColor = hexToRgba(invertColor(gradientColor1), 0.09);
-          patternBgImages.push(`linear-gradient(135deg, ${stripeColor} 25%, transparent 25%, transparent 50%, ${stripeColor} 50%, ${stripeColor} 75%, transparent 75%, transparent)`);
-          patternBgStyle = `background-size: 20px 20px;`;
-          break;
-        case 2: // Wavy pattern (SVG)
-          const waveColor = hexToRgba(invertColor(gradientColor2), 0.18).replace('#', '%23'); // URL encode
-          const svgWave = `<svg width='80' height='16' xmlns='http://www.w3.org/2000/svg'><path d='M0 8 Q 20 16, 40 8 T 80 8' fill='none' stroke='${waveColor}' stroke-width='1.5'/></svg>`;
-          patternBgImages.push(`url("data:image/svg+xml,${encodeURIComponent(svgWave)}")`);
-          patternBgStyle = `background-size: 40px; background-repeat: repeat;`;
-          break;
-        case 5: // Cross-hatching
-          const lineColor = hexToRgba(invertColor(gradientColor1), 0.1);
-          patternBgImages.push(
-             `linear-gradient(45deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`,
-             `linear-gradient(135deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`
-          );
-          patternBgStyle = `background-size: 16px 16px; background-position: 0 0;`;
-          break;
-        case 3: // Subtle Noise/Tiny Dots
-        case 4:
-           const noiseColor1 = hexToRgba(invertColor(gradientColor1), 0.04);
-           const noiseColor2 = hexToRgba(invertColor(gradientColor2), 0.05);
-           patternBgImages.push(`radial-gradient(${noiseColor1} 1px, transparent 0)`, `radial-gradient(${noiseColor2} 1px, transparent 0)`);
-           patternBgStyle = `background-size: 5px 5px; background-position: 0 0, 2.5px 2.5px;`;
-          break;
-      }
-
-      // Combine base gradient and pattern images
-      const finalBackground = `background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%), ${patternBgImages.join(', ')};`;
-
-      // Select a varied border style based on name length
-      const borderStyles = [
-        `border: 2.5px solid ${adjustColor(gradientColor1, -30)}`,
-        `border: 2px dashed ${adjustColor(gradientColor2, -20)}`,
-        `border: 3px double ${adjustColor(gradientColor1, -25)}`,
-        `border: 2px solid ${adjustColor(gradientColor2, -15)}; border-bottom: 4px solid ${adjustColor(gradientColor1, -35)}; border-radius: 1.1rem 1.1rem 0.8rem 0.8rem;`,
-        `border: 2px solid ${adjustColor(gradientColor1, -10)}; border-radius: 1.3rem;`,
-        `border: 3px dotted ${adjustColor(gradientColor2, -20)}; border-radius: 50%;`, // Circle variant
-        `border-top: 3px solid ${adjustColor(gradientColor1, -20)}; border-right: 3px solid ${adjustColor(gradientColor1, -20)}; border-bottom: 3px solid ${adjustColor(gradientColor2, -10)}; border-left: 3px solid ${adjustColor(gradientColor2, -10)}; border-radius: 1.2rem;` // Two-tone border
-      ];
-      const borderStyle = borderStyles[fromName.length % borderStyles.length];
-      const isCircle = borderStyle.includes('50%'); // Check if it's the circle variant
-
-      // Select bottom-right icon
-      const iconIndex = (fromName.charCodeAt(0) + fromName.length) % placeholderIcons.length;
-      const icon = placeholderIcons[iconIndex];
-
-      // Select secondary decorative element
-      const decorIndex = (tributeIdx + fromName.length) % decorElements.length;
-      const decorElement = decorElements[decorIndex];
-      const decorHtml = `<span class="absolute ${decorElement.pos} text-sm opacity-70 pointer-events-none" style="z-index: 1;">${decorElement.icon}</span>`;
-
-      // Determine text color based on background brightness for contrast
-      let textColor = 'rgba(0,0,0,0.65)'; // Default dark text
-      try {
-        const avgRgb = hexToRgb(baseHexColor);
-        if (avgRgb) {
-            const brightness = (avgRgb.r * 299 + avgRgb.g * 587 + avgRgb.b * 114) / 1000;
-            if (brightness < 128) { // If background is dark
-                textColor = 'rgba(255,255,255,0.85)'; // Use lighter text
-            }
-        }
-      } catch(e) { console.error("Placeholder brightness check failed", e); }
-
-      // Construct the HTML for the placeholder
-      return `
-        <div
-          class="initial-placeholder school-illustration mb-2 flex items-center justify-center ${isCircle ? 'rounded-full' : ''}"
-          style="${finalBackground} ${patternBgStyle} ${borderStyle} box-shadow: 0 6px 19px rgba(180, 210, 255, 0.35), inset 0 0 12px rgba(255,255,255,0.15);"
-          title="From: ${escapeHtml(fromName)}"
-        >
-          <div class="relative flex items-center justify-center w-full h-full">
-            ${decorHtml} {/* Decorative element */}
-            <span
-              class="initial-text"
-              style="font-family: 'Quicksand', sans-serif; font-size: 2.8rem; font-weight: 700; color: ${textColor}; text-shadow: 1px 1px 3px rgba(0,0,0,0.15); z-index: 2;"
-            >
-              ${escapeHtml(initial)}
-            </span>
-            <small style="position: absolute; bottom: 0.5rem; right: 0.8rem; font-size: 0.8rem; opacity: 0.9; z-index: 2;">
-              ${icon} {/* Bottom-right icon */}
-            </small>
-          </div>
-        </div>
-      `;
+        return `<div class="fan-stack mb-1"></div>`;
     }
 
     // --- CASE 2: HAS PHOTOS ---
     // Render the photos fanned out statically
     let imgMarkup = "";
-    const numPhotos = Math.min(photoArray.length, 4); // Max 4 photos
+    const numPhotos = Math.min(photoArray.length, 4);
     const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-    const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 40 / 2 : 0; // Calculate base shift for centering
+    const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 40 / 2 : 0;
 
     for (let i = 0; i < numPhotos; i++) {
       // Skip if photo source is invalid
@@ -566,10 +420,11 @@
         >
       `;
     }
+    // Return the container with the image markup
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
 
-  // Generates the HTML for a single tribute card
+  // Generates the HTML for a single tribute card (Applies background pattern)
   function renderTributeCard(tribute, idx) {
     const tributeId = tribute.id;
     const fromName = tribute.from || "Anonymous";
@@ -613,20 +468,15 @@
     }
 
     // Combine the pattern image (if any) with the base gradient for the background style
+    // Also include any other necessary background styles like size/position from cardPatternStyle
     const cardBackgroundStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%); ${cardPatternStyle}`;
 
     // Pick icon for the date line
     const dateIconClass = cardDateIcons[idx % cardDateIcons.length];
 
-    // Construct the card HTML
+    // Construct the card HTML (No JS comments inside the backticks ``)
     return `
-      <div
-        class="tribute-card relative"
-        data-cardidx="${idx}"
-        data-id="${tributeId}"
-        style="${cardBackgroundStyle}"
-      >
-        {/* Edit/Delete Buttons (z-index handled by CSS) */}
+      <div class="tribute-card relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBackgroundStyle}">
         <div class="absolute right-3 top-3 flex space-x-2">
           <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
             <i class="fa-solid fa-pen"></i>
@@ -636,15 +486,13 @@
           </button>
         </div>
 
-        {/* Renders Photos or Initial Placeholder (z-index handled by CSS) */}
         ${renderFanGallery(tribute, idx)}
 
-        {/* Text Content (z-index handled by CSS) */}
         <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">
           ${escapeHtml(fromName)}
         </div>
         <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">
-          ${escapeHtml(message).replace(/\n/g, "<br>")} {/* Convert newlines to <br> */}
+          ${escapeHtml(message).replace(/\n/g, "<br>")}
         </div>
         <div class="text-xs text-green-500 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
           <i class="fa-solid ${dateIconClass}"></i>
@@ -823,8 +671,6 @@
       // Re-enable button if an error occurred before submission attempt (like validation)
       submitBtn.disabled = false;
       submitBtnText.textContent = originalBtnText;
-      // Optionally show an alert here too, though submitTribute handles API errors
-      // alert("An error occurred while processing your tribute. Please try again.");
     }
   }
 
@@ -862,8 +708,6 @@
     // Populate form fields
     const nameInput = document.getElementById('fromName');
     const messageInput = document.getElementById('message');
-    // Note: We don't repopulate the file input for security/practicality reasons.
-    // Users need to re-select photos if they want to change/add them during edit.
 
     if (nameInput) nameInput.value = tributeToEdit.from;
     if (messageInput) messageInput.value = tributeToEdit.msg;
