@@ -42,7 +42,18 @@ h1, h2, h3, .script-font {
   border: 1px solid rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(5px);
 }
+    /* ... (your existing styles) ... */
 
+    /* --- ADDED: Hide Edit/Delete Buttons and Date --- */
+  .tribute-card .absolute.right-3.top-3 { /* Targets the button container */
+      display: none !important; /* Hides the div containing Edit/Delete buttons */
+}
+
+  .tribute-card .absolute.bottom-3 { /* Targets the date container */
+      display: none !important; /* Hides the div containing the date */
+}
+
+    /* ... (rest of your existing styles) ... */
 .tribute-card:hover, .tribute-card.card-mobile-anim {
   transform: translateY(-12px) scale(1.04) rotate(-1.6deg);
   z-index: 10;
@@ -282,23 +293,8 @@ input:focus, textarea:focus {
   color: #e58392; /* Pinkish highlight */
   font-weight: 600;
 }
-    /* ... (your existing styles) ... */
 
-    /* --- ADDED: Hide Edit/Delete Buttons and Date --- */
-    .tribute-card .absolute.right-3.top-3 { /* Targets the button container */
-      display: none !important; /* Hides the div containing Edit/Delete buttons */
-    }
-
-    .tribute-card .absolute.bottom-3 { /* Targets the date container */
-      display: none !important; /* Hides the div containing the date */
-    }
-
-    /* ... (rest of your existing styles) ... */
     
-
-IGNORE_WHEN_COPYING_START
-Use code with caution.
-IGNORE_WHEN_COPYING_END
   </style>
 </head>
 <body class="pb-10 selection:bg-pink-100"> <!-- Adjusted selection color -->
