@@ -65,23 +65,11 @@
       z-index: 1; /* Ensure placeholder is above card pattern */
       /* Specific background, border, shadow applied inline by JS */
     }
-    @keyframes bounceInCircle {
-      0%   { transform: scale(.78) rotate(-6deg); opacity:.2;}
-      70%  { transform: scale(1.12) rotate(9deg); opacity:1;}
-      100% { transform: scale(1) rotate(0deg);}
-    }
-    @keyframes pulseGlow {
-      0%, 100% { text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
-      50% { text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4); }
-    }
-    .initial-placeholder .initial-text {
-      animation: pulseGlow 2.5s ease-in-out infinite; position: relative; z-index: 2;
-    }
+    @keyframes bounceInCircle { 0% { transform: scale(.78) rotate(-6deg); opacity:.2;} 70% { transform: scale(1.12) rotate(9deg); opacity:1;} 100% { transform: scale(1) rotate(0deg);} }
+    @keyframes pulseGlow { 0%, 100% { text-shadow: 1px 1px 2px rgba(255,255,255,0.3); } 50% { text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4); } }
+    .initial-placeholder .initial-text { animation: pulseGlow 2.5s ease-in-out infinite; position: relative; z-index: 2; }
     .initial-placeholder { transform-style: preserve-3d; perspective: 800px; }
-    .initial-placeholder:hover {
-      transform: rotateY(5deg) rotateX(3deg) translateZ(5px) scale(1.05);
-      box-shadow: 0 10px 25px rgba(150, 180, 230, 0.45), inset 0 0 15px rgba(255,255,255,0.2);
-    }
+    .initial-placeholder:hover { transform: rotateY(5deg) rotateX(3deg) translateZ(5px) scale(1.05); box-shadow: 0 10px 25px rgba(150, 180, 230, 0.45), inset 0 0 15px rgba(255,255,255,0.2); }
 
     /* Floating celebration elements */
     .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.14; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
@@ -97,14 +85,14 @@
 
     html, body { overflow: initial !important; box-sizing: border-box; width: 100%; }
     /* Form styling tweak */
-    .stripe-bg { background: linear-gradient(105deg, #f7fbff 0, #e3f9ed 85%); } /* This class seems unused on tribute-card now, maybe remove? */
+    .stripe-bg { background: linear-gradient(105deg, #f7fbff 0, #e3f9ed 85%); }
 
     /* Confetti */
     .confetti { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: flex; align-items: flex-start; justify-content: center; overflow: visible; }
     .confetti__dot { position: absolute; width: 18px; height: 18px; border-radius: 99px; opacity: 0.84; pointer-events: none; will-change: transform, opacity; animation: confetti-fall 1.7s linear forwards; }
     @keyframes confetti-fall { 0% { transform: translateY(-80px) scale(.9) rotate(-20deg);} 80% { opacity: 1;} 95% { opacity: .8;} 100% { transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;} }
 
-    /* Footer animations (Verified - No Changes Needed) */
+    /* Footer animations */
     .footer-party { min-height: 90px; padding-bottom: 0.1rem; position: relative; margin-top: 2.5rem; background: linear-gradient(88deg, #e1f5fe 70%, #ffe0b2 100%); border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible; }
     .cap-throw { position: absolute; left: 25%; top: 14px; animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite; pointer-events: none; z-index: 2; }
     .cap-throw2 { left: 68%; top: 12px; animation-delay: 1.1s; animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite; }
@@ -116,14 +104,13 @@
     /* Print */
     @media print { .custom-scrollbar { overflow: visible !important;} }
 
-    /* NEW: Ensure content elements are above the card background pattern */
+    /* Ensure content elements are above the card background pattern */
     .tribute-card > div:not(.fan-stack):not(.initial-placeholder), /* Text divs */
     .tribute-card > button { /* Edit/Delete buttons */
-        position: relative; /* Create stacking context */
-        z-index: 1; /* Ensure they are above the background */
+        position: relative; z-index: 1;
     }
-    .tribute-card > .absolute.right-3.top-3 { /* Explicitly target buttons container */
-        z-index: 2; /* Higher z-index for buttons */
+    .tribute-card > .absolute.right-3.top-3 { /* Buttons container */
+        z-index: 2;
     }
 
   </style>
@@ -141,59 +128,30 @@
   <div class="max-w-5xl mx-auto mt-11 px-3">
     <!-- Title & Description -->
     <div class="text-center mb-7">
-      <h1 class="mb-2" style="font-family:'Indie Flower',cursive;font-size:2.28rem;color:#4e83e1;text-shadow:0 2px 7px #deedffd0;letter-spacing:1.8px;">
-        🌼 Happy Retirement, Teacher!
-      </h1>
-      <p style="font-family:'Indie Flower',cursive;color:#2e577b;font-size: 1.11rem;opacity:.93;text-align:center;">
-        A wonderful teacher leaves a mark on hearts forever.<br>
-        <span class="text-green-500 font-semibold">Share your words, memories & photos below!</span>
-      </p>
+      <h1 class="mb-2" style="font-family:'Indie Flower',cursive;font-size:2.28rem;color:#4e83e1;text-shadow:0 2px 7px #deedffd0;letter-spacing:1.8px;"> 🌼 Happy Retirement, Teacher! </h1>
+      <p style="font-family:'Indie Flower',cursive;color:#2e577b;font-size: 1.11rem;opacity:.93;text-align:center;"> A wonderful teacher leaves a mark on hearts forever.<br> <span class="text-green-500 font-semibold">Share your words, memories & photos below!</span> </p>
     </div>
     <!-- Add/Edit Tribute Form -->
-    <form id="tributeForm" class="mb-8 bg-gradient-to-r from-blue-50 via-green-50 to-yellow-50 border border-yellow-200 rounded-2xl py-5 px-4 shadow-lg flex flex-wrap items-center justify-between"> {/* Updated form background slightly */}
+    <form id="tributeForm" class="mb-8 bg-gradient-to-r from-blue-50 via-green-50 to-yellow-50 border border-yellow-200 rounded-2xl py-5 px-4 shadow-lg flex flex-wrap items-center justify-between">
       <input type="hidden" id="editIndex" value="">
-      <div class="flex flex-col w-full md:w-1/4 mb-2 md:mb-0 md:pr-3">
-        <label for="fromName" class="text-blue-500 font-semibold mb-1">Your Name</label>
-        <input id="fromName" name="fromName" type="text" class="rounded-xl border border-green-200 px-3 py-2 focus:ring-2 focus:ring-yellow-200 focus:outline-none" maxlength="32" required placeholder="E.g. Jamie">
-      </div>
-      <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-2 md:mb-0">
-        <label for="message" class="text-blue-500 font-semibold mb-1">Message</label>
-        <textarea id="message" name="message" rows="2" class="rounded-xl border border-green-200 px-3 py-2 focus:ring-2 focus:ring-yellow-200 focus:outline-none" maxlength="220" required placeholder="Write your message..."></textarea>
-      </div>
-      <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-2 md:mb-0">
-        <label for="photos" class="text-blue-500 font-semibold mb-1">
-          Photos<br>
-          <span class="text-xs font-normal text-gray-400">(up to 4)</span>
-        </label>
-        <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-yellow-50">
-      </div>
-      <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-2 md:mt-0">
-        <button id="submitBtn" type="submit" class="bg-gradient-to-r from-green-300 to-blue-400 hover:from-yellow-200 hover:to-green-700 font-bold py-2 px-7 text-white rounded-xl focus:outline-none transition duration-150 transform active:scale-95 shadow">
-          <i class="fa-solid fa-paper-plane mr-1"></i>
-          <span id="submitBtnText">Share</span>
-        </button>
-        <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button>
-      </div>
+      <div class="flex flex-col w-full md:w-1/4 mb-2 md:mb-0 md:pr-3"> <label for="fromName" class="text-blue-500 font-semibold mb-1">Your Name</label> <input id="fromName" name="fromName" type="text" class="rounded-xl border border-green-200 px-3 py-2 focus:ring-2 focus:ring-yellow-200 focus:outline-none" maxlength="32" required placeholder="E.g. Jamie"> </div>
+      <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-2 md:mb-0"> <label for="message" class="text-blue-500 font-semibold mb-1">Message</label> <textarea id="message" name="message" rows="2" class="rounded-xl border border-green-200 px-3 py-2 focus:ring-2 focus:ring-yellow-200 focus:outline-none" maxlength="220" required placeholder="Write your message..."></textarea> </div>
+      <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-2 md:mb-0"> <label for="photos" class="text-blue-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4)</span> </label> <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-1 text-xs bg-yellow-50"> </div>
+      <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-2 md:mt-0"> <button id="submitBtn" type="submit" class="bg-gradient-to-r from-green-300 to-blue-400 hover:from-yellow-200 hover:to-green-700 font-bold py-2 px-7 text-white rounded-xl focus:outline-none transition duration-150 transform active:scale-95 shadow"> <i class="fa-solid fa-paper-plane mr-1"></i> <span id="submitBtnText">Share</span> </button> <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button> </div>
     </form>
     <!-- Tribute Cards Grid -->
     <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 custom-scrollbar"></div>
-    <div id="emptyState" class="text-center text-blue-200 italic mt-10 text-lg hidden">
-      <i class="fa-solid fa-star fa-bounce mr-2"></i>No tributes yet. Be the first to post your memory!
-    </div>
+    <div id="emptyState" class="text-center text-blue-200 italic mt-10 text-lg hidden"> <i class="fa-solid fa-star fa-bounce mr-2"></i>No tributes yet. Be the first to post your memory! </div>
   </div>
 
   <!-- Modal for single photo view -->
   <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
     <div class="absolute inset-0 cursor-pointer" id="modalBG"></div>
     <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border-2 border-green-100">
-      <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-green-500 hover:text-yellow-400 focus:outline-none z-10" title="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-green-500 hover:text-yellow-400 focus:outline-none z-10" title="Close"> <i class="fa-solid fa-xmark"></i> </button>
       <div class="w-full flex items-center justify-center mb-3">
         <button type="button" id="prevImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden"> <i class="fa-solid fa-chevron-left"></i> </button>
-        <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow">
-          <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;">
-        </div>
+        <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow"> <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;"> </div>
         <button type="button" id="nextImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden"> <i class="fa-solid fa-chevron-right"></i> </button>
       </div>
       <div id="galleryCaption" class="text-center text-xs mt-2 mb-2 text-gray-500"></div>
@@ -204,9 +162,7 @@
   <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
     <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-blue-400 text-2xl"></i></div>
     <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-yellow-500 text-2xl"></i></div>
-    <span class="footer-teacher">
-      <svg width="56" height="70" viewBox="0 0 56 70" fill="none"> <ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/> <circle cx="28" cy="34" r="20" fill="#fff"/> <ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/> <ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/> <ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/> <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/> <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/> <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/> <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/> </svg>
-    </span>
+    <span class="footer-teacher"> <svg width="56" height="70" viewBox="0 0 56 70" fill="none"> <ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/> <circle cx="28" cy="34" r="20" fill="#fff"/> <ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/> <ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/> <ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/> <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/> <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/> <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/> <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/> </svg> </span>
     <span class="block font-semibold pt-10 pb-1" style="font-family:'Indie Flower',cursive;font-size:1.23rem;color:#356ec5;text-shadow:0 1px 7px #c5eaeeda;"> 🎉 With heartfelt wishes for your next amazing chapter! 🎉 </span>
     <span class="block text-gray-400 pb-1" style="font-family:Quicksand,sans-serif;font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-300"></i> by everyone who is grateful for you. </span>
   </footer>
@@ -219,19 +175,152 @@
   let editingTributeId = null;
 
   // --- CONSTANTS ---
-  const INITIAL_BG_COLORS = [ '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff', '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe' ];
-  const decorElements = [ { icon: '📝', pos: 'top-0 left-0 translate-x-1 translate-y-1' }, { icon: '🎓', pos: 'top-0 right-0 -translate-x-0.5 translate-y-1' }, { icon: '📚', pos: 'bottom-0 left-0 translate-x-1 -translate-y-0.5' }, { icon: '🍎', pos: 'bottom-0 right-0 -translate-x-0.5 -translate-y-0.5' }, { icon: '🌱', pos: 'top-1/2 left-0 -translate-y-1/2 translate-x-0.5' }, { icon: '✨', pos: 'top-0 left-1/2 -translate-x-1/2 translate-y-0.5' }, { icon: '🔍', pos: 'bottom-0 right-1/2 translate-x-1/2 -translate-y-0.5' }, { icon: '✏️', pos: 'top-1/2 right-0 -translate-y-1/2 -translate-x-0.5' } ];
+  // Colors used for the initial placeholders if no photo is present
+  const INITIAL_BG_COLORS = [
+    '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
+    '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe'
+  ];
+  // Small decorative icons used in initial placeholders
+  const decorElements = [
+    { icon: '📝', pos: 'top-0 left-0 translate-x-1 translate-y-1' },
+    { icon: '🎓', pos: 'top-0 right-0 -translate-x-0.5 translate-y-1' },
+    { icon: '📚', pos: 'bottom-0 left-0 translate-x-1 -translate-y-0.5' },
+    { icon: '🍎', pos: 'bottom-0 right-0 -translate-x-0.5 -translate-y-0.5' },
+    { icon: '🌱', pos: 'top-1/2 left-0 -translate-y-1/2 translate-x-0.5' },
+    { icon: '✨', pos: 'top-0 left-1/2 -translate-x-1/2 translate-y-0.5' },
+    { icon: '🔍', pos: 'bottom-0 right-1/2 translate-x-1/2 -translate-y-0.5' },
+    { icon: '✏️', pos: 'top-1/2 right-0 -translate-y-1/2 -translate-x-0.5' }
+  ];
+  // Emojis used in initial placeholders (bottom right)
+  const placeholderIcons = ['✏️','🎓','📚','🍎','🔍','🌱','✨','📝', '⭐', '💡', '🔔', '🎨'];
+  // Font Awesome icons used on the date line of tribute cards
+  const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
 
-  // --- UTILS ---
-  function hexToRgb(hex) { let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null; }
-  function rgbToHsl(r, g, b) { r /= 255, g /= 255, b /= 255; let max = Math.max(r, g, b), min = Math.min(r, g, b); let h, s, l = (max + min) / 2; if (max == min) { h = s = 0; } else { let d = max - min; s = l > 0.5 ? d / (2 - max - min) : d / (max + min); switch (max) { case r: h = (g - b) / d + (g < b ? 6 : 0); break; case g: h = (b - r) / d + 2; break; case b: h = (r - g) / d + 4; break; } h /= 6; } return { h: h * 360, s: s * 100, l: l * 100 }; }
-  function hslToRgb(h, s, l) { h /= 360; s /= 100; l /= 100; let r, g, b; if (s == 0) { r = g = b = l; } else { const hue2rgb = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1/6) return p + (q - p) * 6 * t; if (t < 1/2) return q; if (t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; } let q = l < 0.5 ? l * (1 + s) : l + s - l * s; let p = 2 * l - q; r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3); } return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) }; }
-  function rgbToHex(r, g, b) { return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0'); }
-  function adjustLightness(hsl, amount) { let newL = Math.max(0, Math.min(100, hsl.l + amount)); return { h: hsl.h, s: hsl.s, l: newL }; }
-  function getNameColorIndex(name) { if (!name) return 0; let hash = 0; for (let i = 0; i < name.length; i++) { hash = (hash << 5) - hash + name.charCodeAt(i); hash |= 0; } return Math.abs(hash) % INITIAL_BG_COLORS.length; }
-  function hexToRgba(hex, alpha) { const rgb = hexToRgb(hex); return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})` : `rgba(0,0,0,${alpha})`; }
-  function invertColor(hex) { const rgb = hexToRgb(hex); if (!rgb) return '#ffffff'; const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000; return brightness > 125 ? '#000000' : '#FFFFFF'; }
-  function adjustColor(hex, amount) { const rgb = hexToRgb(hex); if (!rgb) return hex; return rgbToHex( Math.max(0, Math.min(255, rgb.r + amount)), Math.max(0, Math.min(255, rgb.g + amount)), Math.max(0, Math.min(255, rgb.b + amount)) ); }
+
+  // --- UTILITY FUNCTIONS ---
+
+  // --- Color Conversion & Manipulation ---
+  function hexToRgb(hex) {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max == min) {
+      h = s = 0; // achromatic
+    } else {
+      let d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h: h * 360, s: s * 100, l: l * 100 };
+  }
+
+  function hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+
+    if (s == 0) {
+      r = g = b = l; // achromatic
+    } else {
+      // Helper function for HSL to RGB conversion formula
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      };
+      // Calculate intermediate values for the formula
+      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      let p = 2 * l - q;
+      // Calculate R, G, B using the hue2rgb helper
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    // Return rounded RGB values
+    return {
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255)
+    };
+  }
+
+  function rgbToHex(r, g, b) {
+    // Ensure component values are within 0-255 range
+    const clamp = (val) => Math.max(0, Math.min(255, Math.round(val)));
+    const rHex = clamp(r).toString(16).padStart(2, '0');
+    const gHex = clamp(g).toString(16).padStart(2, '0');
+    const bHex = clamp(b).toString(16).padStart(2, '0');
+    return `#${rHex}${gHex}${bHex}`;
+  }
+
+  // Adjusts the Lightness component of an HSL color object
+  function adjustLightness(hsl, amount) {
+    // Add the amount (percentage points) to lightness, clamped between 0 and 100
+    let newL = Math.max(0, Math.min(100, hsl.l + amount));
+    return { h: hsl.h, s: hsl.s, l: newL };
+  }
+
+  // Converts a hex color string to an RGBA string
+  function hexToRgba(hex, alpha) {
+    const rgb = hexToRgb(hex);
+    // Ensure alpha is between 0 and 1
+    const validAlpha = Math.max(0, Math.min(1, alpha));
+    return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${validAlpha})` : `rgba(0,0,0,${validAlpha})`; // Fallback to black if hex is invalid
+  }
+
+  // Inverts a hex color (simple black/white inversion based on brightness)
+  function invertColor(hex) {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return '#ffffff'; // Default to white if invalid hex
+    // Calculate perceived brightness
+    const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+    // Return black for light colors, white for dark colors for contrast
+    return brightness > 125 ? '#000000' : '#FFFFFF';
+  }
+
+  // Lightens or darkens a hex color by a simple RGB amount (can desaturate)
+  function adjustColor(hex, amount) {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return hex; // Return original if invalid
+    // Adjust each component by the amount, clamped to 0-255
+    const r = Math.max(0, Math.min(255, rgb.r + amount));
+    const g = Math.max(0, Math.min(255, rgb.g + amount));
+    const b = Math.max(0, Math.min(255, rgb.b + amount));
+    return rgbToHex(r, g, b);
+  }
+  // --- End Color Utilities ---
+
+  // Generates a consistent index based on a name string to pick colors/patterns
+  function getNameColorIndex(name) {
+    if (!name) return 0; // Default for empty names
+    let hash = 0;
+    // Simple hashing algorithm
+    for (let i = 0; i < name.length; i++) {
+      hash = (hash << 5) - hash + name.charCodeAt(i);
+      hash |= 0; // Convert to 32bit integer
+    }
+    // Use the absolute value of the hash modulo the color array length
+    return Math.abs(hash) % INITIAL_BG_COLORS.length;
+  }
+
+  // Escapes HTML special characters to prevent XSS
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
       '&': '&',
@@ -241,148 +330,810 @@
       "'": '&#39;'
     }[s]));
   }
-  function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const isoFriendlyString = dbDateString.replace(' ', 'T'); const date = new Date(isoFriendlyString); if (isNaN(date.getTime())) return 'Invalid date'; return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { return ''; } }
-  async function filesToDataURLs(fileList) { const filesToProcess = Array.from(fileList).slice(0, 4); const readerPromises = filesToProcess.map(file => { return new Promise((resolve, reject) => { if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) return resolve(null); const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }); const results = await Promise.all(readerPromises); return results.filter(url => url !== null); }
 
-  // --- RENDERING ---
-  function renderAllTributes() {
-    const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = ""; if (!tributes || !tributes.length) { emptyState.classList.remove('hidden'); return; }
-    emptyState.classList.add('hidden');
-    tributes.forEach((trb, idx) => { grid.innerHTML += renderTributeCard(trb, idx); });
-    attachCardEventListeners(); setupCardAnimations();
+  // Formats a date string (like 'YYYY-MM-DD HH:MM:SS') into 'Mon D, YYYY'
+  function formatDateString(dbDateString) {
+    if (!dbDateString || typeof dbDateString !== 'string') return '';
+    try {
+      // Try to parse the date string (handle potential space separator)
+      const isoFriendlyString = dbDateString.replace(' ', 'T');
+      const date = new Date(isoFriendlyString);
+      // Check if the date is valid
+      if (isNaN(date.getTime())) return 'Invalid date';
+      // Format the date
+      return date.toLocaleDateString("en-US", {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return ''; // Return empty on error
+    }
   }
 
-  // --- Initial Placeholder Rendering (No changes needed here, it works on its own) ---
+  // Converts a FileList (up to 4 files) into an array of Base64 Data URLs
+  async function filesToDataURLs(fileList) {
+    const MAX_FILES = 4;
+    const MAX_SIZE_MB = 5;
+    const filesToProcess = Array.from(fileList).slice(0, MAX_FILES);
+    const readerPromises = filesToProcess.map(file => {
+      return new Promise((resolve, reject) => {
+        // Basic validation
+        if (!file.type.startsWith('image/')) {
+          console.warn(`Skipping non-image file: ${file.name}`);
+          return resolve(null);
+        }
+        if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+           console.warn(`Skipping large file (> ${MAX_SIZE_MB}MB): ${file.name}`);
+          return resolve(null);
+        }
+        // Read the file
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result); // Resolve with the Data URL
+        reader.onerror = (error) => {
+            console.error("FileReader error:", error);
+            reject(error); // Reject on error
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    // Wait for all readers to complete
+    const results = await Promise.all(readerPromises);
+    // Filter out any null results (skipped files)
+    return results.filter(url => url !== null);
+  }
+
+  // --- RENDERING LOGIC ---
+
+  // Renders all tributes into the grid or shows the empty state
+  function renderAllTributes() {
+    const grid = document.getElementById("tributesGrid");
+    const emptyState = document.getElementById('emptyState');
+    if (!grid || !emptyState) return; // Exit if elements not found
+
+    grid.innerHTML = ""; // Clear previous tributes
+
+    if (!tributes || !tributes.length) {
+      emptyState.classList.remove('hidden'); // Show empty state
+    } else {
+      emptyState.classList.add('hidden'); // Hide empty state
+      // Create HTML for each tribute and append
+      tributes.forEach((tribute, index) => {
+        grid.innerHTML += renderTributeCard(tribute, index);
+      });
+      // Re-attach event listeners after rendering
+      attachCardEventListeners();
+      // Trigger card animations (if applicable)
+      setupCardAnimations();
+    }
+  }
+
+  // Generates HTML for the top part of a card: either photos fanned out or an initial placeholder
   function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const fromName = tribute.from || "A";
-    // --- CASE 1: NO PHOTOS - Render Enhanced Initial Placeholder ---
+    const fromName = tribute.from || "Anonymous"; // Use "Anonymous" if name is missing
+
+    // --- CASE 1: NO PHOTOS ---
+    // Render an enhanced placeholder with initials, patterns, and icons
     if (!photoArray.length) {
-      const initial = fromName.charAt(0).toUpperCase(); const colorIndex = getNameColorIndex(fromName); const baseHexColor = INITIAL_BG_COLORS[colorIndex]; let gradientColor1 = baseHexColor; let gradientColor2 = baseHexColor;
-      try { const baseRgb = hexToRgb(baseHexColor); if (baseRgb) { const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b); const lighterHsl = adjustLightness(baseHsl, 18); const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l); gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b); if (gradientColor1 === gradientColor2) { const darkerHsl = adjustLightness(baseHsl, -10); const darkerRgb = hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l); gradientColor1 = rgbToHex(darkerRgb.r, darkerRgb.g, darkerRgb.b); } } } catch (e) { console.error("Color conversion error:", e); }
-      const patternType = fromName.charCodeAt(0) % 6; let patternStyle = ''; let backgroundImages = [];
+      const initial = fromName.charAt(0).toUpperCase();
+      const colorIndex = getNameColorIndex(fromName);
+      const baseHexColor = INITIAL_BG_COLORS[colorIndex];
+
+      // Calculate gradient colors
+      let gradientColor1 = baseHexColor;
+      let gradientColor2 = baseHexColor;
+      try {
+        const baseRgb = hexToRgb(baseHexColor);
+        if (baseRgb) {
+          const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
+          const lighterHsl = adjustLightness(baseHsl, 18);
+          gradientColor2 = rgbToHex(hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l).r, hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l).g, hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l).b);
+          // Ensure colors are different if base is very light/dark
+          if (gradientColor1 === gradientColor2) {
+            const darkerHsl = adjustLightness(baseHsl, -10);
+            gradientColor1 = rgbToHex(hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l).r, hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l).g, hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l).b);
+          }
+        }
+      } catch (e) { console.error("Placeholder color conversion error:", e); }
+
+      // Select a pattern type based on the first character's code
+      const patternType = fromName.charCodeAt(0) % 6;
+      let patternBgImages = [];
+      let patternBgStyle = '';
+
+      // Define pattern styles (similar to card patterns but for placeholder)
       switch (patternType) {
-          case 0: const dotColor = hexToRgba(invertColor(gradientColor1), 0.15); backgroundImages.push(`radial-gradient(${dotColor} 10%, transparent 11%)`, `radial-gradient(${dotColor} 10%, transparent 11%)`); patternStyle = `background-size: 18px 18px; background-position: 0 0, 9px 9px;`; break;
-          case 1: const stripeColor = hexToRgba(invertColor(gradientColor1), 0.09); backgroundImages.push(`linear-gradient(135deg, ${stripeColor} 25%, transparent 25%, transparent 50%, ${stripeColor} 50%, ${stripeColor} 75%, transparent 75%, transparent)`); patternStyle = `background-size: 20px 20px;`; break;
-          case 2: const waveColor = hexToRgba(invertColor(gradientColor2), 0.18).replace('#', '%23'); const svgWave = `<svg width='80' height='16' xmlns='http://www.w3.org/2000/svg'><path d='M0 8 Q 20 16, 40 8 T 80 8' fill='none' stroke='${waveColor}' stroke-width='1.5'/></svg>`; backgroundImages.push(`url("data:image/svg+xml,${encodeURIComponent(svgWave)}")`); patternStyle = `background-size: 40px; background-repeat: repeat;`; break;
-          case 5: const lineColor = hexToRgba(invertColor(gradientColor1), 0.1); backgroundImages.push(`linear-gradient(45deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`, `linear-gradient(135deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`); patternStyle = `background-size: 16px 16px; background-position: 0 0;`; break;
-          case 3: case 4: const noiseColor1 = hexToRgba(invertColor(gradientColor1), 0.04); const noiseColor2 = hexToRgba(invertColor(gradientColor2), 0.05); backgroundImages.push(`radial-gradient(${noiseColor1} 1px, transparent 0)`, `radial-gradient(${noiseColor2} 1px, transparent 0)`); patternStyle = `background-size: 5px 5px; background-position: 0 0, 2.5px 2.5px;`; break;
+        case 0: // Polka dots
+          const dotColor = hexToRgba(invertColor(gradientColor1), 0.15);
+          patternBgImages.push(`radial-gradient(${dotColor} 10%, transparent 11%)`, `radial-gradient(${dotColor} 10%, transparent 11%)`);
+          patternBgStyle = `background-size: 18px 18px; background-position: 0 0, 9px 9px;`;
+          break;
+        case 1: // Stripes
+          const stripeColor = hexToRgba(invertColor(gradientColor1), 0.09);
+          patternBgImages.push(`linear-gradient(135deg, ${stripeColor} 25%, transparent 25%, transparent 50%, ${stripeColor} 50%, ${stripeColor} 75%, transparent 75%, transparent)`);
+          patternBgStyle = `background-size: 20px 20px;`;
+          break;
+        case 2: // Wavy pattern (SVG)
+          const waveColor = hexToRgba(invertColor(gradientColor2), 0.18).replace('#', '%23'); // URL encode
+          const svgWave = `<svg width='80' height='16' xmlns='http://www.w3.org/2000/svg'><path d='M0 8 Q 20 16, 40 8 T 80 8' fill='none' stroke='${waveColor}' stroke-width='1.5'/></svg>`;
+          patternBgImages.push(`url("data:image/svg+xml,${encodeURIComponent(svgWave)}")`);
+          patternBgStyle = `background-size: 40px; background-repeat: repeat;`;
+          break;
+        case 5: // Cross-hatching
+          const lineColor = hexToRgba(invertColor(gradientColor1), 0.1);
+          patternBgImages.push(
+             `linear-gradient(45deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`,
+             `linear-gradient(135deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`
+          );
+          patternBgStyle = `background-size: 16px 16px; background-position: 0 0;`;
+          break;
+        case 3: // Subtle Noise/Tiny Dots
+        case 4:
+           const noiseColor1 = hexToRgba(invertColor(gradientColor1), 0.04);
+           const noiseColor2 = hexToRgba(invertColor(gradientColor2), 0.05);
+           patternBgImages.push(`radial-gradient(${noiseColor1} 1px, transparent 0)`, `radial-gradient(${noiseColor2} 1px, transparent 0)`);
+           patternBgStyle = `background-size: 5px 5px; background-position: 0 0, 2.5px 2.5px;`;
+          break;
       }
-      const finalBackground = `background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%), ${backgroundImages.join(', ')};`;
-      const borderStyles = [ `border: 2.5px solid ${adjustColor(gradientColor1, -30)}`, `border: 2px dashed ${adjustColor(gradientColor2, -20)}`, `border: 3px double ${adjustColor(gradientColor1, -25)}`, `border: 2px solid ${adjustColor(gradientColor2, -15)}; border-bottom: 4px solid ${adjustColor(gradientColor1, -35)}; border-radius: 1.1rem 1.1rem 0.8rem 0.8rem;`, `border: 2px solid ${adjustColor(gradientColor1, -10)}; border-radius: 1.3rem;`, `border: 3px dotted ${adjustColor(gradientColor2, -20)}; border-radius: 50%;`, `border-top: 3px solid ${adjustColor(gradientColor1, -20)}; border-right: 3px solid ${adjustColor(gradientColor1, -20)}; border-bottom: 3px solid ${adjustColor(gradientColor2, -10)}; border-left: 3px solid ${adjustColor(gradientColor2, -10)}; border-radius: 1.2rem;` ];
-      const borderStyle = borderStyles[fromName.length % borderStyles.length]; const isCircle = borderStyle.includes('50%');
-      const icons = ['✏️','🎓','📚','🍎','🔍','🌱','✨','📝', '⭐', '💡', '🔔', '🎨']; const iconIndex = (fromName.charCodeAt(0) + fromName.length) % icons.length; const icon = icons[iconIndex];
-      const decorIndex = (tributeIdx + fromName.length) % decorElements.length; const decorElement = decorElements[decorIndex]; const decorHtml = `<span class="absolute ${decorElement.pos} text-sm opacity-70 pointer-events-none" style="z-index: 1;">${decorElement.icon}</span>`;
-      let textColor = 'rgba(0,0,0,0.65)'; try { const avgRgb = hexToRgb(baseHexColor); if (avgRgb) { const brightness = (avgRgb.r * 299 + avgRgb.g * 587 + avgRgb.b * 114) / 1000; if (brightness < 128) { textColor = 'rgba(255,255,255,0.85)'; } } } catch(e) { console.error("Brightness check failed", e); }
+
+      // Combine base gradient and pattern images
+      const finalBackground = `background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%), ${patternBgImages.join(', ')};`;
+
+      // Select a varied border style based on name length
+      const borderStyles = [
+        `border: 2.5px solid ${adjustColor(gradientColor1, -30)}`,
+        `border: 2px dashed ${adjustColor(gradientColor2, -20)}`,
+        `border: 3px double ${adjustColor(gradientColor1, -25)}`,
+        `border: 2px solid ${adjustColor(gradientColor2, -15)}; border-bottom: 4px solid ${adjustColor(gradientColor1, -35)}; border-radius: 1.1rem 1.1rem 0.8rem 0.8rem;`,
+        `border: 2px solid ${adjustColor(gradientColor1, -10)}; border-radius: 1.3rem;`,
+        `border: 3px dotted ${adjustColor(gradientColor2, -20)}; border-radius: 50%;`, // Circle variant
+        `border-top: 3px solid ${adjustColor(gradientColor1, -20)}; border-right: 3px solid ${adjustColor(gradientColor1, -20)}; border-bottom: 3px solid ${adjustColor(gradientColor2, -10)}; border-left: 3px solid ${adjustColor(gradientColor2, -10)}; border-radius: 1.2rem;` // Two-tone border
+      ];
+      const borderStyle = borderStyles[fromName.length % borderStyles.length];
+      const isCircle = borderStyle.includes('50%'); // Check if it's the circle variant
+
+      // Select bottom-right icon
+      const iconIndex = (fromName.charCodeAt(0) + fromName.length) % placeholderIcons.length;
+      const icon = placeholderIcons[iconIndex];
+
+      // Select secondary decorative element
+      const decorIndex = (tributeIdx + fromName.length) % decorElements.length;
+      const decorElement = decorElements[decorIndex];
+      const decorHtml = `<span class="absolute ${decorElement.pos} text-sm opacity-70 pointer-events-none" style="z-index: 1;">${decorElement.icon}</span>`;
+
+      // Determine text color based on background brightness for contrast
+      let textColor = 'rgba(0,0,0,0.65)'; // Default dark text
+      try {
+        const avgRgb = hexToRgb(baseHexColor);
+        if (avgRgb) {
+            const brightness = (avgRgb.r * 299 + avgRgb.g * 587 + avgRgb.b * 114) / 1000;
+            if (brightness < 128) { // If background is dark
+                textColor = 'rgba(255,255,255,0.85)'; // Use lighter text
+            }
+        }
+      } catch(e) { console.error("Placeholder brightness check failed", e); }
+
+      // Construct the HTML for the placeholder
       return `
-        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center ${isCircle ? 'rounded-full' : ''}" style="${finalBackground} ${patternStyle} ${borderStyle} box-shadow: 0 6px 19px rgba(180, 210, 255, 0.35), inset 0 0 12px rgba(255,255,255,0.15);" title="From: ${escapeHtml(fromName)}">
-          <div class="relative flex items-center justify-center w-full h-full"> ${decorHtml} <span class="initial-text" style="font-family: 'Quicksand', sans-serif; font-size: ${initial.length > 1 ? '2.2rem' : '2.8rem'}; font-weight: 700; color: ${textColor}; text-shadow: 1px 1px 3px rgba(0,0,0,0.15); z-index: 2;"> ${escapeHtml(initial)} </span> <small style="position: absolute; bottom: 0.5rem; right: 0.8rem; font-size: 0.8rem; opacity: 0.9; z-index: 2;">${icon}</small> </div>
-        </div> `;
+        <div
+          class="initial-placeholder school-illustration mb-2 flex items-center justify-center ${isCircle ? 'rounded-full' : ''}"
+          style="${finalBackground} ${patternBgStyle} ${borderStyle} box-shadow: 0 6px 19px rgba(180, 210, 255, 0.35), inset 0 0 12px rgba(255,255,255,0.15);"
+          title="From: ${escapeHtml(fromName)}"
+        >
+          <div class="relative flex items-center justify-center w-full h-full">
+            ${decorHtml} {/* Decorative element */}
+            <span
+              class="initial-text"
+              style="font-family: 'Quicksand', sans-serif; font-size: 2.8rem; font-weight: 700; color: ${textColor}; text-shadow: 1px 1px 3px rgba(0,0,0,0.15); z-index: 2;"
+            >
+              ${escapeHtml(initial)}
+            </span>
+            <small style="position: absolute; bottom: 0.5rem; right: 0.8rem; font-size: 0.8rem; opacity: 0.9; z-index: 2;">
+              ${icon} {/* Bottom-right icon */}
+            </small>
+          </div>
+        </div>
+      `;
     }
-    // --- CASE 2: HAS PHOTOS - Render Original Photo Fan (Static) ---
-    let imgMarkup = ""; let n = Math.min(photoArray.length, 4); let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18]; let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0;
-    for (let i = 0; i < n; i++) { if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue; let ang = spread[i]; let l = (n > 1) ? (i * 40) - shiftBase : 0; let z = n - i; imgMarkup += `<img src="${escapeHtml(photoArray[i])}" class="fan-img" data-tidx="${tributeIdx}" data-pidx="${i}" tabindex="0" style="transform:rotate(${ang}deg) translateX(${l}px); z-index: ${z};" alt="Tribute Photo ${i + 1}">`; }
+
+    // --- CASE 2: HAS PHOTOS ---
+    // Render the photos fanned out statically
+    let imgMarkup = "";
+    const numPhotos = Math.min(photoArray.length, 4); // Max 4 photos
+    const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
+    const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 40 / 2 : 0; // Calculate base shift for centering
+
+    for (let i = 0; i < numPhotos; i++) {
+      // Skip if photo source is invalid
+      if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue;
+
+      const angle = spreadAngles[i];
+      // Calculate horizontal position for fanning effect
+      const translateX = (numPhotos > 1) ? (i * 40) - horizontalShiftBase : 0;
+      const zIndex = numPhotos - i; // Top image has highest z-index
+
+      imgMarkup += `
+        <img
+          src="${escapeHtml(photoArray[i])}"
+          class="fan-img"
+          data-tidx="${tributeIdx}"
+          data-pidx="${i}"
+          tabindex="0"
+          style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};"
+          alt="Tribute Photo ${i + 1}"
+        >
+      `;
+    }
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
 
-
-  // --->>> MODIFIED renderTributeCard to add varying background patterns <<<---
+  // Generates the HTML for a single tribute card
   function renderTributeCard(tribute, idx) {
-    const cardIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book']; // Icons for the date line
     const tributeId = tribute.id;
+    const fromName = tribute.from || "Anonymous";
+    const message = tribute.msg || "";
+    const date = tribute.date || "";
 
-    // --- NEW: Generate Card Background Pattern ---
+    // --- Generate Card Background Pattern ---
     let cardPatternStyle = '';
-    const cardPatternType = idx % 5; // Cycle through 5 pattern types (0-4)
+    let cardPatternBgImage = '';
+    // Cycle through 5 pattern types based on card index
+    const cardPatternType = idx % 5;
 
     // Define subtle pattern colors
-    const patternColor = 'rgba(0, 0, 0, 0.03)'; // Very subtle dark pattern
-    const patternColorLight = 'rgba(255, 255, 255, 0.06)'; // Subtle light pattern (alternative)
+    const patternColorDark = 'rgba(0, 0, 0, 0.03)'; // Very subtle dark pattern
+    const patternColorLight = 'rgba(255, 255, 255, 0.06)'; // Subtle light pattern
 
+    // Define patterns using background-image CSS
     switch (cardPatternType) {
         case 0: // Subtle Polka Dots
-            cardPatternStyle = `background-image: radial-gradient(${patternColor} 8%, transparent 9%), radial-gradient(${patternColor} 8%, transparent 9%); background-size: 30px 30px; background-position: 0 0, 15px 15px;`;
+            cardPatternBgImage = `radial-gradient(${patternColorDark} 8%, transparent 9%), radial-gradient(${patternColorDark} 8%, transparent 9%)`;
+            cardPatternStyle = `background-size: 30px 30px; background-position: 0 0, 15px 15px;`;
             break;
         case 1: // Subtle Diagonal Stripes
-            cardPatternStyle = `background-image: linear-gradient(135deg, ${patternColor} 10%, transparent 10%, transparent 50%, ${patternColor} 50%, ${patternColor} 60%, transparent 60%, transparent 100%); background-size: 15px 15px;`;
+            cardPatternBgImage = `linear-gradient(135deg, ${patternColorDark} 10%, transparent 10%, transparent 50%, ${patternColorDark} 50%, ${patternColorDark} 60%, transparent 60%, transparent 100%)`;
+            cardPatternStyle = `background-size: 15px 15px;`;
             break;
         case 2: // Subtle Crosshatch
-             cardPatternStyle = `background-image: linear-gradient(45deg, ${patternColor} 25%, transparent 25%, transparent 75%, ${patternColor} 75%, ${patternColor}), linear-gradient(45deg, ${patternColor} 25%, transparent 25%, transparent 75%, ${patternColor} 75%, ${patternColor}); background-size: 20px 20px; background-position: 0 0, 10px 10px;`;
+             cardPatternBgImage = `linear-gradient(45deg, ${patternColorDark} 25%, transparent 25%, transparent 75%, ${patternColorDark} 75%, ${patternColorDark}), linear-gradient(45deg, ${patternColorDark} 25%, transparent 25%, transparent 75%, ${patternColorDark} 75%, ${patternColorDark})`;
+             cardPatternStyle = `background-size: 20px 20px; background-position: 0 0, 10px 10px;`;
              break;
-        case 3: // Subtle Wavy Lines (SVG)
-            const waveSvgColor = patternColorLight.replace('#', '%23'); // Use light color for contrast on gradient
+        case 3: // Subtle Wavy Lines (SVG) - Use light color for better contrast on gradient
+            const waveSvgColor = patternColorLight.replace('#', '%23'); // URL encode hash
             const svgWaveCard = `<svg width='100' height='10' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q 25 10, 50 5 T 100 5' fill='none' stroke='${waveSvgColor}' stroke-width='1'/></svg>`;
-            cardPatternStyle = `background-image: url("data:image/svg+xml,${encodeURIComponent(svgWaveCard)}"); background-size: 50px; background-repeat: repeat;`;
+            cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgWaveCard)}")`;
+            cardPatternStyle = `background-size: 50px; background-repeat: repeat;`;
             break;
         case 4: // Subtle Noise / Tiny Dots
-            cardPatternStyle = `background-image: radial-gradient(${patternColor} 1px, transparent 0), radial-gradient(${patternColor} 1px, transparent 0); background-size: 8px 8px; background-position: 0 0, 4px 4px;`;
+            cardPatternBgImage = `radial-gradient(${patternColorDark} 1px, transparent 0), radial-gradient(${patternColorDark} 1px, transparent 0)`;
+            cardPatternStyle = `background-size: 8px 8px; background-position: 0 0, 4px 4px;`;
             break;
-        // Add more cases if desired
     }
 
-    // Combine the pattern with the base gradient
-    const cardBackground = `${cardPatternStyle ? cardPatternStyle.replace('background-image:', 'background-image: ') + ',' : ''} linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%)`;
-    // --- END NEW ---
+    // Combine the pattern image (if any) with the base gradient for the background style
+    const cardBackgroundStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%); ${cardPatternStyle}`;
 
-    // Note on Code Comments: If you saw `/* ... */` rendered, it was likely due to an error in a previous code version
-    // or those characters being present in the 'from' or 'msg' data. The `escapeHtml` function below prevents this if data is clean.
+    // Pick icon for the date line
+    const dateIconClass = cardDateIcons[idx % cardDateIcons.length];
 
+    // Construct the card HTML
     return `
-      <div class="tribute-card relative"
-           data-cardidx="${idx}"
-           data-id="${tributeId}"
-           style="background: ${cardBackground}; ${cardPatternStyle ? cardPatternStyle.replace(/background-image:[^;]+;?/,'') : ''}"> {/* Apply combined background */}
-
-        {/* Edit/Delete Buttons - Ensure they have high enough z-index (added in CSS) */}
+      <div
+        class="tribute-card relative"
+        data-cardidx="${idx}"
+        data-id="${tributeId}"
+        style="${cardBackgroundStyle}"
+      >
+        {/* Edit/Delete Buttons (z-index handled by CSS) */}
         <div class="absolute right-3 top-3 flex space-x-2">
-          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition"> <i class="fa-solid fa-pen"></i> </button>
-          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-400 hover:text-pink-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition"> <i class="fa-solid fa-trash"></i> </button>
+          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-400 hover:text-pink-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
+            <i class="fa-solid fa-trash"></i>
+          </button>
         </div>
 
-        {/* Photos or Initial Placeholder - Ensure z-index 1 */}
+        {/* Renders Photos or Initial Placeholder (z-index handled by CSS) */}
         ${renderFanGallery(tribute, idx)}
 
-        {/* Text Content - Ensure z-index 1 */}
-        <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
-        <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
+        {/* Text Content (z-index handled by CSS) */}
+        <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">
+          ${escapeHtml(fromName)}
+        </div>
+        <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">
+          ${escapeHtml(message).replace(/\n/g, "<br>")} {/* Convert newlines to <br> */}
+        </div>
         <div class="text-xs text-green-500 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-          <i class="fa-solid ${cardIcons[idx % cardIcons.length]}"></i>
-          <span>${formatDateString(tribute.date) || ''}</span>
+          <i class="fa-solid ${dateIconClass}"></i>
+          <span>${formatDateString(date)}</span>
         </div>
       </div>
     `;
   }
-  // --->>> END MODIFIED renderTributeCard <<<---
 
 
-  // --- API INTERACTIONS --- (No changes needed)
-  async function fetchAndRenderTributes() { const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState'); grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>'; emptyState.classList.add('hidden'); try { const resp = await fetch('/.netlify/functions/get-tributes'); if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`); tributes = await resp.json(); renderAllTributes(); } catch (error) { grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>'; emptyState.classList.add('hidden'); } }
-  async function submitTribute(tributeData, idToUpdate = null) { const isUpdating = idToUpdate !== null; const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST'; const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData; try { const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); } showConfetti(); await fetchAndRenderTributes(); return true; } catch (error) { alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`); return false; } }
-  async function deleteTribute(tributeId) { const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false; try { const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) }); if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); } await fetchAndRenderTributes(); return true; } catch (error) { alert(`Error deleting tribute: ${error.message}`); return false; } }
+  // --- API INTERACTIONS ---
 
-  // --- FORM LOGIC --- (No changes needed)
-  async function handleFormSubmit(e) { e.preventDefault(); const submitBtn = document.getElementById('submitBtn'); const submitBtnText = document.getElementById('submitBtnText'); const fileInput = document.getElementById('photos'); submitBtn.disabled = true; const originalBtnText = editingTributeId ? "Update" : "Share"; const actionText = editingTributeId ? 'Updating...' : 'Sharing...'; submitBtnText.textContent = actionText; if (fileInput.files.length > 0) { submitBtnText.textContent = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; } let photos = []; try { if (fileInput.files.length > 0) { photos = await filesToDataURLs(fileInput.files); } const from = document.getElementById('fromName').value.trim() || "Anonymous"; const msg = document.getElementById('message').value.trim(); const tributeData = { from, msg, photos }; const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idToUpdate)) throw new Error("Invalid tribute ID for update."); const success = await submitTribute(tributeData, idToUpdate); if (success) { resetForm(); } else { submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; } } catch (error) { alert("An error occurred while processing your tribute. Please try again."); submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; } }
-  function resetForm() { document.getElementById('tributeForm').reset(); document.getElementById('submitBtnText').textContent = "Share"; document.getElementById('cancelEditBtn').classList.add('hidden'); editingTributeId = null; document.getElementById('submitBtn').disabled = false; }
-  function loadEditForm(tributeId) { const tributeIdAsNumber = parseInt(tributeId, 10); if (isNaN(tributeIdAsNumber)) return; const tributeToEdit = tributes.find(t => t.id === tributeIdAsNumber); if (!tributeToEdit) { alert("Could not load tribute for editing."); return; } document.getElementById('fromName').value = tributeToEdit.from; document.getElementById('message').value = tributeToEdit.msg; editingTributeId = tributeIdAsNumber; document.getElementById('submitBtnText').textContent = "Update"; document.getElementById('cancelEditBtn').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  // Fetches tributes from the backend and renders them
+  async function fetchAndRenderTributes() {
+    const grid = document.getElementById("tributesGrid");
+    const emptyState = document.getElementById('emptyState');
+    if (!grid || !emptyState) return;
 
-  // --- CARD BUTTONS / IMAGE EVENTS --- (No changes needed)
-  function attachCardEventListeners() { const grid = document.getElementById('tributesGrid'); if (!grid) return; grid.onclick = function handleGridClick(event) { const target = event.target; const button = target.closest('button[data-act]'); const img = target.closest('.fan-img'); if (button) { event.stopPropagation(); const action = button.getAttribute('data-act'); const id = button.getAttribute('data-id'); if (!id) return; if (action === 'edit') { loadEditForm(id); } else if (action === 'delete') { deleteTribute(id); } } else if (img) { event.stopPropagation(); const tIdx = parseInt(img.getAttribute("data-tidx")); const pIdx = parseInt(img.getAttribute("data-pidx")); if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } } }; document.querySelectorAll('.fan-img').forEach(img => { img.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); } } }); }
+    grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>';
+    emptyState.classList.add('hidden');
 
-  // --- CARD ANIMATIONS --- (No changes needed)
-  function setupCardAnimations() { if ('IntersectionObserver' in window) { document.querySelectorAll('.tribute-card').forEach(card => { card.classList.remove('card-mobile-anim'); const observer = new IntersectionObserver((entries, observerInstance) => { entries.forEach(entry => { if (entry.isIntersecting) { card.classList.add('card-mobile-anim'); setTimeout(() => card.classList.remove('card-mobile-anim'), 700); observerInstance.unobserve(card); } }); }, { threshold: 0.42 }); observer.observe(card); }); } }
+    try {
+      const response = await fetch('/.netlify/functions/get-tributes');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      tributes = await response.json(); // Update global tributes array
+      renderAllTributes(); // Render the fetched tributes
+    } catch (error) {
+      console.error("Could not load tributes:", error);
+      grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>';
+      emptyState.classList.add('hidden');
+    }
+  }
 
-  // --- MODAL GALLERY LOGIC --- (No changes needed)
-  let modalTributeIdx = 0, modalPhotoIdx = 0;
-  function showModalGallery(tributeIdx, photoIdx) { if (!tributes[tributeIdx]) return; modalTributeIdx = tributeIdx; modalPhotoIdx = photoIdx; renderModalImage(); document.getElementById("galleryModal").classList.remove("hidden"); document.body.style.overflow = 'hidden'; }
-  function renderModalImage() { let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; let currentPhotoSrc = photos[modalPhotoIdx]; if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) { closeModalGallery(); return; } document.getElementById('modalImg').src = currentPhotoSrc; document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`; document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0); document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1); }
-  function closeModalGallery() { document.getElementById("galleryModal").classList.add("hidden"); document.getElementById('modalImg').src = ''; document.body.style.overflow = ''; }
+  // Submits a new tribute or updates an existing one
+  async function submitTribute(tributeData, idToUpdate = null) {
+    const isUpdating = idToUpdate !== null;
+    const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
+    const method = isUpdating ? 'PUT' : 'POST';
+    const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData;
 
-  // --- CONFETTI LOGIC --- (No changes needed)
-  function showConfetti() { const confettiBox = document.getElementById('confettiBox'); confettiBox.style.display = 'flex'; confettiBox.innerHTML = ''; const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0']; let n = 20 + Math.floor(8 * Math.random()); for (let i = 0; i < n; i++) { let dot = document.createElement('span'); dot.className = 'confetti__dot'; dot.style.background = colors[Math.floor(Math.random() * colors.length)]; let left = 4 + 92 * Math.random(); dot.style.left = left + '%'; dot.style.top = (5 + Math.random() * 1.6) + '%'; dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's'; dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2); confettiBox.appendChild(dot); } setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900); }
+    console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+idToUpdate : 'New'}):`, payload);
 
-  // --- INITIALIZE & EVENTS --- (No changes needed)
-  document.addEventListener("DOMContentLoaded", function() { fetchAndRenderTributes(); try { const tributeForm = document.getElementById('tributeForm'); if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; } const cancelBtn = document.getElementById('cancelEditBtn'); if (cancelBtn) { cancelBtn.onclick = resetForm; } const closeModalBtn = document.getElementById('closeModalBtn'); if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; } const modalBG = document.getElementById('modalBG'); if (modalBG) { modalBG.onclick = closeModalGallery; } const prevImgBtn = document.getElementById('prevImgBtn'); if (prevImgBtn) { prevImgBtn.onclick = function(e) { e.stopPropagation(); if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } }; } const nextImgBtn = document.getElementById('nextImgBtn'); if (nextImgBtn) { nextImgBtn.onclick = function(e) { e.stopPropagation(); let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); } }; } } catch (error) {} window.addEventListener("keydown", function(e) { const modal = document.getElementById("galleryModal"); if (!modal || modal.classList.contains("hidden")) return; if (e.key === "ArrowLeft") { document.getElementById('prevImgBtn')?.click(); } else if (e.key === "ArrowRight") { document.getElementById('nextImgBtn')?.click(); } else if (e.key === "Escape") { closeModalGallery(); } }); });
+    try {
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        let errorMsg = `HTTP error! status: ${response.status}`;
+        try {
+          // Try to get more specific error from response body
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) { /* Ignore if response body is not JSON */ }
+        throw new Error(errorMsg);
+      }
+
+      console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`);
+      showConfetti(); // Show success animation
+      await fetchAndRenderTributes(); // Refresh the list
+      return true; // Indicate success
+
+    } catch (error) {
+      console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error);
+      alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`);
+      return false; // Indicate failure
+    }
+  }
+
+  // Deletes a tribute by its ID
+  async function deleteTribute(tributeId) {
+    const idToDelete = parseInt(tributeId, 10);
+    if (isNaN(idToDelete)) {
+      console.error("Invalid ID for deletion:", tributeId);
+      return false;
+    }
+
+    // Confirmation dialog
+    if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) {
+      return false; // User cancelled
+    }
+
+    console.log("Attempting to delete tribute ID:", idToDelete);
+
+    try {
+      const response = await fetch('/.netlify/functions/delete-tribute', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: idToDelete })
+      });
+
+      if (!response.ok) {
+        let errorMsg = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) { /* Ignore JSON parse error */ }
+        throw new Error(errorMsg);
+      }
+
+      console.log("Tribute deleted successfully:", idToDelete);
+      await fetchAndRenderTributes(); // Refresh the list
+      return true; // Indicate success
+
+    } catch (error) {
+      console.error("Error deleting tribute:", error);
+      alert(`Error deleting tribute: ${error.message}`);
+      return false; // Indicate failure
+    }
+  }
+
+
+  // --- FORM HANDLING ---
+
+  // Handles the submission of the tribute form
+  async function handleFormSubmit(e) {
+    e.preventDefault(); // Prevent default form submission
+    const submitBtn = document.getElementById('submitBtn');
+    const submitBtnText = document.getElementById('submitBtnText');
+    const fileInput = document.getElementById('photos');
+    if (!submitBtn || !submitBtnText || !fileInput) return; // Safety check
+
+    // Disable button and show loading state
+    submitBtn.disabled = true;
+    const originalBtnText = editingTributeId ? "Update" : "Share";
+    let actionText = editingTributeId ? 'Updating...' : 'Sharing...';
+    if (fileInput.files.length > 0) {
+      actionText = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
+    }
+    submitBtnText.textContent = actionText;
+
+    let photos = [];
+    try {
+      // Process photos if any were selected
+      if (fileInput.files.length > 0) {
+        console.log("Processing photos...");
+        photos = await filesToDataURLs(fileInput.files);
+        console.log("Photos processed:", photos.length);
+      }
+
+      // Get form data
+      const from = document.getElementById('fromName').value.trim() || "Anonymous";
+      const msg = document.getElementById('message').value.trim();
+
+      // Basic validation (ensure message isn't empty)
+      if (!msg) {
+         alert("Please enter a message.");
+         throw new Error("Message cannot be empty."); // Throw error to stop processing and re-enable button
+      }
+
+      const tributeData = { from, msg, photos };
+
+      // Determine if we are editing or adding
+      const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null;
+      if (editingTributeId && isNaN(idToUpdate)) {
+        throw new Error("Invalid tribute ID for update.");
+      }
+
+      // Submit the data
+      const success = await submitTribute(tributeData, idToUpdate);
+
+      // Reset form only on success
+      if (success) {
+        resetForm();
+      } else {
+        // Re-enable button on failure (alert is shown in submitTribute)
+        submitBtn.disabled = false;
+        submitBtnText.textContent = originalBtnText;
+      }
+    } catch (error) {
+      console.error("Error handling form submit:", error);
+      // Re-enable button if an error occurred before submission attempt (like validation)
+      submitBtn.disabled = false;
+      submitBtnText.textContent = originalBtnText;
+      // Optionally show an alert here too, though submitTribute handles API errors
+      // alert("An error occurred while processing your tribute. Please try again.");
+    }
+  }
+
+  // Resets the form to its default state and cancels editing mode
+  function resetForm() {
+    const form = document.getElementById('tributeForm');
+    const submitBtnText = document.getElementById('submitBtnText');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (form) form.reset(); // Reset form fields
+    if (submitBtnText) submitBtnText.textContent = "Share"; // Reset button text
+    if (cancelBtn) cancelBtn.classList.add('hidden'); // Hide cancel button
+    if (submitBtn) submitBtn.disabled = false; // Re-enable submit button
+
+    editingTributeId = null; // Exit editing mode
+    console.log("Form reset and editing cancelled.");
+  }
+
+  // Loads data from a tribute into the form for editing
+  function loadEditForm(tributeId) {
+    const idToLoad = parseInt(tributeId, 10);
+    if (isNaN(idToLoad)) return; // Invalid ID
+
+    // Find the tribute in the current list
+    const tributeToEdit = tributes.find(t => t.id === idToLoad);
+
+    if (!tributeToEdit) {
+      alert("Could not load tribute for editing. It might have been deleted.");
+      return;
+    }
+
+    console.log("Loading tribute for editing:", tributeToEdit);
+
+    // Populate form fields
+    const nameInput = document.getElementById('fromName');
+    const messageInput = document.getElementById('message');
+    // Note: We don't repopulate the file input for security/practicality reasons.
+    // Users need to re-select photos if they want to change/add them during edit.
+
+    if (nameInput) nameInput.value = tributeToEdit.from;
+    if (messageInput) messageInput.value = tributeToEdit.msg;
+
+    // Set editing state
+    editingTributeId = idToLoad;
+    const submitBtnText = document.getElementById('submitBtnText');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (submitBtnText) submitBtnText.textContent = "Update";
+    if (cancelBtn) cancelBtn.classList.remove('hidden');
+
+    // Scroll to the top to make the form visible
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+
+  // --- UI INTERACTIONS (Modal, Card Buttons, Animations) ---
+
+  // Attaches event listeners to the tribute grid for clicks on buttons or images
+  function attachCardEventListeners() {
+    const grid = document.getElementById('tributesGrid');
+    if (!grid) return;
+
+    // Use event delegation on the grid container
+    grid.onclick = function handleGridClick(event) {
+      const target = event.target;
+      // Check if an action button (edit/delete) was clicked
+      const actionButton = target.closest('button[data-act]');
+      // Check if a photo within the fan stack was clicked
+      const photoImage = target.closest('.fan-img');
+
+      if (actionButton) {
+        event.stopPropagation(); // Prevent card click or other handlers
+        const action = actionButton.getAttribute('data-act');
+        const id = actionButton.getAttribute('data-id');
+        if (!id) return; // Skip if no ID found
+
+        if (action === 'edit') {
+          loadEditForm(id);
+        } else if (action === 'delete') {
+          deleteTribute(id);
+        }
+      } else if (photoImage) {
+        event.stopPropagation(); // Prevent card click
+        const tributeIndex = parseInt(photoImage.getAttribute("data-tidx"), 10);
+        const photoIndex = parseInt(photoImage.getAttribute("data-pidx"), 10);
+
+        // Check if indices are valid and tribute exists
+        if (!isNaN(tributeIndex) && !isNaN(photoIndex) && tributes[tributeIndex]) {
+          showModalGallery(tributeIndex, photoIndex); // Open the modal
+        }
+      }
+    };
+
+    // Add keydown listener for accessibility on photo images (Enter/Space to open modal)
+     document.querySelectorAll('.fan-img').forEach(img => {
+         img.onkeydown = function(e) {
+             if (e.key === 'Enter' || e.key === ' ') { // Check for Enter or Spacebar
+                 e.preventDefault(); // Prevent default spacebar scroll
+                 img.click(); // Trigger the click handler to open modal
+             }
+         };
+     });
+  }
+
+  // Sets up IntersectionObserver for simple card animations on scroll
+  function setupCardAnimations() {
+    // Check if IntersectionObserver is supported
+    if ('IntersectionObserver' in window) {
+      const cards = document.querySelectorAll('.tribute-card');
+      cards.forEach(card => {
+        // Remove any existing animation class first
+        card.classList.remove('card-mobile-anim');
+
+        const observer = new IntersectionObserver((entries, observerInstance) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Add animation class when card comes into view
+              card.classList.add('card-mobile-anim');
+              // Optionally remove the animation class after it plays
+              setTimeout(() => card.classList.remove('card-mobile-anim'), 700); // Duration matches hover animation time
+              // Stop observing once animated
+              observerInstance.unobserve(card);
+            }
+          });
+        }, { threshold: 0.42 }); // Trigger when 42% of the card is visible
+
+        observer.observe(card); // Start observing the card
+      });
+    } else {
+      console.log("IntersectionObserver not supported, skipping card animations.");
+    }
+  }
+
+  // --- Modal Gallery Logic ---
+  let modalTributeIdx = 0; // Index of the tribute being viewed in the modal
+  let modalPhotoIdx = 0;  // Index of the photo within that tribute
+
+  // Shows the modal gallery for a specific photo
+  function showModalGallery(tributeIdx, photoIdx) {
+    const modal = document.getElementById("galleryModal");
+    if (!modal || !tributes[tributeIdx]) return; // Safety check
+
+    modalTributeIdx = tributeIdx;
+    modalPhotoIdx = photoIdx;
+
+    renderModalImage(); // Load the correct image and caption
+
+    modal.classList.remove("hidden"); // Show the modal
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  }
+
+  // Updates the image and caption inside the modal
+  function renderModalImage() {
+    const modalImg = document.getElementById('modalImg');
+    const caption = document.getElementById('galleryCaption');
+    const prevBtn = document.getElementById('prevImgBtn');
+    const nextBtn = document.getElementById('nextImgBtn');
+    if (!modalImg || !caption || !prevBtn || !nextBtn) return; // Safety check
+
+    const tribute = tributes[modalTributeIdx];
+    const photos = Array.isArray(tribute.photos) ? tribute.photos : [];
+    const currentPhotoSrc = photos[modalPhotoIdx];
+
+    // If the photo source is invalid, close the modal
+    if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) {
+      closeModalGallery();
+      return;
+    }
+
+    modalImg.src = currentPhotoSrc; // Set image source
+    // Update caption text
+    caption.textContent = `${tribute.from || "Anonymous"}: Photo ${modalPhotoIdx + 1} of ${photos.length}`;
+
+    // Show/hide navigation buttons
+    prevBtn.classList.toggle('hidden', modalPhotoIdx === 0); // Hide prev on first image
+    nextBtn.classList.toggle('hidden', modalPhotoIdx >= photos.length - 1); // Hide next on last image
+  }
+
+  // Hides the modal gallery
+  function closeModalGallery() {
+    const modal = document.getElementById("galleryModal");
+    const modalImg = document.getElementById('modalImg');
+    if (!modal) return;
+
+    modal.classList.add("hidden"); // Hide the modal
+    if (modalImg) modalImg.src = ''; // Clear image source
+    document.body.style.overflow = ''; // Restore background scrolling
+  }
+
+  // Handles navigation within the modal (previous/next image)
+  function navigateModal(direction) {
+    const tribute = tributes[modalTributeIdx];
+    const photos = Array.isArray(tribute.photos) ? tribute.photos : [];
+
+    if (direction === 'prev' && modalPhotoIdx > 0) {
+      modalPhotoIdx--;
+      renderModalImage();
+    } else if (direction === 'next' && modalPhotoIdx < photos.length - 1) {
+      modalPhotoIdx++;
+      renderModalImage();
+    }
+  }
+
+  // --- Confetti Animation ---
+  function showConfetti() {
+    const confettiBox = document.getElementById('confettiBox');
+    if (!confettiBox) return;
+
+    confettiBox.style.display = 'flex'; // Make container visible
+    confettiBox.innerHTML = ''; // Clear previous confetti
+
+    const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0'];
+    const numConfetti = 20 + Math.floor(8 * Math.random()); // Random number of confetti
+
+    for (let i = 0; i < numConfetti; i++) {
+      let dot = document.createElement('span');
+      dot.className = 'confetti__dot';
+      // Random color
+      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+      // Random horizontal position
+      dot.style.left = (4 + 92 * Math.random()) + '%';
+      // Slight random vertical start offset
+      dot.style.top = (5 + Math.random() * 1.6) + '%';
+      // Random animation delay for staggered effect
+      dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's';
+      // Random opacity
+      dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2);
+      confettiBox.appendChild(dot);
+    }
+
+    // Hide the confetti container after the animation duration
+    setTimeout(() => {
+      confettiBox.style.display = 'none';
+      confettiBox.innerHTML = ''; // Clean up DOM
+    }, 1900); // Slightly longer than animation duration
+  }
+
+
+  // --- INITIALIZATION & GLOBAL EVENT LISTENERS ---
+
+  // Runs when the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOM fully loaded and parsed");
+
+    // Initial fetch and render of tributes
+    fetchAndRenderTributes();
+
+    // Attach form submit handler
+    try {
+      const tributeForm = document.getElementById('tributeForm');
+      if (tributeForm) {
+        tributeForm.onsubmit = handleFormSubmit;
+        console.log("Form submit handler attached.");
+      } else {
+        console.warn("Tribute form not found.");
+      }
+
+      // Attach cancel edit button handler
+      const cancelBtn = document.getElementById('cancelEditBtn');
+      if (cancelBtn) {
+        cancelBtn.onclick = resetForm;
+      }
+
+      // Attach modal close handlers
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      if (closeModalBtn) {
+        closeModalBtn.onclick = closeModalGallery;
+      }
+      const modalBG = document.getElementById('modalBG');
+      if (modalBG) {
+        modalBG.onclick = closeModalGallery; // Close modal on background click
+      }
+
+      // Attach modal navigation handlers
+      const prevImgBtn = document.getElementById('prevImgBtn');
+      if (prevImgBtn) {
+        prevImgBtn.onclick = (e) => { e.stopPropagation(); navigateModal('prev'); };
+      }
+      const nextImgBtn = document.getElementById('nextImgBtn');
+      if (nextImgBtn) {
+        nextImgBtn.onclick = (e) => { e.stopPropagation(); navigateModal('next'); };
+      }
+
+    } catch (error) {
+      console.error("Error attaching initial event listeners:", error);
+    }
+
+    // Add global keydown listener for modal navigation/closing
+    window.addEventListener("keydown", function(e) {
+      const modal = document.getElementById("galleryModal");
+      // Only act if the modal is visible
+      if (!modal || modal.classList.contains("hidden")) return;
+
+      switch (e.key) {
+        case "ArrowLeft":
+          document.getElementById('prevImgBtn')?.click(); // Simulate click on prev button
+          break;
+        case "ArrowRight":
+          document.getElementById('nextImgBtn')?.click(); // Simulate click on next button
+          break;
+        case "Escape":
+          closeModalGallery(); // Close modal on Escape key
+          break;
+      }
+    });
+
+    console.log("Initialization complete.");
+  });
+
 </script>
 </body>
 </html>
