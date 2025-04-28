@@ -19,6 +19,7 @@
     /* Card base style */
     .tribute-card {
       position: relative;
+      /* Base gradient - will be layered with patterns via inline style */
       background: linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%);
       box-shadow: 0 8px 32px 0 rgba(156, 195, 255, 0.13);
       border-radius: 1.6rem;
@@ -31,6 +32,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow: hidden; /* Hide pattern overflow */
     }
     .tribute-card:hover, .tribute-card.card-mobile-anim {
       transform: translateY(-12px) scale(1.04) rotate(-1.6deg);
@@ -40,90 +42,52 @@
 
     /* --- Fan image stack (Static Version) --- */
     .fan-stack {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      min-height: 112px;
-      width: 176px;
-      position: relative;
-      margin: 0 auto 1.2rem auto;
-      pointer-events: none;
+      display: flex; flex-direction: row; align-items: center; justify-content: center;
+      min-height: 112px; width: 176px; position: relative;
+      margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; /* Ensure stack is above card pattern */
     }
     .fan-img {
-      width: 96px;
-      height: 96px;
-      object-fit: cover;
-      border-radius: 1.12rem;
-      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24);
-      transform-origin: 50% 80%;
-      position: absolute;
-      background: #f9fafb;
-      border: 2.5px solid #d6edea;
-      z-index: 1;
-      cursor: pointer;
-      pointer-events: auto;
-      filter: brightness(.99) saturate(98%);
+      width: 96px; height: 96px; object-fit: cover; border-radius: 1.12rem;
+      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24); transform-origin: 50% 80%;
+      position: absolute; background: #f9fafb; border: 2.5px solid #d6edea;
+      z-index: 1; cursor: pointer; pointer-events: auto; filter: brightness(.99) saturate(98%);
     }
 
     /* --- Placeholder style (reusing school-illustration for size/shape) --- */
+    /* This remains for the INITIALS placeholders, styled by renderFanGallery */
     .school-illustration, .initial-placeholder {
-      width: 97px;
-      height: 97px;
-      border-radius: 1.12rem; /* Default, might be overridden by JS */
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 97px; height: 97px; border-radius: 1.12rem; /* Default */
+      display: flex; align-items: center; justify-content: center;
       margin: 0 auto 0.3rem auto; /* Keep margin consistent */
-      position: relative; /* Needed for inner absolute elements */
-      overflow: hidden; /* Important for patterns/borders */
-      will-change: transform;
-      transition: transform .22s, box-shadow .22s; /* Added transition for hover */
+      position: relative; overflow: hidden; will-change: transform;
+      transition: transform .22s, box-shadow .22s;
       animation: bounceInCircle .60s 1;
-      /* Styles like background, border, shadow applied inline by JS */
+      z-index: 1; /* Ensure placeholder is above card pattern */
+      /* Specific background, border, shadow applied inline by JS */
     }
     @keyframes bounceInCircle {
       0%   { transform: scale(.78) rotate(-6deg); opacity:.2;}
       70%  { transform: scale(1.12) rotate(9deg); opacity:1;}
       100% { transform: scale(1) rotate(0deg);}
     }
-
-    /* --- NEW: Initial Placeholder Enhancements --- */
-    @keyframes pulseGlow { /* Subtle glow animation for the initial */
+    @keyframes pulseGlow {
       0%, 100% { text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
       50% { text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4); }
     }
-    .initial-placeholder .initial-text { /* Target the span holding the initial */
-      animation: pulseGlow 2.5s ease-in-out infinite;
-      position: relative; /* Ensure it's above patterns */
-      z-index: 2;
+    .initial-placeholder .initial-text {
+      animation: pulseGlow 2.5s ease-in-out infinite; position: relative; z-index: 2;
     }
-    .initial-placeholder { /* Add perspective for 3D effect */
-      transform-style: preserve-3d;
-      perspective: 800px;
+    .initial-placeholder { transform-style: preserve-3d; perspective: 800px; }
+    .initial-placeholder:hover {
+      transform: rotateY(5deg) rotateX(3deg) translateZ(5px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(150, 180, 230, 0.45), inset 0 0 15px rgba(255,255,255,0.2);
     }
-    .initial-placeholder:hover { /* Add 3D hover effect */
-      transform: rotateY(5deg) rotateX(3deg) translateZ(5px) scale(1.05); /* Slight scale on hover too */
-      /* transition: transform 0.3s ease; */ /* Included in base transition */
-      box-shadow: 0 10px 25px rgba(150, 180, 230, 0.45), inset 0 0 15px rgba(255,255,255,0.2); /* Enhance shadow on hover */
-    }
-    /* --- END NEW --- */
-
 
     /* Floating celebration elements */
-    .floating-celebrate {
-      position: absolute;
-      font-size: 1.23rem;
-      opacity: 0.14;
-      pointer-events: none;
-      animation: floatCelebrate 9.2s linear infinite;
-      z-index: 0;
-    }
-    @keyframes floatCelebrate {
-      0%   {transform: translateY(46px) scale(1.17);}
-      100% {transform: translateY(-220px) scale(1);}
-    }
-    /* Custom scrollbar only for browser, not PDF */
+    .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.14; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
+    @keyframes floatCelebrate { 0% {transform: translateY(46px) scale(1.17);} 100% {transform: translateY(-220px) scale(1);} }
+
+    /* Custom scrollbar */
     .custom-scrollbar::-webkit-scrollbar {width: 7px;}
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #bbdefb; border-radius: 10px;}
     .custom-scrollbar::-webkit-scrollbar-track { background: #e6eeff;}
@@ -131,70 +95,41 @@
     input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0;}
     input[type="number"] { -moz-appearance: textfield; }
 
-    html, body {
-      overflow: initial !important;
-      box-sizing: border-box;
-      width: 100%;
-    }
+    html, body { overflow: initial !important; box-sizing: border-box; width: 100%; }
     /* Form styling tweak */
-    .stripe-bg {
-      background: linear-gradient(105deg, #f7fbff 0, #e3f9ed 85%);
-    }
-    /* Confetti animation container for success */
-    .confetti {
-      position: fixed;
-      left: 0; top: 0; width: 100%; height: 100%; z-index: 9999;
-      pointer-events: none;
-      display: flex; align-items: flex-start; justify-content: center;
-      overflow: visible;
-    }
-    .confetti__dot {
-      position: absolute;
-      width: 18px; height: 18px; border-radius: 99px;
-      opacity: 0.84;
-      pointer-events: none;
-      will-change: transform, opacity;
-      animation: confetti-fall 1.7s linear forwards;
-    }
-    @keyframes confetti-fall {
-      0% { transform: translateY(-80px) scale(.9) rotate(-20deg);}
-      80% { opacity: 1;}
-      95% { opacity: .8;}
-      100% { transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;}
-    }
-    /* --- Footer animations (Verified - No Changes Needed) --- */
-    .footer-party {
-      min-height: 90px; padding-bottom: 0.1rem; position: relative;
-      margin-top: 2.5rem; background: linear-gradient(88deg, #e1f5fe 70%, #ffe0b2 100%);
-      border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible;
-    }
-    .cap-throw {
-      position: absolute; left: 25%; top: 14px;
-      animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite;
-      pointer-events: none; z-index: 2;
-    }
-    .cap-throw2 {
-      left: 68%; top: 12px; animation-delay: 1.1s;
-      animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite;
-    }
+    .stripe-bg { background: linear-gradient(105deg, #f7fbff 0, #e3f9ed 85%); } /* This class seems unused on tribute-card now, maybe remove? */
+
+    /* Confetti */
+    .confetti { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: flex; align-items: flex-start; justify-content: center; overflow: visible; }
+    .confetti__dot { position: absolute; width: 18px; height: 18px; border-radius: 99px; opacity: 0.84; pointer-events: none; will-change: transform, opacity; animation: confetti-fall 1.7s linear forwards; }
+    @keyframes confetti-fall { 0% { transform: translateY(-80px) scale(.9) rotate(-20deg);} 80% { opacity: 1;} 95% { opacity: .8;} 100% { transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;} }
+
+    /* Footer animations (Verified - No Changes Needed) */
+    .footer-party { min-height: 90px; padding-bottom: 0.1rem; position: relative; margin-top: 2.5rem; background: linear-gradient(88deg, #e1f5fe 70%, #ffe0b2 100%); border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible; }
+    .cap-throw { position: absolute; left: 25%; top: 14px; animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite; pointer-events: none; z-index: 2; }
+    .cap-throw2 { left: 68%; top: 12px; animation-delay: 1.1s; animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite; }
     @keyframes capThrow { 0% { transform: translateY(0px) rotate(3deg);} 60% { transform: translateY(-50px) rotate(-30deg);} 100% { transform: translateY(0px) rotate(2deg);} }
     @keyframes capThrow2 { 0% { transform: translateY(0px) rotate(-7deg);} 62% { transform: translateY(-46px) rotate(20deg);} 100% { transform: translateY(0px) rotate(-5deg);} }
-    .footer-teacher {
-      position: absolute; right: 12%; bottom: 12px; z-index:3;
-      animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01);
-      transform-origin: bottom right;
-    }
+    .footer-teacher { position: absolute; right: 12%; bottom: 12px; z-index:3; animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01); transform-origin: bottom right; }
     @keyframes waveHand { 0%,100% { transform: rotate(0);} 14% { transform: rotate(-7deg);} 19% { transform: rotate(11deg);} 25% { transform: rotate(-12deg);} 36% { transform: rotate(8deg);} 47% { transform: rotate(0);} }
-    /* --- End Footer Animations --- */
 
-    /* Hide scroll in PDF */
-    @media print {
-      .custom-scrollbar { overflow: visible !important;}
+    /* Print */
+    @media print { .custom-scrollbar { overflow: visible !important;} }
+
+    /* NEW: Ensure content elements are above the card background pattern */
+    .tribute-card > div:not(.fan-stack):not(.initial-placeholder), /* Text divs */
+    .tribute-card > button { /* Edit/Delete buttons */
+        position: relative; /* Create stacking context */
+        z-index: 1; /* Ensure they are above the background */
     }
+    .tribute-card > .absolute.right-3.top-3 { /* Explicitly target buttons container */
+        z-index: 2; /* Higher z-index for buttons */
+    }
+
   </style>
 </head>
 <body class="pb-10 selection:bg-yellow-100">
-  <!-- Floating celebration elements (school theme) -->
+  <!-- Floating celebration elements -->
   <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#6093e5;"><i class="fa-solid fa-book"></i></span>
   <span class="floating-celebrate left-1/4 top-56" style="animation-delay:1.6s; color:#fdb253;"><i class="fa-solid fa-apple-whole"></i></span>
   <span class="floating-celebrate right-14 top-28" style="animation-delay:0.9s; color:#a3de83;"><i class="fa-solid fa-seedling"></i></span>
@@ -215,7 +150,7 @@
       </p>
     </div>
     <!-- Add/Edit Tribute Form -->
-    <form id="tributeForm" class="mb-8 stripe-bg border border-yellow-200 rounded-2xl py-5 px-4 shadow-lg flex flex-wrap items-center justify-between">
+    <form id="tributeForm" class="mb-8 bg-gradient-to-r from-blue-50 via-green-50 to-yellow-50 border border-yellow-200 rounded-2xl py-5 px-4 shadow-lg flex flex-wrap items-center justify-between"> {/* Updated form background slightly */}
       <input type="hidden" id="editIndex" value="">
       <div class="flex flex-col w-full md:w-1/4 mb-2 md:mb-0 md:pr-3">
         <label for="fromName" class="text-blue-500 font-semibold mb-1">Your Name</label>
@@ -255,45 +190,27 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
       <div class="w-full flex items-center justify-center mb-3">
-        <button type="button" id="prevImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
+        <button type="button" id="prevImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden"> <i class="fa-solid fa-chevron-left"></i> </button>
         <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow">
           <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;">
         </div>
-        <button type="button" id="nextImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
+        <button type="button" id="nextImgBtn" class="text-xl text-blue-300 hover:text-green-600 px-3 focus:outline-none hidden"> <i class="fa-solid fa-chevron-right"></i> </button>
       </div>
       <div id="galleryCaption" class="text-center text-xs mt-2 mb-2 text-gray-500"></div>
     </div>
   </div>
 
-  <!-- Animated Celebration Footer (Verified - No Changes Needed) -->
+  <!-- Animated Celebration Footer -->
   <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
     <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-blue-400 text-2xl"></i></div>
     <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-yellow-500 text-2xl"></i></div>
     <span class="footer-teacher">
-      <svg width="56" height="70" viewBox="0 0 56 70" fill="none">
-        <ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/>
-        <circle cx="28" cy="34" r="20" fill="#fff"/>
-        <ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/>
-        <ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/>
-        <ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/>
-        <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/>
-        <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/>
-        <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/>
-        <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/>
-      </svg>
+      <svg width="56" height="70" viewBox="0 0 56 70" fill="none"> <ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/> <circle cx="28" cy="34" r="20" fill="#fff"/> <ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/> <ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/> <ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/> <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/> <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/> <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/> <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/> </svg>
     </span>
-    <span class="block font-semibold pt-10 pb-1" style="font-family:'Indie Flower',cursive;font-size:1.23rem;color:#356ec5;text-shadow:0 1px 7px #c5eaeeda;">
-      🎉 With heartfelt wishes for your next amazing chapter! 🎉
-    </span>
-    <span class="block text-gray-400 pb-1" style="font-family:Quicksand,sans-serif;font-size:1rem;">
-      Made with <i class="fa-solid fa-heart text-pink-300"></i> by everyone who is grateful for you.
-    </span>
+    <span class="block font-semibold pt-10 pb-1" style="font-family:'Indie Flower',cursive;font-size:1.23rem;color:#356ec5;text-shadow:0 1px 7px #c5eaeeda;"> 🎉 With heartfelt wishes for your next amazing chapter! 🎉 </span>
+    <span class="block text-gray-400 pb-1" style="font-family:Quicksand,sans-serif;font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-300"></i> by everyone who is grateful for you. </span>
   </footer>
-  <!-- Confetti effect container (JS) -->
+  <!-- Confetti effect container -->
   <div id="confettiBox" class="confetti" style="pointer-events: none; display:none;"></div>
 
 <script>
@@ -302,80 +219,19 @@
   let editingTributeId = null;
 
   // --- CONSTANTS ---
-  const INITIAL_BG_COLORS = [
-    '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
-    '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe'
-  ];
-  // NEW: Decorative Elements for Placeholders
-  const decorElements = [
-    { icon: '📝', pos: 'top-0 left-0 translate-x-1 translate-y-1' },
-    { icon: '🎓', pos: 'top-0 right-0 -translate-x-0.5 translate-y-1' }, // Adjusted position slightly
-    { icon: '📚', pos: 'bottom-0 left-0 translate-x-1 -translate-y-0.5' }, // Adjusted position slightly
-    { icon: '🍎', pos: 'bottom-0 right-0 -translate-x-0.5 -translate-y-0.5' }, // Adjusted position slightly
-    { icon: '🌱', pos: 'top-1/2 left-0 -translate-y-1/2 translate-x-0.5' }, // Added more options
-    { icon: '✨', pos: 'top-0 left-1/2 -translate-x-1/2 translate-y-0.5' },
-    { icon: '🔍', pos: 'bottom-0 right-1/2 translate-x-1/2 -translate-y-0.5' },
-    { icon: '✏️', pos: 'top-1/2 right-0 -translate-y-1/2 -translate-x-0.5' }
-  ];
+  const INITIAL_BG_COLORS = [ '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff', '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe' ];
+  const decorElements = [ { icon: '📝', pos: 'top-0 left-0 translate-x-1 translate-y-1' }, { icon: '🎓', pos: 'top-0 right-0 -translate-x-0.5 translate-y-1' }, { icon: '📚', pos: 'bottom-0 left-0 translate-x-1 -translate-y-0.5' }, { icon: '🍎', pos: 'bottom-0 right-0 -translate-x-0.5 -translate-y-0.5' }, { icon: '🌱', pos: 'top-1/2 left-0 -translate-y-1/2 translate-x-0.5' }, { icon: '✨', pos: 'top-0 left-1/2 -translate-x-1/2 translate-y-0.5' }, { icon: '🔍', pos: 'bottom-0 right-1/2 translate-x-1/2 -translate-y-0.5' }, { icon: '✏️', pos: 'top-1/2 right-0 -translate-y-1/2 -translate-x-0.5' } ];
 
   // --- UTILS ---
-  function hexToRgb(hex) {
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
-  }
-  function rgbToHsl(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-    let max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
-    if (max == min) { h = s = 0; } else {
-      let d = max - min; s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) { case r: h = (g - b) / d + (g < b ? 6 : 0); break; case g: h = (b - r) / d + 2; break; case b: h = (r - g) / d + 4; break; } h /= 6;
-    } return { h: h * 360, s: s * 100, l: l * 100 };
-  }
-  function hslToRgb(h, s, l) {
-    h /= 360; s /= 100; l /= 100; let r, g, b;
-    if (s == 0) { r = g = b = l; } else {
-      const hue2rgb = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1/6) return p + (q - p) * 6 * t; if (t < 1/2) return q; if (t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; }
-      let q = l < 0.5 ? l * (1 + s) : l + s - l * s; let p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3);
-    } return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
-  }
-  function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0');
-  }
-  function adjustLightness(hsl, amount) {
-    let newL = Math.max(0, Math.min(100, hsl.l + amount)); return { h: hsl.h, s: hsl.s, l: newL };
-  }
-  function getNameColorIndex(name) {
-    if (!name) return 0; let hash = 0;
-    for (let i = 0; i < name.length; i++) { hash = (hash << 5) - hash + name.charCodeAt(i); hash |= 0; }
-    return Math.abs(hash) % INITIAL_BG_COLORS.length;
-  }
-
-  // NEW: Helper functions for patterns/borders
-  function hexToRgba(hex, alpha) {
-    const rgb = hexToRgb(hex);
-    return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})` : `rgba(0,0,0,${alpha})`;
-  }
-  function invertColor(hex) { // Basic inversion for contrast in patterns
-    const rgb = hexToRgb(hex);
-    if (!rgb) return '#ffffff';
-    const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-    // Return black or white based on brightness for better contrast
-    return brightness > 125 ? '#000000' : '#FFFFFF';
-    // Original inversion: return rgbToHex(255 - rgb.r, 255 - rgb.g, 255 - rgb.b);
-  }
-  function adjustColor(hex, amount) { // Simple adjustment for borders etc.
-    const rgb = hexToRgb(hex);
-    if (!rgb) return hex;
-    return rgbToHex(
-      Math.max(0, Math.min(255, rgb.r + amount)),
-      Math.max(0, Math.min(255, rgb.g + amount)),
-      Math.max(0, Math.min(255, rgb.b + amount))
-    );
-  }
-  // --- END NEW HELPERS ---
-
+  function hexToRgb(hex) { let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null; }
+  function rgbToHsl(r, g, b) { r /= 255, g /= 255, b /= 255; let max = Math.max(r, g, b), min = Math.min(r, g, b); let h, s, l = (max + min) / 2; if (max == min) { h = s = 0; } else { let d = max - min; s = l > 0.5 ? d / (2 - max - min) : d / (max + min); switch (max) { case r: h = (g - b) / d + (g < b ? 6 : 0); break; case g: h = (b - r) / d + 2; break; case b: h = (r - g) / d + 4; break; } h /= 6; } return { h: h * 360, s: s * 100, l: l * 100 }; }
+  function hslToRgb(h, s, l) { h /= 360; s /= 100; l /= 100; let r, g, b; if (s == 0) { r = g = b = l; } else { const hue2rgb = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1/6) return p + (q - p) * 6 * t; if (t < 1/2) return q; if (t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; } let q = l < 0.5 ? l * (1 + s) : l + s - l * s; let p = 2 * l - q; r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3); } return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) }; }
+  function rgbToHex(r, g, b) { return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0'); }
+  function adjustLightness(hsl, amount) { let newL = Math.max(0, Math.min(100, hsl.l + amount)); return { h: hsl.h, s: hsl.s, l: newL }; }
+  function getNameColorIndex(name) { if (!name) return 0; let hash = 0; for (let i = 0; i < name.length; i++) { hash = (hash << 5) - hash + name.charCodeAt(i); hash |= 0; } return Math.abs(hash) % INITIAL_BG_COLORS.length; }
+  function hexToRgba(hex, alpha) { const rgb = hexToRgb(hex); return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})` : `rgba(0,0,0,${alpha})`; }
+  function invertColor(hex) { const rgb = hexToRgb(hex); if (!rgb) return '#ffffff'; const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000; return brightness > 125 ? '#000000' : '#FFFFFF'; }
+  function adjustColor(hex, amount) { const rgb = hexToRgb(hex); if (!rgb) return hex; return rgbToHex( Math.max(0, Math.min(255, rgb.r + amount)), Math.max(0, Math.min(255, rgb.g + amount)), Math.max(0, Math.min(255, rgb.b + amount)) ); }
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
       '&': '&',
@@ -385,337 +241,148 @@
       "'": '&#39;'
     }[s]));
   }
-  function formatDateString(dbDateString) {
-    if (!dbDateString || typeof dbDateString !== 'string') return '';
-    try {
-      const isoFriendlyString = dbDateString.replace(' ', 'T'); const date = new Date(isoFriendlyString);
-      if (isNaN(date.getTime())) return 'Invalid date';
-      return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-    } catch (e) { return ''; }
-  }
-  async function filesToDataURLs(fileList) {
-    const filesToProcess = Array.from(fileList).slice(0, 4);
-    const readerPromises = filesToProcess.map(file => {
-      return new Promise((resolve, reject) => {
-        if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) return resolve(null);
-        const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file);
-      });
-    });
-    const results = await Promise.all(readerPromises); return results.filter(url => url !== null);
-  }
+  function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const isoFriendlyString = dbDateString.replace(' ', 'T'); const date = new Date(isoFriendlyString); if (isNaN(date.getTime())) return 'Invalid date'; return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { return ''; } }
+  async function filesToDataURLs(fileList) { const filesToProcess = Array.from(fileList).slice(0, 4); const readerPromises = filesToProcess.map(file => { return new Promise((resolve, reject) => { if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) return resolve(null); const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }); const results = await Promise.all(readerPromises); return results.filter(url => url !== null); }
 
   // --- RENDERING ---
   function renderAllTributes() {
-    const grid = document.getElementById("tributesGrid");
-    const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = "";
-    if (!tributes || !tributes.length) { emptyState.classList.remove('hidden'); return; }
+    const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
+    grid.innerHTML = ""; if (!tributes || !tributes.length) { emptyState.classList.remove('hidden'); return; }
     emptyState.classList.add('hidden');
     tributes.forEach((trb, idx) => { grid.innerHTML += renderTributeCard(trb, idx); });
     attachCardEventListeners(); setupCardAnimations();
   }
 
-  // --->>> MODIFIED renderFanGallery with Enhanced Initial Placeholders <<<---
+  // --- Initial Placeholder Rendering (No changes needed here, it works on its own) ---
   function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const fromName = tribute.from || "A"; // Ensure fromName is never empty
-
+    const fromName = tribute.from || "A";
     // --- CASE 1: NO PHOTOS - Render Enhanced Initial Placeholder ---
     if (!photoArray.length) {
-      const initial = fromName.charAt(0).toUpperCase();
-      const colorIndex = getNameColorIndex(fromName);
-      const baseHexColor = INITIAL_BG_COLORS[colorIndex];
-
-      // Create base and accent colors for gradient
-      let gradientColor1 = baseHexColor;
-      let gradientColor2 = baseHexColor; // Default if conversion fails
-      try {
-        const baseRgb = hexToRgb(baseHexColor);
-        if (baseRgb) {
-          const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
-          const lighterHsl = adjustLightness(baseHsl, 18); // Slightly more difference
-          const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l);
-          gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b);
-
-          // Ensure gradient colors are distinct enough
-          if (gradientColor1 === gradientColor2) {
-              const darkerHsl = adjustLightness(baseHsl, -10);
-              const darkerRgb = hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l);
-              gradientColor1 = rgbToHex(darkerRgb.r, darkerRgb.g, darkerRgb.b); // Make first color darker if same
-          }
-        }
-      } catch (e) { console.error("Color conversion error:", e); }
-
-      // Pick a pattern style based on name hash
-      const patternType = fromName.charCodeAt(0) % 6; // 6 different patterns
-      let patternStyle = '';
-      let backgroundImages = []; // Store multiple background images
-
+      const initial = fromName.charAt(0).toUpperCase(); const colorIndex = getNameColorIndex(fromName); const baseHexColor = INITIAL_BG_COLORS[colorIndex]; let gradientColor1 = baseHexColor; let gradientColor2 = baseHexColor;
+      try { const baseRgb = hexToRgb(baseHexColor); if (baseRgb) { const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b); const lighterHsl = adjustLightness(baseHsl, 18); const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l); gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b); if (gradientColor1 === gradientColor2) { const darkerHsl = adjustLightness(baseHsl, -10); const darkerRgb = hslToRgb(darkerHsl.h, darkerHsl.s, darkerHsl.l); gradientColor1 = rgbToHex(darkerRgb.r, darkerRgb.g, darkerRgb.b); } } } catch (e) { console.error("Color conversion error:", e); }
+      const patternType = fromName.charCodeAt(0) % 6; let patternStyle = ''; let backgroundImages = [];
       switch (patternType) {
-        case 0: // Polka dots
-          const dotColor = hexToRgba(invertColor(gradientColor1), 0.15); // Use inverted color for contrast
-          backgroundImages.push(`radial-gradient(${dotColor} 10%, transparent 11%)`, `radial-gradient(${dotColor} 10%, transparent 11%)`);
-          patternStyle = `background-size: 18px 18px; background-position: 0 0, 9px 9px;`; // Slightly larger dots
-          break;
-        case 1: // Stripes
-          const stripeColor = hexToRgba(invertColor(gradientColor1), 0.09);
-          backgroundImages.push(`linear-gradient(135deg, ${stripeColor} 25%, transparent 25%, transparent 50%, ${stripeColor} 50%, ${stripeColor} 75%, transparent 75%, transparent)`);
-          patternStyle = `background-size: 20px 20px;`;
-          break;
-        case 2: // Wavy pattern (using SVG)
-          const waveColor = hexToRgba(invertColor(gradientColor2), 0.18).replace('#', '%23'); // URL encode color
-          const svgWave = `<svg width='80' height='16' xmlns='http://www.w3.org/2000/svg'><path d='M0 8 Q 20 16, 40 8 T 80 8' fill='none' stroke='${waveColor}' stroke-width='1.5'/></svg>`;
-          backgroundImages.push(`url("data:image/svg+xml,${encodeURIComponent(svgWave)}")`);
-          patternStyle = `background-size: 40px; background-repeat: repeat;`; // Ensure repeat
-          break;
-        case 5: // Cross-hatching
-          const lineColor = hexToRgba(invertColor(gradientColor1), 0.1);
-          backgroundImages.push(
-             `linear-gradient(45deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`,
-             `linear-gradient(135deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})` // Corrected second gradient angle
-          );
-          patternStyle = `background-size: 16px 16px; background-position: 0 0;`; // Combine positions if needed or let default
-          break;
-        case 3: // Subtle noise (fallback for confetti/ring)
-        case 4:
-           const noiseColor1 = hexToRgba(invertColor(gradientColor1), 0.04);
-           const noiseColor2 = hexToRgba(invertColor(gradientColor2), 0.05);
-           backgroundImages.push(`radial-gradient(${noiseColor1} 1px, transparent 0)`, `radial-gradient(${noiseColor2} 1px, transparent 0)`);
-           patternStyle = `background-size: 5px 5px; background-position: 0 0, 2.5px 2.5px;`;
-          break;
+          case 0: const dotColor = hexToRgba(invertColor(gradientColor1), 0.15); backgroundImages.push(`radial-gradient(${dotColor} 10%, transparent 11%)`, `radial-gradient(${dotColor} 10%, transparent 11%)`); patternStyle = `background-size: 18px 18px; background-position: 0 0, 9px 9px;`; break;
+          case 1: const stripeColor = hexToRgba(invertColor(gradientColor1), 0.09); backgroundImages.push(`linear-gradient(135deg, ${stripeColor} 25%, transparent 25%, transparent 50%, ${stripeColor} 50%, ${stripeColor} 75%, transparent 75%, transparent)`); patternStyle = `background-size: 20px 20px;`; break;
+          case 2: const waveColor = hexToRgba(invertColor(gradientColor2), 0.18).replace('#', '%23'); const svgWave = `<svg width='80' height='16' xmlns='http://www.w3.org/2000/svg'><path d='M0 8 Q 20 16, 40 8 T 80 8' fill='none' stroke='${waveColor}' stroke-width='1.5'/></svg>`; backgroundImages.push(`url("data:image/svg+xml,${encodeURIComponent(svgWave)}")`); patternStyle = `background-size: 40px; background-repeat: repeat;`; break;
+          case 5: const lineColor = hexToRgba(invertColor(gradientColor1), 0.1); backgroundImages.push(`linear-gradient(45deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`, `linear-gradient(135deg, ${lineColor} 25%, transparent 25%, transparent 75%, ${lineColor} 75%, ${lineColor})`); patternStyle = `background-size: 16px 16px; background-position: 0 0;`; break;
+          case 3: case 4: const noiseColor1 = hexToRgba(invertColor(gradientColor1), 0.04); const noiseColor2 = hexToRgba(invertColor(gradientColor2), 0.05); backgroundImages.push(`radial-gradient(${noiseColor1} 1px, transparent 0)`, `radial-gradient(${noiseColor2} 1px, transparent 0)`); patternStyle = `background-size: 5px 5px; background-position: 0 0, 2.5px 2.5px;`; break;
       }
-
-       // Combine base gradient and pattern images
-       const finalBackground = `background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%), ${backgroundImages.join(', ')};`;
-
-
-      // Random border style variations
-      const borderStyles = [
-        `border: 2.5px solid ${adjustColor(gradientColor1, -30)}`,
-        `border: 2px dashed ${adjustColor(gradientColor2, -20)}`,
-        `border: 3px double ${adjustColor(gradientColor1, -25)}`,
-        `border: 2px solid ${adjustColor(gradientColor2, -15)}; border-bottom: 4px solid ${adjustColor(gradientColor1, -35)}; border-radius: 1.1rem 1.1rem 0.8rem 0.8rem;`, // More complex example
-        `border: 2px solid ${adjustColor(gradientColor1, -10)}; border-radius: 1.3rem;`,
-        `border: 3px dotted ${adjustColor(gradientColor2, -20)}; border-radius: 50%;`, // Circle variant
-        `border-top: 3px solid ${adjustColor(gradientColor1, -20)}; border-right: 3px solid ${adjustColor(gradientColor1, -20)}; border-bottom: 3px solid ${adjustColor(gradientColor2, -10)}; border-left: 3px solid ${adjustColor(gradientColor2, -10)}; border-radius: 1.2rem;` // Two-tone border
-      ];
-      const borderStyle = borderStyles[fromName.length % borderStyles.length];
-      const isCircle = borderStyle.includes('50%'); // Check if it's the circle variant
-
-      // Add decorative icon (small emoji at bottom right)
-      const icons = ['✏️','🎓','📚','🍎','🔍','🌱','✨','📝', '⭐', '💡', '🔔', '🎨']; // Added more icons
-      const iconIndex = (fromName.charCodeAt(0) + fromName.length) % icons.length;
-      const icon = icons[iconIndex];
-
-      // Add secondary decorative element (from decorElements array)
-      const decorIndex = (tributeIdx + fromName.length) % decorElements.length;
-      const decorElement = decorElements[decorIndex];
-      const decorHtml = `<span class="absolute ${decorElement.pos} text-sm opacity-70 pointer-events-none" style="z-index: 1;">${decorElement.icon}</span>`; // Smaller, slightly transparent
-
-      // Define text color based on background brightness
-      let textColor = 'rgba(0,0,0,0.65)';
-      try {
-        const avgRgb = hexToRgb(baseHexColor); // Use base color for check
-        if (avgRgb) {
-            const brightness = (avgRgb.r * 299 + avgRgb.g * 587 + avgRgb.b * 114) / 1000;
-            if (brightness < 128) { // If background is dark
-                textColor = 'rgba(255,255,255,0.85)'; // Use lighter text
-            }
-        }
-      } catch(e) { console.error("Brightness check failed", e); }
-
-
+      const finalBackground = `background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%), ${backgroundImages.join(', ')};`;
+      const borderStyles = [ `border: 2.5px solid ${adjustColor(gradientColor1, -30)}`, `border: 2px dashed ${adjustColor(gradientColor2, -20)}`, `border: 3px double ${adjustColor(gradientColor1, -25)}`, `border: 2px solid ${adjustColor(gradientColor2, -15)}; border-bottom: 4px solid ${adjustColor(gradientColor1, -35)}; border-radius: 1.1rem 1.1rem 0.8rem 0.8rem;`, `border: 2px solid ${adjustColor(gradientColor1, -10)}; border-radius: 1.3rem;`, `border: 3px dotted ${adjustColor(gradientColor2, -20)}; border-radius: 50%;`, `border-top: 3px solid ${adjustColor(gradientColor1, -20)}; border-right: 3px solid ${adjustColor(gradientColor1, -20)}; border-bottom: 3px solid ${adjustColor(gradientColor2, -10)}; border-left: 3px solid ${adjustColor(gradientColor2, -10)}; border-radius: 1.2rem;` ];
+      const borderStyle = borderStyles[fromName.length % borderStyles.length]; const isCircle = borderStyle.includes('50%');
+      const icons = ['✏️','🎓','📚','🍎','🔍','🌱','✨','📝', '⭐', '💡', '🔔', '🎨']; const iconIndex = (fromName.charCodeAt(0) + fromName.length) % icons.length; const icon = icons[iconIndex];
+      const decorIndex = (tributeIdx + fromName.length) % decorElements.length; const decorElement = decorElements[decorIndex]; const decorHtml = `<span class="absolute ${decorElement.pos} text-sm opacity-70 pointer-events-none" style="z-index: 1;">${decorElement.icon}</span>`;
+      let textColor = 'rgba(0,0,0,0.65)'; try { const avgRgb = hexToRgb(baseHexColor); if (avgRgb) { const brightness = (avgRgb.r * 299 + avgRgb.g * 587 + avgRgb.b * 114) / 1000; if (brightness < 128) { textColor = 'rgba(255,255,255,0.85)'; } } } catch(e) { console.error("Brightness check failed", e); }
       return `
-        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center ${isCircle ? 'rounded-full' : ''}"
-             style="${finalBackground}
-                    ${patternStyle}
-                    ${borderStyle}
-                    box-shadow: 0 6px 19px rgba(180, 210, 255, 0.35), inset 0 0 12px rgba(255,255,255,0.15);"
-             title="From: ${escapeHtml(fromName)}">
-          <div class="relative flex items-center justify-center w-full h-full">
-            ${decorHtml} {/* Added decorative element */}
-            <span class="initial-text" style="font-family: 'Quicksand', sans-serif;
-                       font-size: ${initial.length > 1 ? '2.2rem' : '2.8rem'}; /* Adjust size for multi-char initials if ever needed */
-                       font-weight: 700;
-                       color: ${textColor}; /* Dynamically set text color */
-                       text-shadow: 1px 1px 3px rgba(0,0,0,0.15); /* Adjusted shadow */
-                       z-index: 2;">
-              ${escapeHtml(initial)}
-            </span>
-            <small style="position: absolute; bottom: 0.5rem; right: 0.8rem; font-size: 0.8rem; opacity: 0.9; z-index: 2;">${icon}</small>
-          </div>
-        </div>
-      `;
+        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center ${isCircle ? 'rounded-full' : ''}" style="${finalBackground} ${patternStyle} ${borderStyle} box-shadow: 0 6px 19px rgba(180, 210, 255, 0.35), inset 0 0 12px rgba(255,255,255,0.15);" title="From: ${escapeHtml(fromName)}">
+          <div class="relative flex items-center justify-center w-full h-full"> ${decorHtml} <span class="initial-text" style="font-family: 'Quicksand', sans-serif; font-size: ${initial.length > 1 ? '2.2rem' : '2.8rem'}; font-weight: 700; color: ${textColor}; text-shadow: 1px 1px 3px rgba(0,0,0,0.15); z-index: 2;"> ${escapeHtml(initial)} </span> <small style="position: absolute; bottom: 0.5rem; right: 0.8rem; font-size: 0.8rem; opacity: 0.9; z-index: 2;">${icon}</small> </div>
+        </div> `;
     }
-
     // --- CASE 2: HAS PHOTOS - Render Original Photo Fan (Static) ---
-    let imgMarkup = "";
-    let n = Math.min(photoArray.length, 4);
-    let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-    let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0;
-    for (let i = 0; i < n; i++) {
-      if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue;
-      let ang = spread[i];
-      let l = (n > 1) ? (i * 40) - shiftBase : 0;
-      let z = n - i;
-      imgMarkup += `<img
-        src="${escapeHtml(photoArray[i])}"
-        class="fan-img"
-        data-tidx="${tributeIdx}"
-        data-pidx="${i}"
-        tabindex="0"
-        style="transform:rotate(${ang}deg) translateX(${l}px); z-index: ${z};"
-        alt="Tribute Photo ${i + 1}">
-      `;
-    }
+    let imgMarkup = ""; let n = Math.min(photoArray.length, 4); let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18]; let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0;
+    for (let i = 0; i < n; i++) { if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue; let ang = spread[i]; let l = (n > 1) ? (i * 40) - shiftBase : 0; let z = n - i; imgMarkup += `<img src="${escapeHtml(photoArray[i])}" class="fan-img" data-tidx="${tributeIdx}" data-pidx="${i}" tabindex="0" style="transform:rotate(${ang}deg) translateX(${l}px); z-index: ${z};" alt="Tribute Photo ${i + 1}">`; }
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
-  // --->>> END MODIFIED renderFanGallery <<<---
 
 
+  // --->>> MODIFIED renderTributeCard to add varying background patterns <<<---
   function renderTributeCard(tribute, idx) {
-    const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
+    const cardIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book']; // Icons for the date line
     const tributeId = tribute.id;
+
+    // --- NEW: Generate Card Background Pattern ---
+    let cardPatternStyle = '';
+    const cardPatternType = idx % 5; // Cycle through 5 pattern types (0-4)
+
+    // Define subtle pattern colors
+    const patternColor = 'rgba(0, 0, 0, 0.03)'; // Very subtle dark pattern
+    const patternColorLight = 'rgba(255, 255, 255, 0.06)'; // Subtle light pattern (alternative)
+
+    switch (cardPatternType) {
+        case 0: // Subtle Polka Dots
+            cardPatternStyle = `background-image: radial-gradient(${patternColor} 8%, transparent 9%), radial-gradient(${patternColor} 8%, transparent 9%); background-size: 30px 30px; background-position: 0 0, 15px 15px;`;
+            break;
+        case 1: // Subtle Diagonal Stripes
+            cardPatternStyle = `background-image: linear-gradient(135deg, ${patternColor} 10%, transparent 10%, transparent 50%, ${patternColor} 50%, ${patternColor} 60%, transparent 60%, transparent 100%); background-size: 15px 15px;`;
+            break;
+        case 2: // Subtle Crosshatch
+             cardPatternStyle = `background-image: linear-gradient(45deg, ${patternColor} 25%, transparent 25%, transparent 75%, ${patternColor} 75%, ${patternColor}), linear-gradient(45deg, ${patternColor} 25%, transparent 25%, transparent 75%, ${patternColor} 75%, ${patternColor}); background-size: 20px 20px; background-position: 0 0, 10px 10px;`;
+             break;
+        case 3: // Subtle Wavy Lines (SVG)
+            const waveSvgColor = patternColorLight.replace('#', '%23'); // Use light color for contrast on gradient
+            const svgWaveCard = `<svg width='100' height='10' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q 25 10, 50 5 T 100 5' fill='none' stroke='${waveSvgColor}' stroke-width='1'/></svg>`;
+            cardPatternStyle = `background-image: url("data:image/svg+xml,${encodeURIComponent(svgWaveCard)}"); background-size: 50px; background-repeat: repeat;`;
+            break;
+        case 4: // Subtle Noise / Tiny Dots
+            cardPatternStyle = `background-image: radial-gradient(${patternColor} 1px, transparent 0), radial-gradient(${patternColor} 1px, transparent 0); background-size: 8px 8px; background-position: 0 0, 4px 4px;`;
+            break;
+        // Add more cases if desired
+    }
+
+    // Combine the pattern with the base gradient
+    const cardBackground = `${cardPatternStyle ? cardPatternStyle.replace('background-image:', 'background-image: ') + ',' : ''} linear-gradient(135deg, #e8f5e9 85%, #ffe0e8 100%)`;
+    // --- END NEW ---
+
+    // Note on Code Comments: If you saw `/* ... */` rendered, it was likely due to an error in a previous code version
+    // or those characters being present in the 'from' or 'msg' data. The `escapeHtml` function below prevents this if data is clean.
+
     return `
-      <div class="tribute-card stripe-bg relative" data-cardidx="${idx}" data-id="${tributeId}">
-        <div class="absolute right-3 top-3 flex space-x-2 z-10 opacity-80 hover:opacity-100 transition-all">
-          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-pen"></i>
-          </button>
-          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-400 hover:text-pink-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition">
-            <i class="fa-solid fa-trash"></i>
-          </button>
+      <div class="tribute-card relative"
+           data-cardidx="${idx}"
+           data-id="${tributeId}"
+           style="background: ${cardBackground}; ${cardPatternStyle ? cardPatternStyle.replace(/background-image:[^;]+;?/,'') : ''}"> {/* Apply combined background */}
+
+        {/* Edit/Delete Buttons - Ensure they have high enough z-index (added in CSS) */}
+        <div class="absolute right-3 top-3 flex space-x-2">
+          <button title="Edit" data-act="edit" data-id="${tributeId}" class="text-blue-400 hover:text-yellow-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition"> <i class="fa-solid fa-pen"></i> </button>
+          <button title="Delete" data-act="delete" data-id="${tributeId}" class="text-blue-400 hover:text-pink-500 bg-white rounded-full shadow border border-blue-100 px-2 py-1 focus:outline-none transition"> <i class="fa-solid fa-trash"></i> </button>
         </div>
-        ${renderFanGallery(tribute, idx)} {/* Call the updated function */}
+
+        {/* Photos or Initial Placeholder - Ensure z-index 1 */}
+        ${renderFanGallery(tribute, idx)}
+
+        {/* Text Content - Ensure z-index 1 */}
         <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
         <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
         <div class="text-xs text-green-500 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-          <i class="fa-solid ${icons[idx % icons.length]}"></i>
+          <i class="fa-solid ${cardIcons[idx % cardIcons.length]}"></i>
           <span>${formatDateString(tribute.date) || ''}</span>
         </div>
       </div>
     `;
   }
+  // --->>> END MODIFIED renderTributeCard <<<---
 
-  // --- API INTERACTIONS --- (No changes needed here)
-  async function fetchAndRenderTributes() {
-    const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
-    grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>'; emptyState.classList.add('hidden');
-    try {
-      const resp = await fetch('/.netlify/functions/get-tributes'); if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`); tributes = await resp.json(); renderAllTributes();
-    } catch (error) { grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>'; emptyState.classList.add('hidden'); }
-  }
-  async function submitTribute(tributeData, idToUpdate = null) {
-    const isUpdating = idToUpdate !== null; const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST';
-    const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData;
-    try {
-      const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); }
-      showConfetti(); await fetchAndRenderTributes(); return true;
-    } catch (error) { alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`); return false; }
-  }
-  async function deleteTribute(tributeId) {
-    const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
-    try {
-      const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
-      if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); }
-      await fetchAndRenderTributes(); return true;
-    } catch (error) { alert(`Error deleting tribute: ${error.message}`); return false; }
-  }
 
-  // --- FORM LOGIC --- (No changes needed here)
-  async function handleFormSubmit(e) {
-    e.preventDefault(); const submitBtn = document.getElementById('submitBtn'); const submitBtnText = document.getElementById('submitBtnText'); const fileInput = document.getElementById('photos');
-    submitBtn.disabled = true; const originalBtnText = editingTributeId ? "Update" : "Share"; const actionText = editingTributeId ? 'Updating...' : 'Sharing...'; submitBtnText.textContent = actionText;
-    if (fileInput.files.length > 0) { submitBtnText.textContent = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; } let photos = [];
-    try {
-      if (fileInput.files.length > 0) { photos = await filesToDataURLs(fileInput.files); }
-      const from = document.getElementById('fromName').value.trim() || "Anonymous"; const msg = document.getElementById('message').value.trim(); const tributeData = { from, msg, photos };
-      const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idToUpdate)) throw new Error("Invalid tribute ID for update.");
-      const success = await submitTribute(tributeData, idToUpdate); if (success) { resetForm(); } else { submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; }
-    } catch (error) { alert("An error occurred while processing your tribute. Please try again."); submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; }
-  }
-  function resetForm() {
-    document.getElementById('tributeForm').reset(); document.getElementById('submitBtnText').textContent = "Share"; document.getElementById('cancelEditBtn').classList.add('hidden');
-    editingTributeId = null; document.getElementById('submitBtn').disabled = false;
-  }
-  function loadEditForm(tributeId) {
-    const tributeIdAsNumber = parseInt(tributeId, 10); if (isNaN(tributeIdAsNumber)) return; const tributeToEdit = tributes.find(t => t.id === tributeIdAsNumber);
-    if (!tributeToEdit) { alert("Could not load tribute for editing."); return; }
-    document.getElementById('fromName').value = tributeToEdit.from; document.getElementById('message').value = tributeToEdit.msg; editingTributeId = tributeIdAsNumber;
-    document.getElementById('submitBtnText').textContent = "Update"; document.getElementById('cancelEditBtn').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'});
-  }
+  // --- API INTERACTIONS --- (No changes needed)
+  async function fetchAndRenderTributes() { const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState'); grid.innerHTML = '<p class="text-blue-400 text-center col-span-full italic">Loading tributes...</p>'; emptyState.classList.add('hidden'); try { const resp = await fetch('/.netlify/functions/get-tributes'); if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`); tributes = await resp.json(); renderAllTributes(); } catch (error) { grid.innerHTML = '<p class="text-red-500 text-center col-span-full">Could not load tributes. Please check connection or try again later.</p>'; emptyState.classList.add('hidden'); } }
+  async function submitTribute(tributeData, idToUpdate = null) { const isUpdating = idToUpdate !== null; const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST'; const payload = isUpdating ? { ...tributeData, id: idToUpdate } : tributeData; try { const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); } showConfetti(); await fetchAndRenderTributes(); return true; } catch (error) { alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`); return false; } }
+  async function deleteTribute(tributeId) { const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false; try { const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) }); if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { } throw new Error(errorMsg); } await fetchAndRenderTributes(); return true; } catch (error) { alert(`Error deleting tribute: ${error.message}`); return false; } }
 
-  // --- CARD BUTTONS / IMAGE EVENTS --- (No changes needed here)
-  function attachCardEventListeners() {
-    const grid = document.getElementById('tributesGrid'); if (!grid) return;
-    grid.onclick = function handleGridClick(event) {
-      const target = event.target; const button = target.closest('button[data-act]'); const img = target.closest('.fan-img');
-      if (button) {
-        event.stopPropagation(); const action = button.getAttribute('data-act'); const id = button.getAttribute('data-id'); if (!id) return;
-        if (action === 'edit') { loadEditForm(id); } else if (action === 'delete') { deleteTribute(id); }
-      } else if (img) {
-        event.stopPropagation(); const tIdx = parseInt(img.getAttribute("data-tidx")); const pIdx = parseInt(img.getAttribute("data-pidx"));
-        if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); }
-      }
-    };
-    document.querySelectorAll('.fan-img').forEach(img => {
-      img.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); } }
-    });
-  }
+  // --- FORM LOGIC --- (No changes needed)
+  async function handleFormSubmit(e) { e.preventDefault(); const submitBtn = document.getElementById('submitBtn'); const submitBtnText = document.getElementById('submitBtnText'); const fileInput = document.getElementById('photos'); submitBtn.disabled = true; const originalBtnText = editingTributeId ? "Update" : "Share"; const actionText = editingTributeId ? 'Updating...' : 'Sharing...'; submitBtnText.textContent = actionText; if (fileInput.files.length > 0) { submitBtnText.textContent = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; } let photos = []; try { if (fileInput.files.length > 0) { photos = await filesToDataURLs(fileInput.files); } const from = document.getElementById('fromName').value.trim() || "Anonymous"; const msg = document.getElementById('message').value.trim(); const tributeData = { from, msg, photos }; const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idToUpdate)) throw new Error("Invalid tribute ID for update."); const success = await submitTribute(tributeData, idToUpdate); if (success) { resetForm(); } else { submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; } } catch (error) { alert("An error occurred while processing your tribute. Please try again."); submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; } }
+  function resetForm() { document.getElementById('tributeForm').reset(); document.getElementById('submitBtnText').textContent = "Share"; document.getElementById('cancelEditBtn').classList.add('hidden'); editingTributeId = null; document.getElementById('submitBtn').disabled = false; }
+  function loadEditForm(tributeId) { const tributeIdAsNumber = parseInt(tributeId, 10); if (isNaN(tributeIdAsNumber)) return; const tributeToEdit = tributes.find(t => t.id === tributeIdAsNumber); if (!tributeToEdit) { alert("Could not load tribute for editing."); return; } document.getElementById('fromName').value = tributeToEdit.from; document.getElementById('message').value = tributeToEdit.msg; editingTributeId = tributeIdAsNumber; document.getElementById('submitBtnText').textContent = "Update"; document.getElementById('cancelEditBtn').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'}); }
 
-  // --- CARD ANIMATIONS --- (No changes needed here)
-  function setupCardAnimations() {
-    if ('IntersectionObserver' in window) {
-      document.querySelectorAll('.tribute-card').forEach(card => {
-        card.classList.remove('card-mobile-anim');
-        const observer = new IntersectionObserver((entries, observerInstance) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) { card.classList.add('card-mobile-anim'); setTimeout(() => card.classList.remove('card-mobile-anim'), 700); observerInstance.unobserve(card); }
-          });
-        }, { threshold: 0.42 }); observer.observe(card);
-      });
-    }
-  }
+  // --- CARD BUTTONS / IMAGE EVENTS --- (No changes needed)
+  function attachCardEventListeners() { const grid = document.getElementById('tributesGrid'); if (!grid) return; grid.onclick = function handleGridClick(event) { const target = event.target; const button = target.closest('button[data-act]'); const img = target.closest('.fan-img'); if (button) { event.stopPropagation(); const action = button.getAttribute('data-act'); const id = button.getAttribute('data-id'); if (!id) return; if (action === 'edit') { loadEditForm(id); } else if (action === 'delete') { deleteTribute(id); } } else if (img) { event.stopPropagation(); const tIdx = parseInt(img.getAttribute("data-tidx")); const pIdx = parseInt(img.getAttribute("data-pidx")); if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } } }; document.querySelectorAll('.fan-img').forEach(img => { img.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); } } }); }
 
-  // --- MODAL GALLERY LOGIC --- (No changes needed here)
+  // --- CARD ANIMATIONS --- (No changes needed)
+  function setupCardAnimations() { if ('IntersectionObserver' in window) { document.querySelectorAll('.tribute-card').forEach(card => { card.classList.remove('card-mobile-anim'); const observer = new IntersectionObserver((entries, observerInstance) => { entries.forEach(entry => { if (entry.isIntersecting) { card.classList.add('card-mobile-anim'); setTimeout(() => card.classList.remove('card-mobile-anim'), 700); observerInstance.unobserve(card); } }); }, { threshold: 0.42 }); observer.observe(card); }); } }
+
+  // --- MODAL GALLERY LOGIC --- (No changes needed)
   let modalTributeIdx = 0, modalPhotoIdx = 0;
   function showModalGallery(tributeIdx, photoIdx) { if (!tributes[tributeIdx]) return; modalTributeIdx = tributeIdx; modalPhotoIdx = photoIdx; renderModalImage(); document.getElementById("galleryModal").classList.remove("hidden"); document.body.style.overflow = 'hidden'; }
-  function renderModalImage() {
-    let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; let currentPhotoSrc = photos[modalPhotoIdx];
-    if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) { closeModalGallery(); return; }
-    document.getElementById('modalImg').src = currentPhotoSrc; document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`;
-    document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0); document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1);
-  }
+  function renderModalImage() { let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; let currentPhotoSrc = photos[modalPhotoIdx]; if (typeof currentPhotoSrc !== 'string' || !currentPhotoSrc) { closeModalGallery(); return; } document.getElementById('modalImg').src = currentPhotoSrc; document.getElementById('galleryCaption').textContent = `${t.from || "Anonymous"}: ${modalPhotoIdx + 1} / ${photos.length}`; document.getElementById('prevImgBtn').classList.toggle('hidden', modalPhotoIdx === 0); document.getElementById('nextImgBtn').classList.toggle('hidden', modalPhotoIdx >= photos.length - 1); }
   function closeModalGallery() { document.getElementById("galleryModal").classList.add("hidden"); document.getElementById('modalImg').src = ''; document.body.style.overflow = ''; }
 
-  // --- CONFETTI LOGIC --- (No changes needed here)
-  function showConfetti() {
-    const confettiBox = document.getElementById('confettiBox'); confettiBox.style.display = 'flex'; confettiBox.innerHTML = '';
-    const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0']; let n = 20 + Math.floor(8 * Math.random());
-    for (let i = 0; i < n; i++) {
-      let dot = document.createElement('span'); dot.className = 'confetti__dot'; dot.style.background = colors[Math.floor(Math.random() * colors.length)];
-      let left = 4 + 92 * Math.random(); dot.style.left = left + '%'; dot.style.top = (5 + Math.random() * 1.6) + '%'; dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's';
-      dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2); confettiBox.appendChild(dot);
-    } setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900);
-  }
+  // --- CONFETTI LOGIC --- (No changes needed)
+  function showConfetti() { const confettiBox = document.getElementById('confettiBox'); confettiBox.style.display = 'flex'; confettiBox.innerHTML = ''; const colors = ['#fee49e','#fff44f','#60b5fa','#e57373','#a3e635','#68e1c9','#fdb253','#bb57df','#f9bbd0']; let n = 20 + Math.floor(8 * Math.random()); for (let i = 0; i < n; i++) { let dot = document.createElement('span'); dot.className = 'confetti__dot'; dot.style.background = colors[Math.floor(Math.random() * colors.length)]; let left = 4 + 92 * Math.random(); dot.style.left = left + '%'; dot.style.top = (5 + Math.random() * 1.6) + '%'; dot.style.animationDelay = (Math.random() * 0.7).toFixed(2) + 's'; dot.style.opacity = (0.65 + 0.33 * Math.random()).toFixed(2); confettiBox.appendChild(dot); } setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900); }
 
-  // --- INITIALIZE & EVENTS --- (No changes needed here)
-  document.addEventListener("DOMContentLoaded", function() {
-    fetchAndRenderTributes();
-    try {
-      const tributeForm = document.getElementById('tributeForm'); if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; }
-      const cancelBtn = document.getElementById('cancelEditBtn'); if (cancelBtn) { cancelBtn.onclick = resetForm; }
-      const closeModalBtn = document.getElementById('closeModalBtn'); if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
-      const modalBG = document.getElementById('modalBG'); if (modalBG) { modalBG.onclick = closeModalGallery; }
-      const prevImgBtn = document.getElementById('prevImgBtn'); if (prevImgBtn) { prevImgBtn.onclick = function(e) { e.stopPropagation(); if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } }; }
-      const nextImgBtn = document.getElementById('nextImgBtn'); if (nextImgBtn) { nextImgBtn.onclick = function(e) { e.stopPropagation(); let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); } }; }
-    } catch (error) {}
-    window.addEventListener("keydown", function(e) {
-      const modal = document.getElementById("galleryModal"); if (!modal || modal.classList.contains("hidden")) return;
-      if (e.key === "ArrowLeft") { document.getElementById('prevImgBtn')?.click(); } else if (e.key === "ArrowRight") { document.getElementById('nextImgBtn')?.click(); } else if (e.key === "Escape") { closeModalGallery(); }
-    });
-  });
+  // --- INITIALIZE & EVENTS --- (No changes needed)
+  document.addEventListener("DOMContentLoaded", function() { fetchAndRenderTributes(); try { const tributeForm = document.getElementById('tributeForm'); if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; } const cancelBtn = document.getElementById('cancelEditBtn'); if (cancelBtn) { cancelBtn.onclick = resetForm; } const closeModalBtn = document.getElementById('closeModalBtn'); if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; } const modalBG = document.getElementById('modalBG'); if (modalBG) { modalBG.onclick = closeModalGallery; } const prevImgBtn = document.getElementById('prevImgBtn'); if (prevImgBtn) { prevImgBtn.onclick = function(e) { e.stopPropagation(); if (modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } }; } const nextImgBtn = document.getElementById('nextImgBtn'); if (nextImgBtn) { nextImgBtn.onclick = function(e) { e.stopPropagation(); let t = tributes[modalTributeIdx]; let photos = Array.isArray(t.photos) ? t.photos : []; if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); } }; } } catch (error) {} window.addEventListener("keydown", function(e) { const modal = document.getElementById("galleryModal"); if (!modal || modal.classList.contains("hidden")) return; if (e.key === "ArrowLeft") { document.getElementById('prevImgBtn')?.click(); } else if (e.key === "ArrowRight") { document.getElementById('nextImgBtn')?.click(); } else if (e.key === "Escape") { closeModalGallery(); } }); });
 </script>
 </body>
 </html>
