@@ -356,6 +356,86 @@
     }
     return Math.abs(hash) % INITIAL_BG_COLORS.length;
   }
+    // --->>> ADDED Color Manipulation Utilities <<<---
+  function hexToRgb(hex) {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  function rgbToHsl(r, g, b) {
+    r /= 255, g /= 255, b /= 255;
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+    if (max == min) {
+      h = s = 0; // achromatic
+    } else {
+      let d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h: h * 360, s: s * 100, l: l * 100 };
+  }
+
+  function hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+    if (s == 0) {
+      r = g = b = l; // achromatic
+    } else {
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      }
+      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      let p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+  }
+
+  function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0');
+  }
+
+  // Function to adjust HSL lightness
+  function adjustLightness(hsl, amount) {
+    // amount is percentage points, e.g., 10 for 10% lighter, -10 for 10% darker
+    let newL = Math.max(0, Math.min(100, hsl.l + amount));
+    return { h: hsl.h, s: hsl.s, l: newL };
+  }
+  // --->>> END ADDED Color Utilities <<<---
+
+  // Palette for initial backgrounds (can be adjusted)
+  const INITIAL_BG_COLORS = [
+    '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
+    '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe'
+  ];
+
+  // Simple hash function to pick a color based on name
+  function getNameColorIndex(name) {
+    if (!name) return 0;
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = (hash << 5) - hash + name.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash) % INITIAL_BG_COLORS.length;
+  }
   // --->>> END ADDED UTILS <<<---
 
   function escapeHtml(str) {
@@ -412,40 +492,63 @@
     setupCardAnimations(); // Keep card animations, fan animations removed below
   }
 
-  // --->>> MODIFIED renderFanGallery for Initials <<<---
-  function renderFanGallery(tribute, tributeIdx) { // Accepts full tribute object
+      
+// --->>> MODIFIED renderFanGallery for Cuter Initials <<<---
+  function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const fromName = tribute.from || "A"; // Use name for initial
+    const fromName = tribute.from || "A";
 
     if (!photoArray.length) {
       // Generate Initial Placeholder
       const initial = fromName.charAt(0).toUpperCase();
       const colorIndex = getNameColorIndex(fromName);
-      const bgColor = INITIAL_BG_COLORS[colorIndex];
-      // Re-use school-illustration class for size/shape/border, add initial-placeholder
+      const baseHexColor = INITIAL_BG_COLORS[colorIndex];
+
+      // --- Create Gradient ---
+      let gradientColor1 = baseHexColor;
+      let gradientColor2 = baseHexColor; // Default if conversion fails
+      try {
+          const baseRgb = hexToRgb(baseHexColor);
+          if (baseRgb) {
+              const baseHsl = rgbToHsl(baseRgb.r, baseRgb.g, baseRgb.b);
+              // Create a second color ~15% lighter
+              const lighterHsl = adjustLightness(baseHsl, 15);
+              const lighterRgb = hslToRgb(lighterHsl.h, lighterHsl.s, lighterHsl.l);
+              gradientColor2 = rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b);
+          }
+      } catch (e) { console.error("Color conversion error:", e); }
+      // --- End Create Gradient ---
+
+      // Use a slightly different border color, maybe softer
+      const borderColor = '#e0e7ff'; // Example: light blue/purple
+
+      // Apply gradient and updated styles
       return `
         <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center"
-             style="background-color: ${bgColor}; border-color: rgba(0,0,0,0.05);"
+             style="background: linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%);
+                    border: 2px solid ${borderColor}; /* Thinner, different color border */ "
              title="From: ${escapeHtml(fromName)}">
-          <span style="font-family: 'Quicksand', sans-serif; font-size: 2.5rem; font-weight: 700; color: rgba(0,0,0,0.5);">
+          <span style="font-family: 'Quicksand', sans-serif;
+                       font-size: 2.8rem; /* Slightly larger */
+                       font-weight: 700; /* Bolder */
+                       color: rgba(0,0,0,0.6); /* Darker text for contrast */
+                       text-shadow: 1px 1px 2px rgba(255,255,255,0.3);"> {/* Subtle shadow */}
             ${escapeHtml(initial)}
           </span>
         </div>
       `;
     }
 
-    // Original Photo Fan Logic (Static positioning)
+    // --- Original Photo Fan Logic (Static positioning) ---
     let imgMarkup = "";
     let n = Math.min(photoArray.length, 4);
-    // Adjusted spread/shift slightly for visual preference with static stack
     let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-    let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0; // Reduced spacing
+    let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0;
     for (let i = 0; i < n; i++) {
       if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue;
       let ang = spread[i];
-      let l = (n > 1) ? (i * 40) - shiftBase : 0; // Reduced spacing
-      // Assign z-index directly in style for static stacking order
-      let z = n - i; // Make the last image (top of stack) have lowest index i, highest z
+      let l = (n > 1) ? (i * 40) - shiftBase : 0;
+      let z = n - i;
       imgMarkup += `<img
         src="${escapeHtml(photoArray[i])}"
         class="fan-img"
