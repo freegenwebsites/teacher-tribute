@@ -23,6 +23,7 @@
       box-shadow: 0 8px 32px 0 rgba(156, 195, 255, 0.13);
       border-radius: 1.6rem;
       padding: 1.9rem 1.6rem 1.2rem 1.6rem;
+      /* Keep card hover animation */
       transition:
         transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
         box-shadow 0.19s;
@@ -37,37 +38,40 @@
       z-index:10;
       box-shadow: 0 24px 62px 0 rgba(194, 180, 255, 0.23), 0 1.5px 8px rgba(122,122,216,.10);
     }
-    /* Fan image stack */
+
+    /* --- Fan image stack (Static Version) --- */
     .fan-stack {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      min-height: 112px; 
+      min-height: 112px;
       width: 176px;
       position: relative;
       margin: 0 auto 1.2rem auto;
-      pointer-events: none;
+      pointer-events: none; /* Container doesn't need events */
     }
     .fan-img {
       width: 96px;
       height: 96px;
       object-fit: cover;
       border-radius: 1.12rem;
-      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24);
+      box-shadow: 0 9px 26px rgba(160, 190, 255, 0.24); /* Static shadow */
       transform-origin: 50% 80%;
       position: absolute;
       background: #f9fafb;
       border: 2.5px solid #d6edea;
-      z-index: 1;
-      cursor: pointer;
-      pointer-events: auto;
-      transition:
-        box-shadow 0.18s cubic-bezier(.34,1.3,.67,1.08),
-        transform 0.29s cubic-bezier(.44,1.4,.47,.96),
-        z-index 0.21s;
+      z-index: 1; /* Base z-index */
+      cursor: pointer; /* Still clickable */
+      pointer-events: auto; /* Images are clickable */
+      /* Remove transition for hover effects */
+      /* transition: ... */
       filter: brightness(.99) saturate(98%);
+      /* Inline transform sets the static fan position */
     }
+
+    /* --- DELETE CSS Rules for Fan Animation --- */
+    /*
     .fan-img.fan-expanded,
     .fan-img.fan-anim,
     .fan-img:hover {
@@ -84,36 +88,38 @@
     .fan-img.fan-pop {
       animation: fanPop 0.78s cubic-bezier(.65,1.7,.5,.8);
     }
-    /* School illustration circle (when no photo) */
-    .school-illustration {
+    */
+    /* --- End Deleted CSS Rules --- */
+
+
+    /* Placeholder style (reusing school-illustration for size/shape) */
+    /* Also added .initial-placeholder for potential targeting */
+    .school-illustration, .initial-placeholder {
       width: 97px;
       height: 97px;
       border-radius: 1.12rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #e0f7fa 70%, #fffde4 100%);
+      /* Background set by inline style in JS now */
       border: 2.5px solid #e2e6f7;
       box-shadow: 0 6px 19px rgba(180, 210, 255, 0.16);
-      font-size: 2.9rem;
-      margin: 0 auto 0.3rem auto;
+      font-size: 2.9rem; /* Base size for SVG */
+      margin: 0 auto 0.3rem auto; /* Keep margin consistent */
       position: relative;
       overflow: hidden;
       will-change: transform;
       transition: transform .22s;
-      animation: bounceInCircle .60s 1;
+      animation: bounceInCircle .60s 1; /* Keep entry animation */
     }
-    .tribute-card .school-illustration svg {
-      width: 54px;
-      height: 54px;
-      display: block;
-      margin: auto;
-    }
+    /* Remove specific SVG styling if not needed */
+    /* .tribute-card .school-illustration svg { ... } */
     @keyframes bounceInCircle {
       0%   { transform: scale(.78) rotate(-6deg); opacity:.2;}
       70%  { transform: scale(1.12) rotate(9deg); opacity:1;}
       100% { transform: scale(1) rotate(0deg);}
     }
+
     /* Floating celebration elements */
     .floating-celebrate {
       position: absolute;
@@ -240,7 +246,7 @@
       </h1>
       <p style="font-family:'Indie Flower',cursive;color:#2e577b;font-size: 1.11rem;opacity:.93;text-align:center;">
         A wonderful teacher leaves a mark on hearts forever.<br>
-        <span class="text-green-500 font-semibold">Share your words, memories &amp; photos below!</span>
+        <span class="text-green-500 font-semibold">Share your words, memories & photos below!</span>
       </p>
     </div>
     <!-- Add/Edit Tribute Form -->
@@ -331,30 +337,34 @@
   let tributes = [];
   let editingTributeId = null;
 
-  // School themed SVGs for cards without photos
-  const SCHOOL_SVGS = [
-    // Book
-    `<svg viewBox="0 0 56 56" fill="none"><rect x="5" y="11" width="39" height="33" rx="7" fill="#e3eafc"/><rect x="8.8" y="15" width="31" height="26" rx="5" fill="#cbe1fa"/><rect x="13.4" y="19" width="22.2" height="2.8" rx="1.3" fill="#f6d365"/><rect x="13.4" y="25.5" width="22.2" height="2.8" rx="1.3" fill="#eb68b8"/><rect x="13.4" y="32" width="14.2" height="2.8" rx="1.3" fill="#98e6d7"/></svg>`,
-    // Apple
-    `<svg viewBox="0 0 56 56" fill="none"><ellipse cx="28" cy="35" rx="19" ry="14" fill="#faaf92"/><ellipse cx="28" cy="37" rx="13" ry="9" fill="#f36b6b"/><ellipse cx="36" cy="31" rx="2.3" ry="3.8" fill="#fdf6e3"/><rect x="25" y="18" width="6" height="8" rx="3" fill="#8fd295" transform="rotate(-30 25 18)"/><rect x="30.8" y="8.7" width="2.2" height="7" rx="1.1" fill="#66554d" transform="rotate(-19.5 30.8 8.7)"/></svg>`,
-    // Pencil
-    `<svg viewBox="0 0 56 56" fill="none"><rect x="22" y="13" width="12" height="26" rx="3" fill="#ffd95c"/><rect x="22" y="35" width="12" height="6" fill="#ffbc42"/><rect x="25" y="9" width="6" height="9" rx="3" fill="#ffc7a6"/><rect x="25" y="38.7" width="6" height="4.6" rx="2" fill="#e46868"/><rect x="28" y="10" width="1.6" height="23" rx=".8" fill="#8c6100"/></svg>`,
-    // Graduation cap
-    `<svg viewBox="0 0 56 56" fill="none"><polygon points="12,24 28,14 44,24 28,34" fill="#08befc"/><rect x="25" y="23.2" width="6" height="10.8" rx="2" fill="#0056a3"/><ellipse cx="28" cy="37.5" rx="2.2" ry="1.5" fill="#ffd95c"/></svg>`,
-    // Heart
-    `<svg viewBox="0 0 56 56" fill="none"><path d="M28 47c-10-8-16-12.7-16-19A9 9 0 0128 18a9 9 0 0116 10c0 6.3-6 11-16 19z" fill="#fc99c0"/><path d="M33 26c1.4 0 2.5 1.1 2.5 2.5S34.4 31 33 31s-2.5-1.1-2.5-2.5S31.6 26 33 26z" fill="#fff"/></svg>`,
-    // Star
-    `<svg viewBox="0 0 56 56" fill="none"><polygon points="28,11 32,25 46,25 34,33 37,46 28,38 19,46 22,33 10,25 24,25" fill="#fcd34d"/></svg>`
-  ];
+  // --- CONSTANTS ---
+  // Removed SCHOOL_SVGS array as it's replaced by initials
 
   // --- UTILS ---
+
+  // --->>> ADDED Color Palette and Hash Function <<<---
+  const INITIAL_BG_COLORS = [
+    '#a7f3d0', '#bae6fd', '#fecaca', '#fde68a', '#d8b4fe', '#a5f3fc', '#fecdd3', '#e9d5ff',
+    '#bfdbfe', '#fbcfe8', '#bbf7d0', '#fef08a', '#fed7aa', '#fecfbb', '#c7d2fe', '#f5d0fe' // Added more colors
+  ];
+  function getNameColorIndex(name) {
+    if (!name) return 0;
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = (hash << 5) - hash + name.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash) % INITIAL_BG_COLORS.length;
+  }
+  // --->>> END ADDED UTILS <<<---
+
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
+      '&': '&',
+      '<': '<',
+      '>': '>',
+      '"': '"',
+      "'": '''
     }[s]));
   }
   function formatDateString(dbDateString) {
@@ -368,14 +378,13 @@
       return '';
     }
   }
-  // Reads selected files and returns array of Data URLs (max 4, images only)
   async function filesToDataURLs(fileList) {
     const dataURLs = [];
     const filesToProcess = Array.from(fileList).slice(0, 4);
     const readerPromises = filesToProcess.map(file => {
       return new Promise((resolve, reject) => {
         if (!file.type.startsWith('image/')) return resolve(null);
-        if (file.size > 5 * 1024 * 1024) return resolve(null);
+        if (file.size > 5 * 1024 * 1024) return resolve(null); // 5MB Limit
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
@@ -400,38 +409,58 @@
       grid.innerHTML += renderTributeCard(trb, idx);
     });
     attachCardEventListeners();
-    setupCardAnimations();
+    setupCardAnimations(); // Keep card animations, fan animations removed below
   }
 
-  // Fan gallery: with fallback illustration if empty
-  function renderFanGallery(photos, tributeIdx) {
-    const photoArray = Array.isArray(photos) ? photos : [];
+  // --->>> MODIFIED renderFanGallery for Initials <<<---
+  function renderFanGallery(tribute, tributeIdx) { // Accepts full tribute object
+    const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
+    const fromName = tribute.from || "A"; // Use name for initial
+
     if (!photoArray.length) {
-      // Pick a random SVG illustration each time for visual variety
-      let illIndex = tributeIdx % SCHOOL_SVGS.length;
-      return `<div class="school-illustration mb-2" title="Classroom Artwork">${SCHOOL_SVGS[illIndex]}</div>`;
+      // Generate Initial Placeholder
+      const initial = fromName.charAt(0).toUpperCase();
+      const colorIndex = getNameColorIndex(fromName);
+      const bgColor = INITIAL_BG_COLORS[colorIndex];
+      // Re-use school-illustration class for size/shape/border, add initial-placeholder
+      return `
+        <div class="initial-placeholder school-illustration mb-2 flex items-center justify-center"
+             style="background-color: ${bgColor}; border-color: rgba(0,0,0,0.05);"
+             title="From: ${escapeHtml(fromName)}">
+          <span style="font-family: 'Quicksand', sans-serif; font-size: 2.5rem; font-weight: 700; color: rgba(0,0,0,0.5);">
+            ${escapeHtml(initial)}
+          </span>
+        </div>
+      `;
     }
+
+    // Original Photo Fan Logic (Static positioning)
     let imgMarkup = "";
     let n = Math.min(photoArray.length, 4);
-    let spread = (n === 1) ? [0] : (n === 2) ? [-18, 18] : (n === 3) ? [-18, 0, 18] : [-24, -8, 8, 24];
-    let shiftBase = (n > 1) ? (n - 1) * 50 / 2 : 0;
+    // Adjusted spread/shift slightly for visual preference with static stack
+    let spread = (n === 1) ? [0] : (n === 2) ? [-10, 10] : (n === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
+    let shiftBase = (n > 1) ? (n - 1) * 40 / 2 : 0; // Reduced spacing
     for (let i = 0; i < n; i++) {
       if (typeof photoArray[i] !== 'string' || !photoArray[i]) continue;
       let ang = spread[i];
-      let l = (n > 1) ? (i * 50) - shiftBase : 0;
+      let l = (n > 1) ? (i * 40) - shiftBase : 0; // Reduced spacing
+      // Assign z-index directly in style for static stacking order
+      let z = n - i; // Make the last image (top of stack) have lowest index i, highest z
       imgMarkup += `<img
         src="${escapeHtml(photoArray[i])}"
         class="fan-img"
         data-tidx="${tributeIdx}"
         data-pidx="${i}"
         tabindex="0"
-        style="transform:rotate(${ang}deg) translateX(${l}px);"
+        style="transform:rotate(${ang}deg) translateX(${l}px); z-index: ${z};"
         alt="Tribute Photo ${i + 1}">
       `;
     }
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
+  // --->>> END MODIFIED renderFanGallery <<<---
 
+  // --->>> MODIFIED renderTributeCard to pass full tribute object <<<---
   function renderTributeCard(tribute, idx) {
     const icons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
     const tributeId = tribute.id;
@@ -445,7 +474,7 @@
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
-        ${renderFanGallery(tribute.photos, idx)}
+        ${renderFanGallery(tribute, idx)} {/* Pass full tribute object */}
         <div class="text-blue-600 font-bold mb-1" style="font-family:'Indie Flower',cursive">${escapeHtml(tribute.from || "Anonymous")}</div>
         <div class="text-gray-700 mb-3 text-center" style="font-family:'Indie Flower',cursive;font-size:1.14rem;">${escapeHtml(tribute.msg || '').replace(/\n/g, "<br>")}</div>
         <div class="text-xs text-green-500 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
@@ -455,8 +484,9 @@
       </div>
     `;
   }
+  // --->>> END MODIFIED renderTributeCard <<<---
 
-  // --- API INTERACTIONS ---
+  // --- API INTERACTIONS --- (No changes needed here)
   async function fetchAndRenderTributes() {
     const grid = document.getElementById("tributesGrid");
     const emptyState = document.getElementById('emptyState');
@@ -487,8 +517,7 @@
         try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) { }
         throw new Error(errorMsg);
       }
-      // Confetti celebration!
-      showConfetti();
+      showConfetti(); // Keep confetti
       await fetchAndRenderTributes();
       return true;
     } catch (error) {
@@ -503,7 +532,7 @@
     try {
       const response = await fetch('/.netlify/functions/delete-tribute', {
         method: 'DELETE', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: idToDelete }) 
+        body: JSON.stringify({ id: idToDelete })
       });
       if (!response.ok) {
         let errorMsg = `HTTP error! status: ${response.status}`;
@@ -517,7 +546,8 @@
       return false;
     }
   }
-  // --- FORM LOGIC ---
+
+  // --- FORM LOGIC --- (No changes needed here)
   async function handleFormSubmit(e) {
     e.preventDefault();
     const submitBtn = document.getElementById('submitBtn');
@@ -575,14 +605,18 @@
     document.getElementById('cancelEditBtn').classList.remove('hidden');
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
+
   // --- CARD BUTTONS / IMAGE EVENTS ---
+  // --->>> MODIFIED attachCardEventListeners to remove fan hover <<<---
   function attachCardEventListeners() {
     const grid = document.getElementById('tributesGrid');
     if (!grid) return;
+
     grid.onclick = function handleGridClick(event) {
       const target = event.target;
       const button = target.closest('button[data-act]');
-      const img = target.closest('.fan-img');
+      const img = target.closest('.fan-img'); // Click listener for modal still needed
+
       if (button) {
         event.stopPropagation();
         const action = button.getAttribute('data-act');
@@ -593,7 +627,7 @@
         } else if (action === 'delete') {
           deleteTribute(id);
         }
-      } else if (img) {
+      } else if (img) { // If a fan image was clicked, open modal
         event.stopPropagation();
         const tIdx = parseInt(img.getAttribute("data-tidx"));
         const pIdx = parseInt(img.getAttribute("data-pidx"));
@@ -602,49 +636,69 @@
         }
       }
     };
-    document.querySelectorAll('.fan-img').forEach(img => {
-      img.onkeydown = function(e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); img.click(); }
-      }
-      img.removeEventListener('mouseenter', handleFanMouseEnter);
-      img.removeEventListener('mouseleave', handleFanMouseLeave);
-      img.addEventListener('mouseenter', handleFanMouseEnter);
-      img.addEventListener('mouseleave', handleFanMouseLeave);
-    });
+
+    // Attach keydown listeners directly to images for accessibility (modal opening)
+     document.querySelectorAll('.fan-img').forEach(img => {
+         img.onkeydown = function(e) {
+             if (e.key === 'Enter' || e.key === ' ') {
+                 e.preventDefault();
+                 img.click(); // Trigger the delegated click handler to open modal
+             }
+         }
+         // REMOVED hover listener attachments
+         // img.removeEventListener('mouseenter', handleFanMouseEnter);
+         // img.removeEventListener('mouseleave', handleFanMouseLeave);
+         // img.addEventListener('mouseenter', handleFanMouseEnter);
+         // img.addEventListener('mouseleave', handleFanMouseLeave);
+     });
   }
-  function handleFanMouseEnter() { this.classList.add('fan-expanded'); }
-  function handleFanMouseLeave() { this.classList.remove('fan-expanded'); }
+  // REMOVED hover handler functions as they are no longer used
+  // function handleFanMouseEnter() { this.classList.add('fan-expanded'); }
+  // function handleFanMouseLeave() { this.classList.remove('fan-expanded'); }
+  // --->>> END MODIFIED attachCardEventListeners <<<---
+
+
+  // --->>> MODIFIED setupCardAnimations to remove fan animation <<<---
   function setupCardAnimations() {
     if ('IntersectionObserver' in window) {
-      document.querySelectorAll('.fan-img').forEach(img => {
-        img.classList.remove('fan-anim', 'fan-pop');
-        const observer = new IntersectionObserver((entries, observerInstance) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              img.classList.add('fan-pop');
-              setTimeout(() => img.classList.remove('fan-pop'), 800);
-              observerInstance.unobserve(img);
-            }
-          });
-        }, { threshold: 0.5 });
-        observer.observe(img);
-      });
-      document.querySelectorAll('.tribute-card').forEach(card => {
-        card.classList.remove('card-mobile-anim');
-        const observer = new IntersectionObserver((entries, observerInstance) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              card.classList.add('card-mobile-anim');
-              setTimeout(() => card.classList.remove('card-mobile-anim'), 700);
-              observerInstance.unobserve(card);
-            }
-          });
-        }, { threshold: 0.42 });
-        observer.observe(card);
-      });
+
+        // REMOVED IntersectionObserver for .fan-img
+        /*
+        document.querySelectorAll('.fan-img').forEach(img => {
+            img.classList.remove('fan-anim', 'fan-pop');
+            const observer = new IntersectionObserver((entries, observerInstance) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        img.classList.add('fan-pop');
+                        setTimeout(() => img.classList.remove('fan-pop'), 800);
+                        observerInstance.unobserve(img);
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(img);
+        });
+        */
+
+        // Keep IntersectionObserver for .tribute-card animation
+        document.querySelectorAll('.tribute-card').forEach(card => {
+            card.classList.remove('card-mobile-anim');
+            const observer = new IntersectionObserver((entries, observerInstance) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        card.classList.add('card-mobile-anim');
+                        setTimeout(() => card.classList.remove('card-mobile-anim'), 700);
+                        observerInstance.unobserve(card);
+                    }
+                });
+            }, { threshold: 0.42 });
+            observer.observe(card);
+        });
     }
   }
-  // Modal gallery logic
+  // --->>> END MODIFIED setupCardAnimations <<<---
+
+
+  // --- MODAL GALLERY LOGIC --- (No changes needed here)
   let modalTributeIdx = 0, modalPhotoIdx = 0;
   function showModalGallery(tributeIdx, photoIdx) {
     if (!tributes[tributeIdx]) return;
@@ -671,7 +725,8 @@
     document.getElementById('modalImg').src = '';
     document.body.style.overflow = '';
   }
-  // Confetti mini-effect for celebration
+
+  // --- CONFETTI LOGIC --- (No changes needed here)
   function showConfetti() {
     const confettiBox = document.getElementById('confettiBox');
     confettiBox.style.display = 'flex';
@@ -692,7 +747,7 @@
     setTimeout(() => { confettiBox.style.display = 'none'; confettiBox.innerHTML = ''; }, 1900);
   }
 
-  // --- INITIALIZE & EVENTS ---
+  // --- INITIALIZE & EVENTS --- (No changes needed here)
   document.addEventListener("DOMContentLoaded", function() {
     fetchAndRenderTributes();
     try {
@@ -713,9 +768,9 @@
       const nextImgBtn = document.getElementById('nextImgBtn');
       if (nextImgBtn) {
         nextImgBtn.onclick = function(e) {
-          e.stopPropagation(); 
+          e.stopPropagation();
           let t = tributes[modalTributeIdx];
-          let photos = Array.isArray(t.photos) ? t.photos : []; 
+          let photos = Array.isArray(t.photos) ? t.photos : [];
           if (modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); }
         };
       }
@@ -731,7 +786,6 @@
 </script>
 </body>
 </html>
-
 
 
 
