@@ -372,33 +372,40 @@
     /*           AUTO-LOAD TIMER / INDICATOR / OBSERVER       */
     /* ------------------------------------------------------ */
 
-    /** Updates the loading indicator based on global state */
+    /** Updates the loading indicator (Spinner/Arrow/Hidden) */
     function updateIndicatorState() {
         const indicator = document.getElementById('singleLoadIndicator');
-        if (!indicator) return; // Exit if indicator element not found
+        if (!indicator) {
+            console.error("Indicator element #singleLoadIndicator not found!");
+            return; // Exit if indicator element not found
+        }
         // Log the state right before deciding what to show/hide
         console.log(`INDICATOR UPDATE: isLoading=${isLoading}, allLoaded=${allTributesLoaded}`);
 
         if (isLoading) {
             // State: Currently fetching data
             indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading...`;
-            indicator.classList.remove('hidden');
+            indicator.classList.remove('hidden'); // Ensure container is visible via class
+            indicator.style.display = 'flex';    // Ensure container is visible via style
             console.log("Indicator: Showing Spinner");
         } else if (!allTributesLoaded) {
             // State: Not loading, but more tributes might exist
             indicator.innerHTML = `<span class="bouncing-arrow"><i class="fa-solid fa-chevron-down"></i></span>`;
-            indicator.classList.remove('hidden');
+            indicator.classList.remove('hidden'); // Ensure container is visible via class
+            indicator.style.display = 'flex';    // Ensure container is visible via style
             console.log("Indicator: Showing Arrow");
         } else {
             // State: Not loading, and all tributes are confirmed loaded
-            indicator.classList.add('hidden');
-            console.log("Indicator: Hidden (All Loaded)");
+            // ** Explicitly hide using style.display **
+            indicator.classList.add('hidden'); // Keep adding class (might help if style is overridden)
+            indicator.style.display = 'none';  // Directly set display to none - this should reliably hide it
+            console.log("Indicator: Set display to none (All Loaded)");
         }
     }
 
     /** Starts the interval timer (7 seconds) to auto-load */
     function startAutoLoadTimer() {
-        stopAutoLoadTimer(); // Clear previous timer
+        stopAutoLoadTimer(); // Clear any existing timer
         console.log(`Starting auto-load timer (${AUTO_LOAD_INTERVAL}ms)`);
         autoLoadIntervalId = setInterval(() => {
             console.log("Auto-load timer tick.");
@@ -406,7 +413,7 @@
                 console.log("Auto-load calling loadNextTribute...");
                 loadNextTribute();
             } else {
-                console.log("Auto-load timer skipped fetch (busy or finished).");
+                console.log("Auto-load timer skipped fetch:", {isLoading, allTributesLoaded});
             }
         }, AUTO_LOAD_INTERVAL);
     }
@@ -422,23 +429,34 @@
 
     /** Sets up the IntersectionObserver to watch the scroll trigger */
     function setupScrollObserver() {
-        if (observer) { observer.disconnect(); } // Disconnect previous
+        if (observer) { observer.disconnect(); console.log("Observer disconnected."); } // Clean up previous one
         const scrollTrigger = document.getElementById('scrollTrigger');
-        if (!scrollTrigger) { console.error("#scrollTrigger element missing."); return; }
+        if (!scrollTrigger) {
+            console.error("#scrollTrigger element not found. Scroll loading disabled.");
+            return;
+        }
         // Options: Load 300px before element is visible
-        const options = { root: null, rootMargin: '0px 0px 300px 0px', threshold: 0.01 };
+        const options = {
+            root: null, // relative to viewport
+            rootMargin: '0px 0px 300px 0px', // Trigger early
+            threshold: 0.01 // Trigger even if 1% is visible
+        };
+        // Create observer
         observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !isLoading && !allTributesLoaded) { // Trigger conditions
+                // Trigger conditions: intersecting, not loading, not finished
+                if (entry.isIntersecting && !isLoading && !allTributesLoaded) {
                     console.log(">>> Scroll Observer triggering loadNextTribute <<<");
                     loadNextTribute(); // Load next card
                 }
             });
         }, options);
-        observer.observe(scrollTrigger); // Start watching
-        console.log("Scroll Observer setup.");
+        // Start observing
+        observer.observe(scrollTrigger);
+        console.log("Scroll IntersectionObserver setup with rootMargin.");
     }
 
+    
     /* ------------------------------------------------------ */
     /*            ADD/EDIT/DELETE & RELOAD LOGIC              */
     /* ------------------------------------------------------ */
