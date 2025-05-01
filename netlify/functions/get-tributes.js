@@ -8,7 +8,7 @@ const config = {
 };
 
 // Default values for pagination
-const DEFAULT_PAGE_SIZE = 50; // How many items per page
+const DEFAULT_PAGE_SIZE = 50; // How many items per page - You can adjust this default
 const MAX_PAGE_SIZE = 100;   // Set a maximum limit
 
 export const handler = async (event, context) => {
@@ -26,65 +26,97 @@ export const handler = async (event, context) => {
 
     // Validate and set defaults
     if (isNaN(page) || page < 1) {
-        page = 1; // Default to page 1 if invalid or missing
+        console.log(`Invalid or missing 'page' parameter. Defaulting to 1.`);
+        page = 1;
     }
     if (isNaN(pageSize) || pageSize < 1 || pageSize > MAX_PAGE_SIZE) {
-        pageSize = DEFAULT_PAGE_SIZE; // Default/max size if invalid or missing or too large
+        console.log(`Invalid or missing 'pageSize' parameter (or > ${MAX_PAGE_SIZE}). Defaulting to ${DEFAULT_PAGE_SIZE}.`);
+        pageSize = DEFAULT_PAGE_SIZE;
     }
 
     // Calculate OFFSET for SQL query
     const offset = (page - 1) * pageSize;
+    console.log(`Pagination calculated: page=${page}, pageSize=${pageSize}, offset=${offset}`);
     // --- End Pagination Logic ---
 
     const client = createClient(config);
 
     try {
-        // --- Modified Query with LIMIT and OFFSET ---
+        // --- Prepare the SQL query and arguments ---
+        const sqlQuery = "SELECT id, from_name, message, photos, created_at FROM tributes ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        const queryArgs = { limit: pageSize, offset: offset };
+
+        // --->>> ADD DEBUG LOG HERE <<<---
+        console.log("Executing SQL:", sqlQuery, "with Args:", queryArgs);
+        // --->>> END DEBUG LOG <<<---
+
+        // --- Execute the paginated query ---
         const tributesResult = await client.execute({
-            sql: "SELECT id, from_name, message, photos, created_at FROM tributes ORDER BY created_at DESC LIMIT :limit OFFSET :offset",
-            args: { limit: pageSize, offset: offset }
+            sql: sqlQuery,
+            args: queryArgs
         });
+        console.log(`Fetched ${tributesResult.rows.length} tributes.`); // Log how many rows were actually returned
 
         // --- Optional: Get total count for pagination metadata ---
-        // This requires a separate query. Consider if needed for your UI.
+        console.log("Executing SQL: SELECT COUNT(*) as totalCount FROM tributes");
         const countResult = await client.execute("SELECT COUNT(*) as totalCount FROM tributes");
         const totalCount = countResult.rows[0]?.totalCount ?? 0;
         const totalPages = Math.ceil(totalCount / pageSize);
+        console.log(`Total count: ${totalCount}, Total pages: ${totalPages}`);
         // --- End Optional Count ---
-
 
         // Map rows to a more standard JSON object format
         const tributes = tributesResult.rows.map(row => ({
             id: row.id,
             from: row.from_name,
             msg: row.message,
-            photos: row.photos ? JSON.parse(row.photos) : [],
-            date: row.created_at
+            // Safely parse photos JSON
+            photos: (() => {
+                try {
+                    return row.photos ? JSON.parse(row.photos) : [];
+                } catch (parseError) {
+                    console.error(`Error parsing photos JSON for tribute ID ${row.id}:`, parseError);
+                    return []; // Return empty array on parse error
+                }
+            })(),
+            date: row.created_at // Pass raw date string
         }));
+
+        const responsePayload = {
+            tributes: tributes,
+            pagination: {
+                currentPage: page,
+                pageSize: pageSize,
+                totalCount: Number(totalCount),
+                totalPages: totalPages
+            }
+        };
+
+        // Log the size of the response *before* returning (approximate)
+        const responseBodyString = JSON.stringify(responsePayload);
+        console.log(`Approximate response body size: ${responseBodyString.length} bytes.`);
 
         // --- Return paginated data AND metadata ---
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                tributes: tributes, // The actual data for the current page
-                pagination: {      // Metadata about the pagination
-                    currentPage: page,
-                    pageSize: pageSize,
-                    totalCount: Number(totalCount), // Ensure it's a number
-                    totalPages: totalPages
-                }
-            }),
+            body: responseBodyString, // Use the stringified body
         };
         // --- End Modified Return ---
 
     } catch (error) {
-        console.error("Error fetching tributes from Turso:", error);
+        console.error("Error during database operation or processing:", error);
+        // Ensure error details are logged, especially the message
+        console.error("Error Message:", error.message);
+        console.error("Error Stack:", error.stack);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Failed to fetch tributes' }),
+            // Provide a more generic error message to the client for security
+            body: JSON.stringify({ error: 'Failed to fetch tributes due to a server error.' }),
         };
     } finally {
-        // client.close(); // Close client if the library requires/recommends it
+        // Close client connection if needed (check @libsql/client docs for best practice)
+        // client.close(); might be necessary depending on how connections are managed
+        console.log("Function execution finished.");
     }
 };
