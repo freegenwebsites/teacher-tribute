@@ -5,214 +5,62 @@
     <title>Illustrated Retiring Teacher Tribute Board - Mdm Teh</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Tailwind CSS via CDN -->
+    <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome 6 via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         /* --- General Body & Font Styles --- */
-        body {
-            font-family: 'Quicksand', sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%); /* Pinkish gradient background */
-            color: #546e7a; /* Default text color */
-            letter-spacing: 0.02em;
-            box-sizing: border-box;
-            width: 100%;
-            overflow: initial !important; /* Allow body scroll */
-        }
-
-        h1, h2, h3, .script-font {
-            font-family: 'Indie Flower', cursive; /* Handwritten style for titles */
-        }
+        body { font-family: 'Quicksand', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%); color: #546e7a; letter-spacing: 0.02em; box-sizing: border-box; width: 100%; overflow: initial !important; }
+        h1, h2, h3, .script-font { font-family: 'Indie Flower', cursive; }
 
         /* --- Tribute Card Styles --- */
-        .tribute-card {
-            position: relative; /* For positioning absolute elements inside */
-            box-shadow: 0 10px 25px rgba(149, 157, 165, 0.1);
-            border-radius: 1.8rem; /* Rounded corners */
-            padding: 1.9rem 1.6rem 1.2rem 1.6rem; /* Inner spacing */
-            margin-bottom: 0.7rem; /* Space below card */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow: hidden; /* Hide parts of patterns that go outside */
-            border: 1px solid rgba(255, 255, 255, 0.8); /* Subtle border */
-            backdrop-filter: blur(5px); /* Glassy effect (if supported) */
-            /* Base transition for hover effect */
-            transition:
-                transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
-                box-shadow 0.19s;
-        }
-
-        /* Hide Edit/Delete Buttons and Date by default via CSS */
-        /* You can remove these rules if you want the buttons/date visible */
-        .tribute-card .absolute.right-3.top-3 {
-            display: none !important; /* Hides the div containing Edit/Delete buttons */
-        }
-        .tribute-card .absolute.bottom-3 {
-            display: none !important; /* Hides the div containing the date */
-        }
-
-        /* Card Hover Effect */
-        .tribute-card:hover {
-            transform: translateY(-12px) scale(1.04) rotate(-1.6deg); /* Lift, scale, and tilt */
-            z-index: 10; /* Bring card above others on hover */
-            box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1); /* Enhanced shadow */
-        }
+        .tribute-card { position: relative; box-shadow: 0 10px 25px rgba(149, 157, 165, 0.1); border-radius: 1.8rem; padding: 1.9rem 1.6rem 1.2rem 1.6rem; transition: transform 0.24s cubic-bezier(.24,1.46,.54,1.07), box-shadow 0.19s; margin-bottom: 0.7rem; display: flex; flex-direction: column; align-items: center; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); }
+        /* --- Hide Edit/Delete/Date --- */
+        .tribute-card .absolute.right-3.top-3 { display: none !important; }
+        .tribute-card .absolute.bottom-3 { display: none !important; }
+        /* --- Hover Effect --- */
+        .tribute-card:hover { transform: translateY(-12px) scale(1.04) rotate(-1.6deg); z-index: 10; box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1); }
 
         /* --- Card Fade-In Animation --- */
-        .tribute-card-fade-in {
-            opacity: 0; /* Start invisible */
-            transform: translateY(20px); /* Start slightly lower */
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Animation timing */
-        }
-        .tribute-card-fade-in.is-visible {
-            opacity: 1; /* Fade to visible */
-            transform: translateY(0); /* Move to final position */
-        }
+        .tribute-card-fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .tribute-card-fade-in.is-visible { opacity: 1; transform: translateY(0); }
 
         /* --- Fan Photo Stack Styles --- */
-        .fan-stack {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            min-height: 112px; /* Ensure space even if no photos */
-            width: 176px; /* Fixed width for positioning */
-            position: relative;
-            margin: 0 auto 1.2rem auto; /* Center horizontally, space below */
-            pointer-events: none; /* Allow clicks to pass through container */
-            z-index: 1; /* Base stack level */
-        }
-        .fan-img {
-            width: 96px;
-            height: 96px;
-            object-fit: cover; /* Scale image nicely */
-            border-radius: 1.12rem;
-            box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2); /* Subtle shadow */
-            transform-origin: 50% 80%; /* Rotate around bottom-center */
-            position: absolute; /* Allow positioning and overlap */
-            background: #f9fafb; /* Fallback background */
-            border: 2.5px solid #fff; /* White border */
-            z-index: 1; /* Each image is individually layered */
-            cursor: pointer; /* Indicate clickable */
-            pointer-events: auto; /* Make individual images clickable */
-            filter: brightness(1) saturate(1.02); /* Slight color pop */
-        }
+        .fan-stack { display: flex; flex-direction: row; align-items: center; justify-content: center; min-height: 112px; width: 176px; position: relative; margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; }
+        .fan-img { width: 96px; height: 96px; object-fit: cover; border-radius: 1.12rem; box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2); transform-origin: 50% 80%; position: absolute; background: #f9fafb; border: 2.5px solid #fff; z-index: 1; cursor: pointer; pointer-events: auto; filter: brightness(1) saturate(1.02); }
 
         /* --- Floating Background Elements --- */
-        .floating-celebrate {
-            position: absolute;
-            font-size: 1.23rem;
-            opacity: 0.17;
-            pointer-events: none;
-            animation: floatCelebrate 9.2s linear infinite;
-            z-index: 0; /* Behind content */
-        }
-        @keyframes floatCelebrate {
-            0% { transform: translateY(46px) scale(1.17); }
-            100% { transform: translateY(-220px) scale(1); }
-        }
+        .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.17; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
+        @keyframes floatCelebrate { 0% {transform: translateY(46px) scale(1.17);} 100% {transform: translateY(-220px) scale(1);} }
 
-        /* --- Custom Scrollbar (Webkit) --- */
-        .custom-scrollbar::-webkit-scrollbar { width: 7px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
-
-        /* --- Form & Input Styles --- */
-        .form-container {
-            background: linear-gradient(to right, #fdf5f7, #fef9fa);
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1);
-        }
-        input, textarea {
-            transition: all 0.2s;
-            border: 1px solid #f0e3e8 !important; /* Pinkish border */
-        }
-        input:focus, textarea:focus {
-            border-color: #ffbbd0 !important; /* Pinker focus border */
-            box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important; /* Pinker focus glow */
-        }
-        /* Remove number input arrows */
-        input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type="number"] { -moz-appearance: textfield; }
-
-        /* --- Button Styles --- */
-        .btn-gradient {
-            background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%);
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3);
-            border: none;
-        }
-        .btn-gradient:hover {
-            background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%);
-            box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4);
-            transform: translateY(-2px);
-        }
-        .btn-gradient:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4);
-        }
-
-        /* --- Confetti Styles --- */
-        .confetti {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; pointer-events: none; display: flex;
-            align-items: flex-start; justify-content: center; overflow: visible;
-        }
-        .confetti__dot {
-            position: absolute; width: 18px; height: 18px; border-radius: 99px;
-            opacity: 0.84; pointer-events: none; will-change: transform, opacity;
-            animation: confetti-fall 1.7s linear forwards;
-        }
-        @keyframes confetti-fall {
-            0% { transform: translateY(-80px) scale(.9) rotate(-20deg); }
-            80% { opacity: 1; } 95% { opacity: .8; }
-            100% { transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0; }
-        }
-
-        /* --- Footer Styles & Animations --- */
-        .footer-party {
-            min-height: 90px; padding-bottom: 0.1rem; position: relative; margin-top: 2.5rem;
-            background: linear-gradient(88deg, #fce8ff 70%, #f8f1fc 100%);
-            border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible;
-        }
-        .cap-throw { position: absolute; left: 25%; top: 14px; animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite; pointer-events: none; z-index: 2; }
-        .cap-throw2 { left: 68%; top: 12px; animation-delay: 1.1s; animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite; }
-        @keyframes capThrow { 0%{transform: translateY(0px) rotate(3deg);} 60%{transform: translateY(-50px) rotate(-30deg);} 100%{transform: translateY(0px) rotate(2deg);} }
-        @keyframes capThrow2 { 0%{transform: translateY(0px) rotate(-7deg);} 62%{transform: translateY(-46px) rotate(20deg);} 100%{transform: translateY(0px) rotate(-5deg);} }
-        .footer-teacher { position: absolute; right: 12%; bottom: 12px; z-index: 3; animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01); transform-origin: bottom right; }
-        @keyframes waveHand { 0%,100%{transform: rotate(0);} 14%{transform: rotate(-7deg);} 19%{transform: rotate(11deg);} 25%{transform: rotate(-12deg);} 36%{transform: rotate(8deg);} 47%{transform: rotate(0);} }
-
-        /* --- Print Styles --- */
+        /* --- Misc Styles --- */
+        .custom-scrollbar::-webkit-scrollbar { width: 7px; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; } .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
+        input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } input[type="number"] { -moz-appearance: textfield; }
+        .form-container { background: linear-gradient(to right, #fdf5f7, #fef9fa); border-radius: 1rem; border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1); }
+        input, textarea { transition: all 0.2s; border: 1px solid #f0e3e8 !important; }
+        input:focus, textarea:focus { border-color: #ffbbd0 !important; box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important; }
+        .btn-gradient { background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%); transition: all 0.3s; box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3); border: none; } .btn-gradient:hover { background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%); box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4); transform: translateY(-2px); } .btn-gradient:active { transform: translateY(1px); box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4); }
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: flex; align-items: flex-start; justify-content: center; overflow: visible; } .confetti__dot { position: absolute; width: 18px; height: 18px; border-radius: 99px; opacity: 0.84; pointer-events: none; will-change: transform, opacity; animation: confetti-fall 1.7s linear forwards; } @keyframes confetti-fall { 0%{transform: translateY(-80px) scale(.9) rotate(-20deg);} 80%{opacity: 1;} 95%{opacity: .8;} 100%{transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;} }
+        .footer-party { min-height: 90px; padding-bottom: 0.1rem; position: relative; margin-top: 2.5rem; background: linear-gradient(88deg, #fce8ff 70%, #f8f1fc 100%); border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible; } .cap-throw { position: absolute; left: 25%; top: 14px; animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite; pointer-events: none; z-index: 2; } .cap-throw2 { left: 68%; top: 12px; animation-delay: 1.1s; animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite; } @keyframes capThrow { 0%{transform: translateY(0px) rotate(3deg);} 60%{transform: translateY(-50px) rotate(-30deg);} 100%{transform: translateY(0px) rotate(2deg);} } @keyframes capThrow2 { 0%{transform: translateY(0px) rotate(-7deg);} 62%{transform: translateY(-46px) rotate(20deg);} 100%{transform: translateY(0px) rotate(-5deg);} } .footer-teacher { position: absolute; right: 12%; bottom: 12px; z-index: 3; animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01); transform-origin: bottom right; } @keyframes waveHand { 0%,100%{transform: rotate(0);} 14%{transform: rotate(-7deg);} 19%{transform: rotate(11deg);} 25%{transform: rotate(-12deg);} 36%{transform: rotate(8deg);} 47%{transform: rotate(0);} }
         @media print { .custom-scrollbar {overflow: visible !important;} }
-
-        /* --- Z-index helpers for Card Content --- */
-        .tribute-card > div:not(.fan-stack), .tribute-card > button { position: relative; z-index: 1; }
-        .tribute-card > .absolute.right-3.top-3 { z-index: 2; } /* Ensure buttons are clickable above pattern */
-
-        /* --- Aesthetic Page Titles --- */
-        .page-title { color: #e58392; font-size: 2.4rem; text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15); letter-spacing: 2px; }
-        .page-subtitle { color: #786d70; font-size: 1.15rem; opacity: 0.9; }
-        .highlight-text { color: #e58392; font-weight: 600; }
-
+        .tribute-card > div:not(.fan-stack), .tribute-card > button { position: relative; z-index: 1; } .tribute-card > .absolute.right-3.top-3 { z-index: 2; }
+        .page-title { color: #e58392; font-size: 2.4rem; text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15); letter-spacing: 2px; } .page-subtitle { color: #786d70; font-size: 1.15rem; opacity: 0.9; } .highlight-text { color: #e58392; font-weight: 600; }
     </style>
 </head>
-<body class="pb-10 selection:bg-pink-100"> <!-- Pink selection color -->
+<body class="pb-10 selection:bg-pink-100">
 
     <!-- Floating Background Elements -->
     <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#f09fa8;"><i class="fa-solid fa-book"></i></span>
     <span class="floating-celebrate left-1/4 top-56" style="animation-delay:1.6s; color:#ffb74d;"><i class="fa-solid fa-apple-whole"></i></span>
+    <!-- ... other floating elements ... -->
     <span class="floating-celebrate right-14 top-28" style="animation-delay:0.9s; color:#81c784;"><i class="fa-solid fa-seedling"></i></span>
     <span class="floating-celebrate left-1/3 top-44" style="animation-delay:2.1s; color:#ce93d8;"><i class="fa-solid fa-flower"></i></span>
     <span class="floating-celebrate right-1/4 top-56" style="animation-delay:1.2s; color:#ef9a9a;"><i class="fa-solid fa-star"></i></span>
     <span class="floating-celebrate left-3/5 top-96" style="animation-delay:2.36s; color:#4db6ac;"><i class="fa-solid fa-pencil"></i></span>
     <span class="floating-celebrate left-2/3 top-20" style="animation-delay:0.5s; color:#ffd54f;"><i class="fa-solid fa-bell"></i></span>
+
 
     <!-- Main Content Container -->
     <div class="max-w-5xl mx-auto mt-12 px-4">
@@ -230,33 +78,12 @@
         <form id="tributeForm" class="mb-10 form-container py-6 px-5 shadow-lg flex flex-wrap items-center justify-between">
             <!-- Hidden input to store the ID of the tribute being edited -->
             <input type="hidden" id="editIndex" value="">
-
-            <!-- Name Input -->
-            <div class="flex flex-col w-full md:w-1/4 mb-3 md:mb-0 md:pr-3">
-                <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label>
-                <input id="fromName" name="fromName" type="text" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="32" required placeholder="E.g. Alicia (Class of 2010)">
-            </div>
-
-            <!-- Message Textarea -->
-            <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-3 md:mb-0">
-                <label for="message" class="text-pink-500 font-semibold mb-1">Message</label>
-                <textarea id="message" name="message" rows="2" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="1500" required placeholder="Write your message..."></textarea>
-            </div>
-
-            <!-- Photo File Input -->
-            <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-3 md:mb-0">
-                <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label>
-                <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100">
-            </div>
-
+            <!-- Form Inputs (Name, Message, Photos) -->
+            <div class="flex flex-col w-full md:w-1/4 mb-3 md:mb-0 md:pr-3"> <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label> <input id="fromName" name="fromName" type="text" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="32" required placeholder="E.g. Alicia (Class of 2010)"> </div>
+            <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-3 md:mb-0"> <label for="message" class="text-pink-500 font-semibold mb-1">Message</label> <textarea id="message" name="message" rows="2" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="1500" required placeholder="Write your message..."></textarea> </div>
+            <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-3 md:mb-0"> <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label> <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100"> </div>
             <!-- Submit/Cancel Buttons -->
-            <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-3 md:mt-0">
-                <button id="submitBtn" type="submit" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150">
-                    <i class="fa-solid fa-paper-plane mr-1"></i>
-                    <span id="submitBtnText">Share</span>
-                </button>
-                <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button>
-            </div>
+            <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-3 md:mt-0"> <button id="submitBtn" type="submit" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150"> <i class="fa-solid fa-paper-plane mr-1"></i> <span id="submitBtnText">Share</span> </button> <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button> </div>
         </form>
 
         <!-- Tribute Cards Grid - Populated by JavaScript -->
@@ -265,7 +92,7 @@
         </div>
 
         <!-- Loading Indicator for fetching the next single card -->
-        <div id="singleLoadIndicator" class="text-center text-pink-400 italic mt-6 hidden h-10"> <!-- Fixed height prevents layout jump -->
+        <div id="singleLoadIndicator" class="text-center text-pink-400 italic mt-6 hidden h-10">
             <i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...
         </div>
 
@@ -283,36 +110,22 @@
 
     <!-- Modal for viewing a single photo -->
     <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-50 hidden flex items-center justify-center">
-        <div class="absolute inset-0 cursor-pointer" id="modalBG"></div> <!-- Background closes modal on click -->
+        <div class="absolute inset-0 cursor-pointer" id="modalBG"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border border-pink-100">
-            <!-- Close Button -->
-            <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-pink-400 hover:text-pink-600 focus:outline-none z-10" title="Close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <!-- Image Navigation -->
+            <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-pink-400 hover:text-pink-600 focus:outline-none z-10" title="Close"><i class="fa-solid fa-xmark"></i></button>
             <div class="w-full flex items-center justify-center mb-3">
-                <button type="button" id="prevImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden" title="Previous Image">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow">
-                    <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;">
-                </div>
-                <button type="button" id="nextImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden" title="Next Image">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
+                <button type="button" id="prevImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden" title="Previous Image"><i class="fa-solid fa-chevron-left"></i></button>
+                <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow"> <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;"> </div>
+                <button type="button" id="nextImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden" title="Next Image"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
-            <!-- Caption -->
             <div id="galleryCaption" class="text-center text-sm mt-2 mb-2 text-gray-500"></div>
         </div>
     </div>
 
     <!-- Animated Footer -->
     <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
-        <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-pink-400 text-2xl"></i></div>
-        <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-amber-400 text-2xl"></i></div>
-        <span class="footer-teacher">
-            <svg width="56" height="70" viewBox="0 0 56 70" fill="none"><ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/><circle cx="28" cy="34" r="20" fill="#fff"/><ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/><ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/><ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/><ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/><rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/><rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/><ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/></svg>
-        </span>
+        <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-pink-400 text-2xl"></i></div> <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-amber-400 text-2xl"></i></div>
+        <span class="footer-teacher"> <svg width="56" height="70" viewBox="0 0 56 70" fill="none"><ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/><circle cx="28" cy="34" r="20" fill="#fff"/><ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/><ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/><ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/><ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/><rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/><rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/><ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/></svg> </span>
         <span class="block font-semibold pt-10 pb-1 script-font" style="font-size:1.23rem;color:#e58392;text-shadow:0 1px 5px #fce8ffa8;"> 🎉 With heartfelt wishes for your next amazing chapter! 🎉 </span>
         <span class="block text-gray-500 pb-1" style="font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-400"></i> by everyone who is grateful for you. </span>
     </footer>
@@ -327,66 +140,23 @@
     /* ====================================================== */
     /*                     GLOBAL STATE                       */
     /* ====================================================== */
-
-    // Holds the actual data for all tributes that have been loaded so far.
-    // Used for populating the modal gallery and the edit form.
-    let tributes = [];
-
-    // Stores the ID of the tribute currently being edited, or null if not editing.
-    let editingTributeId = null;
-
-    // --- State specifically for the one-at-a-time loading ---
-
-    // Tracks the page number to request for the *next* single tribute.
-    // Since pageSize is always 1, page 'N' corresponds to the Nth tribute.
-    let nextPageToFetch = 1;
-
-    // Flag to prevent making multiple simultaneous fetch requests while one is pending.
-    let isLoading = false;
-
-    // Flag set to true when the backend indicates no more tributes are available.
-    let allTributesLoaded = false;
+    let tributes = []; // Holds data for all loaded tributes
+    let editingTributeId = null; // ID of tribute being edited
+    let nextPageToFetch = 1; // Page number for the next single tribute fetch
+    let isLoading = false; // Prevents concurrent fetches
+    let allTributesLoaded = false; // True when backend confirms no more tributes
 
     /* ====================================================== */
     /*                        CONSTANTS                       */
     /* ====================================================== */
-
-    // Array of Font Awesome icon classes used for the date line on cards. Rotates through these.
     const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
-
-    // Array of color pairs used for card background gradients. Rotates through these.
-    const CARD_GRADIENT_PAIRS = [
-        ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'],
-        ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'],
-        ['#fdf9ff', '#fffaf9']
-    ];
-
-    // Color definitions for the subtle background patterns on cards.
-    const patternColors = {
-        light: 'rgba(255, 255, 255, 0.35)',
-        dark: 'rgba(229, 131, 146, 0.06)',
-        accent: 'rgba(206, 147, 216, 0.05)'
-    };
+    const CARD_GRADIENT_PAIRS = [ ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'], ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'], ['#fdf9ff', '#fffaf9'] ];
+    const patternColors = { light: 'rgba(255, 255, 255, 0.35)', dark: 'rgba(229, 131, 146, 0.06)', accent: 'rgba(206, 147, 216, 0.05)' };
 
     /* ====================================================== */
     /*                    UTILITY FUNCTIONS                   */
     /* ====================================================== */
-
-    /**
-     * Converts a HEX color string to an RGB object.
-     * @param {string} hex - The hex color string (e.g., "#ff0000").
-     * @returns {object|null} - An object {r, g, b} or null if invalid.
-     */
-    function hexToRgb(hex) {
-        let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
-    }
-
-    /**
-     * Escapes HTML special characters in a string to prevent XSS.
-     * @param {string} str - The string to escape.
-     * @returns {string} - The escaped string.
-     */
+    function hexToRgb(hex) { let r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return r ? { r: parseInt(r[1], 16), g: parseInt(r[2], 16), b: parseInt(r[3], 16) } : null; }
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
       '&': '&',
@@ -396,298 +166,122 @@
       "'": '&#39;'
     }[s]));
   }
-
-    /**
-     * Formats a date string (ideally received in ISO-like format) into a user-friendly format.
-     * @param {string} dbDateString - The date string from the database.
-     * @returns {string} - Formatted date (e.g., "Apr 30, 2024") or an error indicator.
-     */
-    function formatDateString(dbDateString) {
-        if (!dbDateString || typeof dbDateString !== 'string') return '';
-        try {
-            // Attempt to handle common variations, prioritizing ISO 8601 format
-            const isoFriendlyString = dbDateString.replace(' ', 'T').replace(' UTC', 'Z');
-            const date = new Date(isoFriendlyString);
-            // Check if the date object is valid
-            if (isNaN(date.getTime())) {
-                console.warn("Could not parse date:", dbDateString);
-                return 'Date unavailable'; // Provide a fallback message
-            }
-            // Format valid date
-            return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-        } catch (e) {
-            console.error("Error formatting date:", dbDateString, e);
-            return ''; // Return empty string on error
-        }
-    }
+    function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const d = new Date(dbDateString.replace(' ', 'T').replace(' UTC', 'Z')); return isNaN(d.getTime()) ? 'Date unavailable' : d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { console.error("Date Format Error:", e); return ''; } }
 
     /* ====================================================== */
     /*                   RENDERING FUNCTIONS                  */
     /* ====================================================== */
 
-    /**
-     * Renders a single tribute object into an HTML card element,
-     * appends it to the grid, and applies a fade-in animation.
-     * @param {object} tribute - The tribute data object.
-     * @returns {HTMLElement|null} The appended card element or null if skipped.
-     */
+    /** Appends a single tribute card to the grid with fade-in */
     function renderSingleTribute(tribute) {
         const grid = document.getElementById("tributesGrid");
         const emptyState = document.getElementById('emptyState');
-        if (!grid || !emptyState) {
-            console.error("Cannot render tribute: Grid or empty state element not found.");
-            return null;
-        }
-
-        // Hide the empty state message if we are adding a card
+        if (!grid || !emptyState) return null;
         emptyState.classList.add('hidden');
-
-        // Prevent rendering duplicates if the same tribute is fetched again somehow
-        if (tributes.some(existing => existing.id === tribute.id)) {
-            console.warn("Duplicate tribute ID detected, skipping render:", tribute.id);
-            return null;
-        }
-        // Add the new tribute data to our global state array *before* rendering
+        if (tributes.some(existing => existing.id === tribute.id)) { console.warn("Skip duplicate render:", tribute.id); return null; }
         tributes.push(tribute);
-
-        // Get the overall index of this new tribute in the `tributes` array
         const cardIndex = tributes.length - 1;
-        // Generate the HTML string for the card
         const cardHtml = renderTributeCard(tribute, cardIndex);
-
-        // Create a temporary container to parse the HTML string into a DOM node
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = cardHtml.trim(); // Remove leading/trailing whitespace
-        const cardElement = tempDiv.firstChild; // Get the actual card element
-
-        if (!cardElement) {
-             console.error("Failed to create card element from HTML string.");
-             return null;
-        }
-
-        // Append the (currently invisible due to CSS) card element to the grid
+        const tempDiv = document.createElement('div'); tempDiv.innerHTML = cardHtml.trim(); const cardElement = tempDiv.firstChild;
+        if (!cardElement) return null;
         grid.appendChild(cardElement);
-
-        // Use requestAnimationFrame and setTimeout to ensure the CSS transition triggers correctly
-        requestAnimationFrame(() => {
-            setTimeout(() => {
-                // Add the 'is-visible' class to start the fade-in animation
-                cardElement.classList.add('is-visible');
-            }, 50); // Small delay (50ms) often helps ensure the transition starts
-        });
-
-        // Return the newly added and animating card element
+        requestAnimationFrame(() => { setTimeout(() => { cardElement.classList.add('is-visible'); }, 50); });
         return cardElement;
     }
 
-    /**
-     * Renders the stack of "fanned out" photo thumbnails for a tribute card.
-     * @param {object} tribute - The tribute data object containing a `photos` array.
-     * @param {number} tributeIdx - The overall index of the tribute in the `tributes` array (used for data attributes).
-     * @returns {string} - The HTML string for the fan gallery container and images.
-     */
+    /** Renders the fan photo gallery (Corrected Version) */
     function renderFanGallery(tribute, tributeIdx) {
-        // Ensure photos is an array, default to empty if not or null/undefined
         const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-        // If no photos, return an empty container to maintain layout spacing
-        if (!photoArray.length) return `<div class="fan-stack mb-1"></div>`;
-
-        let imgMarkup = "";
-        const numPhotos = Math.min(photoArray.length, 4); // Limit to showing 4 photos max
-        // Define angles for fanning based on the number of photos
-        const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-        // Calculate horizontal shift for centering the fan
-        const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
-
-        // Create an <img> tag for each photo
-        for (let i = 0; i < numPhotos; i++) {
-            // Basic validation of the photo source (expecting base64 or http(s) URL)
-            if (typeof photoArray[i] !== 'string' || (!photoArray[i].startsWith('data:image') && !photoArray[i].startsWith('http'))) {
-                console.warn(`Invalid photo data at index ${i} for tribute ${tribute.id}`);
-                continue; // Skip this invalid photo
-            }
-            const angle = spreadAngles[i]; // Get the rotation angle
-            const translateX = (numPhotos > 1) ? (i * 40) - horizontalShiftBase : 0; // Calculate horizontal position
-            const zIndex = numPhotos - i; // Stack photos visually (last photo on top)
-
-            // Generate the image tag with appropriate classes, styles, and data attributes
-            imgMarkup += `
-                <img
-                    src="${escapeHtml(photoArray[i])}"
-                    class="fan-img"
-                    data-tidx="${tributeIdx}" <!-- Store overall tribute index -->
-                    data-pidx="${i}"        <!-- Store photo index within the tribute -->
-                    tabindex="0"             <!-- Make image focusable for accessibility -->
-                    style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};"
-                    alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || 'Anonymous')}"
-                    loading="lazy"          <!-- Improve performance by lazy loading images -->
-                >
-            `;
+        if (!photoArray.length) {
+            return `<div class="fan-stack mb-1"></div>`; // Empty container if no photos
         }
-        // Return the container div with all the image tags inside
-        return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
+        let imgMarkup = "";
+        const numPhotos = Math.min(photoArray.length, 4);
+        const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
+        const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0; // Adjusted shift
+
+        for (let i = 0; i < numPhotos; i++) {
+            const photoSrc = photoArray[i];
+            // Validate photo source
+            if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) {
+                console.warn(`Invalid photo data at index ${i} for tribute ${tribute.id}`);
+                continue; // Skip invalid photo entries
+            }
+            const angle = spreadAngles[i];
+            const translateX = (numPhotos > 1) ? (i * 40) - horizontalShiftBase : 0;
+            const zIndex = numPhotos - i; // Last photo appears on top
+
+            // *** CRITICAL FIX: Ensure the entire <img> tag is correctly formed inside the template literal ***
+            imgMarkup += `
+                <img src="${escapeHtml(photoSrc)}"
+                     class="fan-img"
+                     data-tidx="${tributeIdx}"
+                     data-pidx="${i}"
+                     tabindex="0"
+                     style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};"
+                     alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || 'Anonymous')}"
+                     loading="lazy"
+                >`; // Ensure closing '>' is present and correctly placed
+        }
+        return `<div class="fan-stack mb-1">${imgMarkup}</div>`; // Return container with images
     }
 
-    /**
-     * Generates the complete HTML string for a single tribute card.
-     * Includes background gradients, patterns, content, and the initial fade-in class.
-     * @param {object} tribute - The tribute data object.
-     * @param {number} idx - The overall index of the tribute (used for cycling styles/icons).
-     * @returns {string} - The HTML string for the tribute card.
-     */
+
+    /** Generates HTML for a single tribute card */
     function renderTributeCard(tribute, idx) {
-        // Extract data with fallbacks for safety
-        const tributeId = tribute.id;
-        const fromName = tribute.from || "Anonymous";
-        const message = tribute.msg || "";
-        const date = tribute.date || ""; // Let formatDateString handle formatting/errors
-
-        // --- Dynamic Styling ---
-        // Cycle through background gradient pairs based on index
-        const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
-        const gradientColor1 = gradientPair[0], gradientColor2 = gradientPair[1];
-        const cardBaseGradient = `linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%)`;
-
-        // Cycle through background pattern types based on index
-        let cardPatternStyle = '', cardPatternBgImage = '';
-        const cardPatternType = idx % 5;
-        const patternColorDark = patternColors.dark, patternColorLight = patternColors.light;
-        switch (cardPatternType) {
-            case 0: cardPatternBgImage = `radial-gradient(${patternColorDark} 3%, transparent 4%), radial-gradient(${patternColorDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break;
-            case 1: cardPatternBgImage = `linear-gradient(135deg, ${patternColorDark} 1%, transparent 2%, transparent 50%, ${patternColorDark} 50%, ${patternColorDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break;
-            case 2: cardPatternBgImage = `linear-gradient(45deg, ${patternColorLight} 10%, transparent 12%, transparent 90%, ${patternColorLight} 91%, ${patternColorLight}), linear-gradient(135deg, ${patternColorLight} 10%, transparent 12%, transparent 90%, ${patternColorLight} 91%, ${patternColorLight})`; cardPatternStyle = `background-size: 38px 38px;`; break;
-            case 3: const waveSvgColor = patternColors.accent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgWaveCard = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(waveSvgColor)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgWaveCard)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break;
-            case 4: cardPatternBgImage = `radial-gradient(${patternColorDark} 0.8px, transparent 0), radial-gradient(${patternColorDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
-        }
-        // Combine pattern and gradient for the final background style
-        const cardBackgroundStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
-
-        // Cycle through date icons based on index
-        const dateIconClass = cardDateIcons[idx % cardDateIcons.length];
-
-        // --- Card HTML Structure ---
-        // The main div includes the 'tribute-card-fade-in' class for the animation.
-        // Data attributes `data-cardidx` and `data-id` are crucial for event handling and editing.
+        const tributeId = tribute.id; const fromName = tribute.from || "Anonymous"; const message = tribute.msg || ""; const date = tribute.date || "";
+        const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length]; const cardBaseGradient = `linear-gradient(135deg, ${gradientPair[0]} 0%, ${gradientPair[1]} 100%)`;
+        let cardPatternStyle = '', cardPatternBgImage = ''; const cardPatternType = idx % 5; const pDark = patternColors.dark, pLight = patternColors.light, pAccent = patternColors.accent;
+        switch (cardPatternType) { case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break; case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break; case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break; case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break; case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break; }
+        const cardBgStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
+        const dateIcon = cardDateIcons[idx % cardDateIcons.length];
         return `
-        <div class="tribute-card tribute-card-fade-in relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBackgroundStyle}">
-
-            <!-- Edit/Delete Buttons (Hidden by default via CSS) -->
-            <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;">
-                <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300">
-                    <i class="fa-solid fa-pen fa-xs"></i> <!-- Smaller icon -->
-                </button>
-                <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300">
-                    <i class="fa-solid fa-trash fa-xs"></i> <!-- Smaller icon -->
-                </button>
-            </div>
-
-            <!-- Photo Gallery -->
+        <div class="tribute-card tribute-card-fade-in relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBgStyle}">
+            <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;"> <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button> <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button> </div>
             ${renderFanGallery(tribute, idx)}
-
-            <!-- Sender Name -->
-            <div class="text-pink-600 font-bold mb-2 text-center" style="font-family:'Indie Flower',cursive; font-size: 1.2rem;">
-                ${escapeHtml(fromName)}
-            </div>
-
-            <!-- Message Body (with line breaks and scroll for long messages) -->
-            <div class="text-gray-700 mb-3 text-center px-1 text-sm" style="font-family:'Quicksand',sans-serif; max-height: 100px; overflow-y: auto;">
-                ${escapeHtml(message).replace(/\n/g, "<br>")} <!-- Convert newlines to <br> -->
-            </div>
-
-            <!-- Date (Hidden by default via CSS) -->
-            <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-                <i class="fa-solid ${dateIconClass} fa-xs"></i> <!-- Cycle through icons -->
-                <span>${formatDateString(date)}</span> <!-- Format the date -->
-            </div>
-        </div>
-        `;
+            <div class="text-pink-600 font-bold mb-2 text-center" style="font-family:'Indie Flower',cursive; font-size: 1.2rem;"> ${escapeHtml(fromName)} </div>
+            <div class="text-gray-700 mb-3 text-center px-1 text-sm" style="font-family:'Quicksand',sans-serif; max-height: 100px; overflow-y: auto;"> ${escapeHtml(message).replace(/\n/g, "<br>")} </div>
+            <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1"> <i class="fa-solid ${dateIcon} fa-xs"></i> <span>${formatDateString(date)}</span> </div>
+        </div>`;
     }
 
     /* ====================================================== */
     /*                API INTERACTION FUNCTIONS               */
     /* ====================================================== */
 
-    /**
-     * Fetches the next single tribute from the backend based on the `nextPageToFetch` state.
-     * Handles loading states, errors, rendering the fetched tribute, and detecting the end.
-     */
+    /** Fetches the next single tribute */
     async function loadNextTribute() {
-        const loadingIndicator = document.getElementById('singleLoadIndicator');
+        const indicator = document.getElementById('singleLoadIndicator');
         const emptyState = document.getElementById('emptyState');
         const allLoadedMsg = document.getElementById('allLoadedMessage');
+        const initialEmptyMsg = document.getElementById('initialEmptyMessage');
 
-        // Exit if already loading or if all tributes have been loaded
-        if (isLoading || allTributesLoaded) {
-            console.log("Skipping loadNextTribute:", { isLoading, allTributesLoaded });
-            return;
-        }
-
-        // Set loading state and show indicator
+        if (isLoading || allTributesLoaded) { console.log("Skip load:", {isLoading, allTributesLoaded}); return; }
         isLoading = true;
-        if (loadingIndicator) loadingIndicator.classList.remove('hidden');
-        console.log(`Fetching next tribute (page ${nextPageToFetch})...`);
+        if (indicator) indicator.classList.remove('hidden');
+        console.log(`FETCHING page ${nextPageToFetch}...`); // Log fetch attempt
 
         try {
-            // Fetch from the Netlify function, requesting the next page number with pageSize=1
             const response = await fetch(`/.netlify/functions/get-tributes?page=${nextPageToFetch}&pageSize=1`);
-
-            // Handle network or server errors (non-200 status codes)
-            if (!response.ok) {
-                let errorMsg = `HTTP error! status: ${response.status}`;
-                try {
-                    // Try to get more specific error from response body
-                    const errorData = await response.json();
-                    errorMsg = errorData.error || errorMsg;
-                } catch (e) { /* Response might not be JSON, ignore */ }
-                throw new Error(errorMsg);
-            }
-
-            // Parse the JSON response from the backend
+            if (!response.ok) { let eMsg = `HTTP error! status: ${response.status}`; try { const eData = await response.json(); eMsg = eData.error || eMsg; } catch(e){} throw new Error(eMsg); }
             const data = await response.json();
 
-            // Check if the backend returned a valid tribute array and if it contains data
             if (!data || !Array.isArray(data.tributes) || data.tributes.length === 0) {
-                // No more tributes available from the backend
-                console.log("All tributes loaded.");
-                allTributesLoaded = true; // Set flag to stop further loading attempts
-
-                // Update UI to show the appropriate end message
-                if (tributes.length === 0) {
-                    // If *no* tributes were *ever* loaded, show the initial empty state message
-                    if(emptyState) emptyState.classList.remove('hidden');
-                    if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
-                    document.getElementById('initialEmptyMessage').style.display = 'block'; // Ensure initial message is shown
-                } else {
-                    // If tributes were loaded previously, hide the main empty state container
-                    // and show only the "reached the end" message within it.
-                    if(emptyState) emptyState.classList.add('hidden'); // Keep parent hidden or style differently
-                     if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); // Show only the "end" message
-                     document.getElementById('initialEmptyMessage').style.display = 'none'; // Hide initial message
-                }
+                console.log("ALL TRIBUTES LOADED."); allTributesLoaded = true;
+                if (tributes.length === 0) { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; }
+                else { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'none';} // Show "end" message
             } else {
-                // Successfully fetched the next tribute
                 const tribute = data.tributes[0];
-                renderSingleTribute(tribute); // Render the card and add to the `tributes` array
-                nextPageToFetch++; // Increment the page number for the *next* request
+                console.log(`RECEIVED tribute ID: ${tribute.id}`); renderSingleTribute(tribute);
+                nextPageToFetch++; // Prepare for next fetch
             }
-
         } catch (error) {
-            // Handle errors during fetch or processing
             console.error("Could not load next tribute:", error);
-            // Update the loading indicator to show an error (optional)
-            if (loadingIndicator) loadingIndicator.innerText = "Error loading. Try scrolling again.";
-            // Note: We don't set `allTributesLoaded = true` on error, allowing the user to potentially retry on the next scroll.
+            if (indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i>Error loading. Scroll to retry.`;
         } finally {
-            // Always reset loading state, regardless of success or failure
             isLoading = false;
-            // Hide the loading indicator after a short delay to prevent visual jitter
-            if (loadingIndicator) {
-                setTimeout(() => {
-                    loadingIndicator.classList.add('hidden');
-                    // Reset indicator text for the next time it appears
-                    loadingIndicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`;
-                }, 300); // 300ms delay
-            }
+            if (indicator) { setTimeout(() => { indicator.classList.add('hidden'); indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`; }, 500); } // Hide slightly slower
+             console.log("Fetch complete. isLoading:", isLoading, "allLoaded:", allTributesLoaded); // Log state after fetch
         }
     }
 
@@ -695,715 +289,151 @@
     /*            ADD/EDIT/DELETE & RELOAD LOGIC              */
     /* ====================================================== */
 
-    /**
-     * Clears the current tribute grid and state, then reloads tributes from the beginning (page 1).
-     * Used after adding, editing, or deleting a tribute to ensure consistency.
-     */
+    /** Clears grid/state and reloads from page 1 */
     async function resetAndReloadAll() {
-        console.log("Resetting and reloading all tributes...");
-        const grid = document.getElementById("tributesGrid");
-        const emptyState = document.getElementById('emptyState');
-        const allLoadedMsg = document.getElementById('allLoadedMessage');
-        const initialEmptyMsg = document.getElementById('initialEmptyMessage');
-
-        // --- Clear the Grid ---
+        console.log(">>> RESETTING AND RELOADING ALL <<<");
+        const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState'); const allLoadedMsg = document.getElementById('allLoadedMessage'); const initialEmptyMsg = document.getElementById('initialEmptyMessage');
         if (grid) grid.innerHTML = '';
-
-        // --- Reset State Variables ---
-        tributes = []; // Clear the local data cache
-        nextPageToFetch = 1; // Reset to start from the first tribute
-        isLoading = false; // Ensure loading is not blocked
-        allTributesLoaded = false; // Allow loading again
-
-        // --- Reset UI Elements ---
-        if(emptyState) emptyState.classList.add('hidden'); // Hide empty state messages
-        if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
-        if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; // Ensure initial msg is ready if needed
-        document.getElementById('singleLoadIndicator')?.classList.add('hidden'); // Hide loading indicator
-
-        // --- Start Loading Process Anew ---
-        await loadNextTribute(); // Load the very first tribute
-
-        // --- Re-initialize Infinite Scroll ---
-        // The observer needs to be reset or re-attached to the trigger element
-        setupScrollObserver();
+        tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false;
+        if(emptyState) emptyState.classList.add('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'block';
+        document.getElementById('singleLoadIndicator')?.classList.add('hidden');
+        await loadNextTribute(); // Load first one
+        setupScrollObserver(); // Re-attach observer
     }
 
-    /**
-     * Submits tribute data (new or update) to the backend.
-     * Reloads all tributes via resetAndReloadAll() on success.
-     * NOTE: Assumes photos are passed as base64 strings (temporary workaround).
-     * @param {object} tributeData - Object containing { from, msg, photos (base64 array) }.
-     * @param {number|null} idToUpdate - The ID of the tribute to update, or null for new.
-     * @returns {Promise<boolean>} - True if successful, false otherwise.
-     */
+    /** Submits tribute (new/update), reloads on success */
     async function submitTribute(tributeData, idToUpdate = null) {
-        // Determine if it's an update or a new submission
         const isUpdating = idToUpdate !== null && !isNaN(parseInt(idToUpdate, 10));
-        const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
-        const method = isUpdating ? 'PUT' : 'POST';
-
-        // Prepare the payload (ensure ID is only included for updates)
-        const payload = {
-            from: tributeData.from,
-            msg: tributeData.msg,
-            photos: tributeData.photos // Currently assumes base64 strings based on temporary form handling
-        };
-        if (isUpdating) {
-            payload.id = parseInt(idToUpdate, 10);
-        }
-
+        const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST';
+        const payload = { from: tributeData.from, msg: tributeData.msg, photos: tributeData.photos }; if (isUpdating) { payload.id = parseInt(idToUpdate, 10); }
         console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+payload.id : 'New'})`);
-
         try {
-            // Send the request to the backend function
-            const response = await fetch(endpoint, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            // Check for network/server errors
-            if (!response.ok) {
-                 let errorMsg = `HTTP Error ${response.status}`;
-                 try { const errData = await response.json(); errorMsg = errData.error || errorMsg; } catch(e){}
-                 throw new Error(errorMsg);
-            }
-
-            // Success!
-            console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`);
-            showConfetti(); // Trigger success animation
-            await resetAndReloadAll(); // Reload the entire list from scratch
-            return true; // Indicate success
-
-        } catch (error) {
-            // Handle errors during submission
-            console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error);
-            alert(`Error submitting tribute: ${error.message}`); // Show error to user
-            return false; // Indicate failure
-        }
+            const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (!response.ok) { let e = `HTTP Error ${response.status}`; try{ const d=await response.json();e=d.error||e; }catch(x){} throw new Error(e); }
+            console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`); showConfetti(); await resetAndReloadAll(); return true;
+        } catch (error) { console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error); alert(`Error: ${error.message}`); return false; }
     }
 
-    /**
-     * Deletes a tribute by its ID via a backend request.
-     * Reloads all tributes via resetAndReloadAll() on success.
-     * @param {string|number} tributeId - The ID of the tribute to delete.
-     * @returns {Promise<boolean>} - True if successful, false otherwise.
-     */
+    /** Deletes tribute, reloads on success */
     async function deleteTribute(tributeId) {
-        // Validate the ID
-        const idToDelete = parseInt(tributeId, 10);
-        if (isNaN(idToDelete)) {
-            console.error("Invalid ID for deletion:", tributeId);
-            return false;
-        }
-
-        // Ask for user confirmation
-        if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) {
-            return false; // User cancelled
-        }
-
+        const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
         console.log("Attempting to delete tribute ID:", idToDelete);
-
         try {
-            // Send DELETE request to the backend function
-            const response = await fetch('/.netlify/functions/delete-tribute', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: idToDelete }) // Send ID in the request body
-            });
-
-            // Check for network/server errors
-            if (!response.ok) {
-                let errorMsg = `HTTP Error ${response.status}`;
-                try { const errData = await response.json(); errorMsg = errData.error || errorMsg; } catch(e){}
-                throw new Error(errorMsg);
-            }
-
-            // Success!
-            console.log("Tribute deleted successfully:", idToDelete);
-            await resetAndReloadAll(); // Reload the entire list from scratch
-            return true; // Indicate success
-
-        } catch (error) {
-            // Handle errors during deletion
-            console.error("Error deleting tribute:", error);
-            alert(`Error deleting tribute: ${error.message}`); // Show error to user
-            return false; // Indicate failure
-        }
+            const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
+            if (!response.ok) { let e = `HTTP Error ${response.status}`; try{ const d=await response.json();e=d.error||e; }catch(x){} throw new Error(e); }
+            console.log("Tribute deleted successfully:", idToDelete); await resetAndReloadAll(); return true;
+        } catch (error) { console.error("Error deleting tribute:", error); alert(`Error: ${error.message}`); return false; }
     }
 
     /* ====================================================== */
     /*          FORM HANDLING & PHOTO PROCESSING              */
     /* ====================================================== */
 
-    /**
-     * [TEMPORARY WORKAROUND] Converts selected image files to Base64 Data URLs.
-     * This is used ONLY because the proper image hosting solution is on hold.
-     * Ideally, this would be replaced by direct uploads to a service like Cloudinary.
-     * @param {FileList} fileList - The FileList object from the file input.
-     * @returns {Promise<string[]>} - An array of Base64 Data URL strings for valid images.
-     */
+    /** [TEMPORARY] Converts files to Base64 Data URLs */
     async function filesToDataURLs_Temporary(fileList) {
-        const MAX_FILES = 4; // Limit number of files
-        const MAX_SIZE_MB = 20; // Limit file size
-        const filesToProcess = Array.from(fileList).slice(0, MAX_FILES); // Take only the first few files
-
-        const readerPromises = filesToProcess.map(file => {
-            return new Promise((resolve, reject) => {
-                // Basic validation
-                if (!file.type.startsWith('image/')) {
-                    console.warn(`Skipping non-image file: ${file.name}`);
-                    return resolve(null); // Resolve with null for non-images
-                }
-                if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-                    alert(`File "${file.name}" is too large (max ${MAX_SIZE_MB}MB). It will be skipped.`);
-                    return resolve(null); // Resolve with null for large files
-                }
-
-                // Use FileReader to read the file as Data URL (base64)
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result); // Resolve promise with the base64 string
-                reader.onerror = (error) => {
-                     console.error(`FileReader error for ${file.name}:`, error);
-                     reject(error); // Reject promise on error
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        // Wait for all file reading attempts to settle (complete or fail)
-        const results = await Promise.allSettled(readerPromises);
-
-        // Filter out failures and null results, return only successful base64 strings
-        return results
-            .filter(result => result.status === 'fulfilled' && result.value !== null)
-            .map(result => result.value);
+        const MAX_FILES = 4, MAX_SIZE_MB = 20; const files = Array.from(fileList).slice(0, MAX_FILES);
+        const promises = files.map(f => new Promise((res, rej) => { if (!f.type.startsWith('image/')) return res(null); if (f.size > MAX_SIZE_MB * 1024 * 1024) { alert(`File "${f.name}" > ${MAX_SIZE_MB}MB.`); return res(null); } const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(f); }));
+        const results = await Promise.allSettled(promises); return results.filter(r => r.status === 'fulfilled' && r.value !== null).map(r => r.value);
     }
 
-    /**
-     * Handles the submission event of the main tribute form.
-     * Processes photos (currently to Base64), validates input,
-     * calls submitTribute, and handles UI updates (button state, form reset).
-     * @param {Event} e - The form submission event.
-     */
+    /** Handles form submission */
     async function handleFormSubmit(e) {
-        e.preventDefault(); // Prevent default page reload on form submission
-
-        // Get references to form elements
-        const submitBtn = document.getElementById('submitBtn');
-        const submitBtnText = document.getElementById('submitBtnText');
-        const fileInput = document.getElementById('photos');
-        const nameInput = document.getElementById('fromName');
-        const messageInput = document.getElementById('message');
-
-        // Basic check if elements exist
-        if (!submitBtn || !submitBtnText || !fileInput || !nameInput || !messageInput) {
-             console.error("One or more form elements could not be found.");
-             return;
-        }
-
-        // Prevent submission if tributes are currently loading in the background
-        if (isLoading) {
-            alert("Please wait for the current tribute to load before submitting.");
-            return;
-        }
-
-        // Disable submit button and update text to indicate processing
-        submitBtn.disabled = true;
-        const originalBtnText = editingTributeId ? "Update" : "Share";
-        let actionText = editingTributeId ? 'Updating...' : 'Sharing...'; // Base text
-         submitBtnText.textContent = actionText; // Initial update
-
-        let photos = []; // Array to store processed photo data (base64 for now)
-
+        e.preventDefault(); const btn = document.getElementById('submitBtn'), txt = document.getElementById('submitBtnText'), fin = document.getElementById('photos'); if (!btn || !txt || !fin) return; if (isLoading) { alert("Please wait for loading."); return; } btn.disabled = true; const origTxt = editingTributeId ? "Update" : "Share"; let actTxt = editingTributeId ? 'Updating...' : 'Sharing...'; txt.textContent = actTxt; let photos = [];
         try {
-            // --- Process Photos (Temporary Base64 Method) ---
-            const files = fileInput.files;
-            if (files.length > 0 && files.length <= 4) {
-                // Update button text if photos are being processed
-                actionText = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
-                submitBtnText.textContent = actionText;
-                console.log("Processing photos to Base64 (temporary)...");
-                // Convert selected files to base64
-                photos = await filesToDataURLs_Temporary(files);
-                console.log("Base64 Photos processed:", photos.length);
-                // Alert if some files failed (e.g., too large)
-                 if (photos.length < files.length) {
-                     alert("Some photos could not be processed (check size/type). Only valid photos will be included.");
-                 }
-            } else if (files.length > 4) {
-                // Prevent submission if too many files selected
-                alert("You can only upload a maximum of 4 photos.");
-                throw new Error("Too many photos selected."); // Stop execution
-            }
-             // Update button text again in case processing text was set
-            submitBtnText.textContent = actionText;
-            // --- End Temporary Photo Processing ---
-
-            // --- Get Text Inputs & Validate ---
-            const from = nameInput.value.trim() || "Anonymous"; // Default if empty
-            const msg = messageInput.value.trim();
-            // Basic validation
-            if (!msg) {
-                alert("Please enter a message for your tribute.");
-                throw new Error("Message cannot be empty.");
-            }
-            if (msg.length > 1500) { // Check length limit
-                alert("Your message is too long (max 1500 characters).");
-                throw new Error("Message exceeds 1500 characters.");
-            }
-
-            // --- Prepare Data & Submit ---
-            const tributeData = { from, msg, photos }; // Include base64 photo array
-            const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null;
-            // Validate editing ID if present
-            if (editingTributeId && isNaN(idToUpdate)) {
-                throw new Error("Invalid tribute ID for update.");
-            }
-
-            // Call the function to send data to the backend
-            const success = await submitTribute(tributeData, idToUpdate);
-
-            // --- Handle Success/Failure ---
-            if (success) {
-                resetForm(); // Clear the form only on successful submission/reload
-            } else {
-                // Re-enable the button if submission failed
-                submitBtn.disabled = false;
-                submitBtnText.textContent = originalBtnText;
-            }
-
-        } catch (error) {
-            // Catch errors from validation or submission process
-            console.error("Error handling form submit:", error);
-            // Show specific validation errors, otherwise a generic message might suffice
-            if (error.message !== "Message cannot be empty." && error.message !== "Message exceeds 1500 characters." && error.message !== "Too many photos selected.") {
-                 alert(`An error occurred: ${error.message}`); // Show other errors
-            }
-            // Always re-enable button and reset text after an error
-            submitBtn.disabled = false;
-            submitBtnText.textContent = originalBtnText;
-        }
+            const files = fin.files; if (files.length > 0 && files.length <= 4) { actTxt = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; txt.textContent = actTxt; photos = await filesToDataURLs_Temporary(files); if(photos.length < files.length){ alert("Some photos skipped (size/type).");} } else if (files.length > 4) { throw new Error("Too many photos selected (max 4)."); } txt.textContent = actTxt;
+            const from = document.getElementById('fromName').value.trim() || "Anonymous"; const msg = document.getElementById('message').value.trim(); if (!msg) throw new Error("Message cannot be empty."); if (msg.length > 1500) throw new Error("Message exceeds 1500 characters.");
+            const tributeData = { from, msg, photos }; const idUpd = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idUpd)) throw new Error("Invalid ID for update.");
+            const success = await submitTribute(tributeData, idUpd); if (success) { resetForm(); } else { btn.disabled = false; txt.textContent = origTxt; }
+        } catch (error) { console.error("Form submit error:", error); alert(error.message); btn.disabled = false; txt.textContent = origTxt; }
     }
 
-    /**
-     * Resets the tribute form fields to their default state and cancels editing mode.
-     */
-    function resetForm() {
-        const form = document.getElementById('tributeForm');
-        const submitBtnText = document.getElementById('submitBtnText');
-        const cancelBtn = document.getElementById('cancelEditBtn');
-        const submitBtn = document.getElementById('submitBtn');
+    /** Resets the form */
+    function resetForm() { const f = document.getElementById('tributeForm'), t = document.getElementById('submitBtnText'), c = document.getElementById('cancelEditBtn'), b = document.getElementById('submitBtn'); if (f) f.reset(); if (t) t.textContent = "Share"; if (c) c.classList.add('hidden'); if (b) b.disabled = false; editingTributeId = null; console.log("Form reset."); }
 
-        if (form) form.reset(); // Clears all inputs within the form
-        if (submitBtnText) submitBtnText.textContent = "Share"; // Reset button text
-        if (cancelBtn) cancelBtn.classList.add('hidden'); // Hide the "Cancel Edit" button
-        if (submitBtn) submitBtn.disabled = false; // Ensure submit button is enabled
-
-        editingTributeId = null; // Clear the editing state
-        console.log("Form reset and editing cancelled.");
-    }
-
-    /**
-     * Loads data from a specific tribute (found in the `tributes` array) into the form for editing.
-     * @param {string|number} tributeId - The ID of the tribute to load into the form.
-     */
-    function loadEditForm(tributeId) {
-        const idToLoad = parseInt(tributeId, 10);
-        if (isNaN(idToLoad)) return; // Ignore if ID is invalid
-
-        // Find the tribute data in the currently loaded global `tributes` array
-        const tributeToEdit = tributes.find(t => t.id === idToLoad);
-
-        // If the tribute isn't found (e.g., not loaded yet or deleted), show an alert.
-        if (!tributeToEdit) {
-            alert("Could not find tribute data to edit. It might be on a page not yet loaded or has been deleted. Please load more tributes or refresh.");
-            return;
-        }
-
-        console.log("Loading tribute for editing:", tributeToEdit);
-
-        // Get references to form inputs
-        const nameInput = document.getElementById('fromName');
-        const messageInput = document.getElementById('message');
-        const fileInput = document.getElementById('photos'); // Reference to clear it
-
-        // Populate the form fields with the tribute's data
-        if (nameInput) nameInput.value = tributeToEdit.from || ''; // Use fallback for safety
-        if (messageInput) messageInput.value = tributeToEdit.msg || ''; // Use fallback
-
-        // IMPORTANT: Clear the file input. Users must re-select photos if they want to change them during an edit.
-        // We cannot programmatically set files in a file input for security reasons.
-        if (fileInput) fileInput.value = '';
-
-        // Set the global state to indicate editing mode and store the ID
-        editingTributeId = idToLoad;
-
-        // Update the Submit button text and show the Cancel button
-        const submitBtnText = document.getElementById('submitBtnText');
-        const cancelBtn = document.getElementById('cancelEditBtn');
-        if (submitBtnText) submitBtnText.textContent = "Update";
-        if (cancelBtn) cancelBtn.classList.remove('hidden');
-
-        // Scroll the page to the top so the user sees the populated form
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    /** Loads tribute data into form for editing */
+    function loadEditForm(tributeId) { const idL = parseInt(tributeId, 10); if (isNaN(idL)) return; const tEdit = tributes.find(t => t.id === idL); if (!tEdit) { alert("Could not find tribute data to edit."); return; } console.log("Loading for edit:", tEdit); const nIn = document.getElementById('fromName'), mIn = document.getElementById('message'), fIn = document.getElementById('photos'); if (nIn) nIn.value = tEdit.from || ''; if (mIn) mIn.value = tEdit.msg || ''; if (fIn) fIn.value = ''; editingTributeId = idL; const sTxt = document.getElementById('submitBtnText'), cBtn = document.getElementById('cancelEditBtn'); if (sTxt) sTxt.textContent = "Update"; if (cBtn) cBtn.classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
     /* ====================================================== */
     /*                UI INTERACTION LISTENERS                */
     /* ====================================================== */
 
-    /**
-     * Attaches event listeners to the main grid container using event delegation.
-     * Handles clicks on edit buttons, delete buttons, and photo images within the grid.
-     */
+    /** Attaches delegated listeners to the grid */
     function attachGridEventListeners() {
-        const grid = document.getElementById('tributesGrid');
-        if (!grid) {
-            console.error("Cannot attach listeners: Tribute grid not found.");
-            return;
-        }
-
-        // --- Click Event Listener (Delegation) ---
-        grid.onclick = function handleGridClick(event) {
-            const target = event.target; // The actual element that was clicked
-
-            // Check if the click was on or inside an Edit or Delete button
-            const actionButton = target.closest('button[data-act]');
-            if (actionButton) {
-                event.stopPropagation(); // Prevent event from bubbling further if needed
-                const action = actionButton.getAttribute('data-act'); // Get action ('edit' or 'delete')
-                const id = actionButton.getAttribute('data-id'); // Get tribute ID
-                if (!id) { console.warn("Action button clicked without data-id"); return; }
-
-                // Perform action based on the button clicked
-                if (action === 'edit') {
-                    console.log("Edit action clicked for ID:", id);
-                    loadEditForm(id); // Load data into the form
-                } else if (action === 'delete') {
-                    console.log("Delete action clicked for ID:", id);
-                    deleteTribute(id); // Initiate deletion process
-                }
-                return; // Stop further checks if an action button was handled
-            }
-
-            // Check if the click was on or inside a photo image in the fan stack
-            const photoImage = target.closest('.fan-img');
-            if (photoImage) {
-                event.stopPropagation();
-                // Get tribute index and photo index from data attributes
-                const cardElement = photoImage.closest('.tribute-card'); // Find parent card
-                const tributeIndex = cardElement ? parseInt(cardElement.getAttribute("data-cardidx"), 10) : NaN;
-                const photoIndex = parseInt(photoImage.getAttribute("data-pidx"), 10);
-
-                // Validate indices and ensure the tribute data exists
-                if (!isNaN(tributeIndex) && !isNaN(photoIndex) && tributes[tributeIndex]) {
-                    console.log(`Photo clicked: Tribute Index ${tributeIndex}, Photo Index ${photoIndex}`);
-                    showModalGallery(tributeIndex, photoIndex); // Open the modal
-                } else {
-                    console.warn("Could not determine valid indices for modal gallery from clicked photo.", { tributeIndex, photoIndex });
-                }
-                return; // Stop further checks if a photo was handled
-            }
-        };
-
-        // --- Keydown Event Listener (Delegation for Accessibility) ---
-        grid.onkeydown = function handleGridKeyDown(event) {
-            // Allow opening the photo modal using Enter or Space key when a fan image is focused
-            if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.fan-img')) {
-                event.preventDefault(); // Prevent default spacebar scroll or button activation
-                event.target.click(); // Trigger the same logic as a mouse click
-            }
-            // Could add similar handling for Enter/Space on edit/delete buttons if needed
-        };
-
-        console.log("Event listeners attached to tributesGrid using delegation.");
+        const grid = document.getElementById('tributesGrid'); if (!grid) return;
+        grid.onclick = (e) => { const t = e.target; const btn = t.closest('button[data-act]'); const img = t.closest('.fan-img'); if (btn) { e.stopPropagation(); const act = btn.getAttribute('data-act'); const id = btn.getAttribute('data-id'); if (!id) return; if (act === 'edit') loadEditForm(id); else if (act === 'delete') deleteTribute(id); return; } if (img) { e.stopPropagation(); const card = img.closest('.tribute-card'); const tIdx = card ? parseInt(card.getAttribute("data-cardidx"), 10) : NaN; const pIdx = parseInt(img.getAttribute("data-pidx"), 10); if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } else { console.warn("Invalid modal indices.", {tIdx, pIdx}); } return; } };
+        grid.onkeydown = (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.fan-img')) { e.preventDefault(); e.target.click(); } }; console.log("Grid listeners attached.");
     }
 
     /* ====================================================== */
     /*                  MODAL GALLERY LOGIC                   */
     /* ====================================================== */
-
-    // Global variables to store the state of the currently open modal
-    let modalTributeIdx = 0; // Index of the tribute in the `tributes` array
-    let modalPhotoIdx = 0;   // Index of the photo within that tribute's `photos` array
-
-    /**
-     * Shows the modal gallery for a specific tribute and photo index.
-     * @param {number} tributeIdx - Index of the tribute in the global `tributes` array.
-     * @param {number} photoIdx - Index of the photo within the tribute's `photos` array.
-     */
-    function showModalGallery(tributeIdx, photoIdx) {
-        const modal = document.getElementById("galleryModal");
-        // Validate inputs before proceeding
-        if (!modal || typeof tributeIdx !== 'number' || tributeIdx < 0 || tributeIdx >= tributes.length || !tributes[tributeIdx]) {
-            console.error("Invalid tribute index or tribute data for modal gallery:", tributeIdx); return;
-        }
-        const tribute = tributes[tributeIdx];
-        if (!Array.isArray(tribute.photos) || typeof photoIdx !== 'number' || photoIdx < 0 || photoIdx >= tribute.photos.length) {
-            console.error("Invalid photo index or photos array for modal gallery:", photoIdx, tribute.photos); return;
-        }
-
-        // Store the indices globally for navigation functions
-        modalTributeIdx = tributeIdx;
-        modalPhotoIdx = photoIdx;
-
-        renderModalImage(); // Populate the modal with the correct image and controls
-
-        modal.classList.remove("hidden"); // Make the modal visible
-        modal.focus(); // Set focus to the modal for keyboard controls
-        document.body.style.overflow = 'hidden'; // Prevent scrolling of the page behind the modal
-        console.log(`Showing modal for Tribute ${tributeIdx}, Photo ${photoIdx}`);
-    }
-
-    /**
-     * Updates the content of the modal (image, caption, nav buttons) based on the current
-     * `modalTributeIdx` and `modalPhotoIdx`.
-     */
-    function renderModalImage() {
-        // Get references to modal elements
-        const modalImg = document.getElementById('modalImg');
-        const caption = document.getElementById('galleryCaption');
-        const prevBtn = document.getElementById('prevImgBtn');
-        const nextBtn = document.getElementById('nextImgBtn');
-
-        // Basic check if elements exist; close modal if something is wrong
-        if (!modalImg || !caption || !prevBtn || !nextBtn) {
-            console.error("Modal image, caption, or navigation buttons not found!");
-            closeModalGallery(); return;
-        }
-
-        // Get the current tribute and photo data
-        const tribute = tributes[modalTributeIdx];
-        const photos = Array.isArray(tribute.photos) ? tribute.photos : []; // Ensure photos is an array
-        const currentPhotoSrc = photos[modalPhotoIdx]; // Get the photo source (URL or base64)
-
-        // Validate the photo source string
-        if (typeof currentPhotoSrc !== 'string' || (!currentPhotoSrc.startsWith('data:image') && !currentPhotoSrc.startsWith('http'))) {
-            console.error(`Invalid image source at index ${modalPhotoIdx} for tribute ${tribute.id}`);
-            // Display an error state in the modal
-            modalImg.alt = "Invalid image source"; modalImg.src = ""; // Clear image
-            caption.textContent = "Error loading image.";
-            prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); // Hide nav
-            return;
-        }
-
-        // Set the image source and alt text
-        modalImg.src = currentPhotoSrc;
-        modalImg.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(tribute.from || 'Anonymous')}`;
-
-        // Update the caption text
-        caption.textContent = `${escapeHtml(tribute.from || 'Anonymous')}: Photo ${modalPhotoIdx + 1} of ${photos.length}`;
-
-        // Show/hide navigation buttons based on the current photo index
-        prevBtn.classList.toggle('hidden', modalPhotoIdx === 0); // Hide 'prev' if it's the first photo
-        nextBtn.classList.toggle('hidden', modalPhotoIdx >= photos.length - 1); // Hide 'next' if it's the last photo
-    }
-
-    /**
-     * Hides the modal gallery and restores page scrolling.
-     */
-    function closeModalGallery() {
-        const modal = document.getElementById("galleryModal");
-        const modalImg = document.getElementById('modalImg');
-        if (!modal) return;
-
-        modal.classList.add("hidden"); // Hide the modal visually
-        // Clear the image source to potentially free memory and stop loading
-        if (modalImg) { modalImg.src = ''; modalImg.alt = 'Gallery Image'; }
-        // Restore scrolling on the main page body
-        document.body.style.overflow = '';
-        console.log("Modal closed.");
-    }
-
-    /**
-     * Navigates to the previous or next image within the currently open modal gallery.
-     * @param {'prev' | 'next'} direction - The direction to navigate.
-     */
-    function navigateModal(direction) {
-        // Ensure current tribute and photos array are valid
-        if (!tributes[modalTributeIdx] || !Array.isArray(tributes[modalTributeIdx].photos)) {
-            console.warn("Cannot navigate modal, tribute or photos data missing."); return;
-        }
-        const photos = tributes[modalTributeIdx].photos;
-
-        // Update the photo index based on direction and bounds
-        if (direction === 'prev' && modalPhotoIdx > 0) {
-            modalPhotoIdx--; // Go to previous index
-            console.log("Navigating modal to previous image, index:", modalPhotoIdx);
-            renderModalImage(); // Re-render the modal with the new image
-        } else if (direction === 'next' && modalPhotoIdx < photos.length - 1) {
-            modalPhotoIdx++; // Go to next index
-            console.log("Navigating modal to next image, index:", modalPhotoIdx);
-            renderModalImage(); // Re-render the modal
-        } else {
-            // Already at the beginning or end
-            console.log("Modal navigation reached beginning or end.");
-        }
-    }
+    let modalTributeIdx = 0, modalPhotoIdx = 0;
+    function showModalGallery(tIdx, pIdx) { const m = document.getElementById("galleryModal"); if (!m || typeof tIdx !== 'number' || tIdx < 0 || tIdx >= tributes.length || !tributes[tIdx]) { console.error("Invalid modal data:", tIdx); return; } const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx !== 'number' || pIdx < 0 || pIdx >= t.photos.length) { console.error("Invalid photo index:", pIdx, t.photos); return; } modalTributeIdx = tIdx; modalPhotoIdx = pIdx; renderModalImage(); m.classList.remove("hidden"); m.focus(); document.body.style.overflow = 'hidden'; }
+    function renderModalImage() { const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'), prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn'); if (!img || !cap || !prev || !next) { closeModalGallery(); return; } const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : []; const src = p[modalPhotoIdx]; if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { console.error(`Invalid src index ${modalPhotoIdx}`); img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; } img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`; cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`; prev.classList.toggle('hidden', modalPhotoIdx === 0); next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); }
+    function closeModalGallery() { const m = document.getElementById("galleryModal"), i = document.getElementById('modalImg'); if (!m) return; m.classList.add("hidden"); if (i) i.src = ''; document.body.style.overflow = ''; }
+    function navigateModal(dir) { if (!tributes[modalTributeIdx]?.photos) return; const p = tributes[modalTributeIdx].photos; if (dir === 'prev' && modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } else if (dir === 'next' && modalPhotoIdx < p.length - 1) { modalPhotoIdx++; renderModalImage(); } }
 
     /* ====================================================== */
     /*                   CONFETTI ANIMATION                   */
     /* ====================================================== */
-
-    /**
-     * Displays a brief confetti animation. Called after successful tribute submission.
-     */
-    function showConfetti() {
-        const confettiBox = document.getElementById('confettiBox');
-        if (!confettiBox) return; // Exit if container element doesn't exist
-
-        confettiBox.style.display = 'flex'; // Make container visible
-        confettiBox.innerHTML = ''; // Clear any previous confetti elements
-
-        // Define confetti colors (pink theme)
-        const colors = ['#f8bbd0','#f48fb1','#f06292','#ec407a','#e91e63','#d81b60','#ce93d8','#ba68c8','#ab47bc','#9c27b0','#ffccbc','#ffab91','#ff8a65','#ff7043'];
-        const numConfetti = 30 + Math.floor(15 * Math.random()); // Number of confetti pieces
-
-        // Create and add each confetti dot element
-        for (let i = 0; i < numConfetti; i++) {
-            let dot = document.createElement('span');
-            dot.className = 'confetti__dot'; // Apply base style
-            dot.style.background = colors[Math.floor(Math.random() * colors.length)]; // Random color
-            dot.style.left = (2 + 96 * Math.random()) + '%'; // Random horizontal position
-            dot.style.top = (-5 + Math.random() * 10) + '%'; // Random vertical start position (slightly off-screen)
-            dot.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's'; // Random start delay
-            dot.style.opacity = (0.6 + 0.4 * Math.random()).toFixed(2); // Random opacity
-            const scale = 0.8 + Math.random() * 0.4; // Random size variation
-            dot.style.transform = `scale(${scale.toFixed(2)})`; // Apply size scale
-            confettiBox.appendChild(dot); // Add dot to the container
-        }
-
-        // Set a timeout to hide the confetti container after the animation finishes
-        setTimeout(() => {
-            if (confettiBox) {
-                confettiBox.style.display = 'none'; // Hide container
-                confettiBox.innerHTML = ''; // Remove dots from DOM
-            }
-        }, 2100); // Duration should be slightly longer than the CSS animation (1.7s)
-    }
+    function showConfetti() { const c=document.getElementById('confettiBox'); if(!c)return; c.style.display='flex'; c.innerHTML=''; const o=['#f8bbd0','#f48fb1','#f06292','#ec407a','#e91e63','#d81b60','#ce93d8','#ba68c8','#ab47bc','#9c27b0','#ffccbc','#ffab91','#ff8a65','#ff7043']; const n=30+Math.floor(15*Math.random()); for(let i=0;i<n;i++){ let d=document.createElement('span'); d.className='confetti__dot'; d.style.background=o[Math.floor(Math.random()*o.length)]; d.style.left=(2+96*Math.random())+'%'; d.style.top=(-5+Math.random()*10)+'%'; d.style.animationDelay=(Math.random()*0.9).toFixed(2)+'s'; d.style.opacity=(0.6+0.4*Math.random()).toFixed(2); const s=0.8+Math.random()*0.4; d.style.transform=`scale(${s.toFixed(2)})`; c.appendChild(d); } setTimeout(()=>{if(c){c.style.display='none';c.innerHTML='';}},2100); }
 
     /* ====================================================== */
     /*          INFINITE SCROLL INTERSECTION OBSERVER         */
     /* ====================================================== */
+    let observer; // Holds the IntersectionObserver instance
 
-    // Global variable to hold the IntersectionObserver instance
-    let observer;
-
-    /**
-     * Sets up the IntersectionObserver to watch the `#scrollTrigger` element.
-     * When the trigger element becomes visible, it calls `loadNextTribute`.
-     */
+    /** Sets up IntersectionObserver to load more tributes */
     function setupScrollObserver() {
-        // If an observer already exists, disconnect it first to avoid duplicates
-        if (observer) {
-            observer.disconnect();
-            console.log("Disconnected previous IntersectionObserver.");
-        }
-
-        // Get the target element that will trigger loading when visible
+        if (observer) { observer.disconnect(); console.log("Observer disconnected."); } // Clean up previous observer
         const scrollTrigger = document.getElementById('scrollTrigger');
-        if (!scrollTrigger) {
-            console.error("Scroll trigger element (#scrollTrigger) not found. Infinite scroll disabled.");
-            return;
-        }
+        if (!scrollTrigger) { console.error("#scrollTrigger not found."); return; }
 
-        // Configuration options for the IntersectionObserver
+        // Options for the observer
         const options = {
-            root: null, // Observe intersections relative to the browser viewport
-            rootMargin: '0px', // No margin around the viewport
-            threshold: 0.1 // Trigger when at least 10% of the trigger element is visible
+            root: null, // Observe relative to viewport
+             // Trigger when the element is 300px away from entering the bottom of the viewport
+             // This starts loading earlier, making it feel smoother. Adjust px value as needed.
+            rootMargin: '0px 0px 300px 0px',
+            threshold: 0.01 // Trigger even if just a tiny part becomes "visible" according to rootMargin
         };
 
-        // Create the observer instance
         observer = new IntersectionObserver((entries, observerInstance) => {
-            // entries is an array of observed elements (in this case, just one)
             entries.forEach(entry => {
-                // Check if the trigger element is intersecting (visible) and we're not already loading or finished
+                // Log intersection changes for debugging
+                 console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`);
                 if (entry.isIntersecting && !isLoading && !allTributesLoaded) {
-                    console.log("Scroll trigger intersected, loading next tribute.");
-                    loadNextTribute(); // Load the next tribute card
+                    console.log(">>> Triggering loadNextTribute from observer <<<");
+                    loadNextTribute();
                 }
             });
         }, options);
 
-        // Start observing the trigger element
         observer.observe(scrollTrigger);
-        console.log("IntersectionObserver setup and observing #scrollTrigger.");
+        console.log("IntersectionObserver setup with rootMargin.");
     }
 
     /* ====================================================== */
     /*              INITIALIZATION (DOM Ready)                */
     /* ====================================================== */
-
-    /**
-     * Runs once the HTML document is fully loaded and parsed.
-     * Attaches event listeners and initiates the first tribute load.
-     */
     document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOM fully loaded and parsed. Initializing application...");
-
-        // Attach event listeners that rely on event delegation (grid clicks)
-        attachGridEventListeners();
-
-        // Attach listeners to static elements on the page
-        try {
-            // Form submission
-            const tributeForm = document.getElementById('tributeForm');
-            if (tributeForm) {
-                tributeForm.onsubmit = handleFormSubmit;
-                console.log("Form submit handler attached.");
-            } else { console.warn("Tribute form (#tributeForm) not found."); }
-
-            // Cancel Edit button
-            const cancelBtn = document.getElementById('cancelEditBtn');
-            if (cancelBtn) { cancelBtn.onclick = resetForm; }
-             else { console.warn("Cancel edit button (#cancelEditBtn) not found."); }
-
-            // Modal close buttons (icon and background)
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
-            else { console.warn("Close modal button (#closeModalBtn) not found."); }
-            const modalBG = document.getElementById('modalBG');
-            if (modalBG) { modalBG.onclick = closeModalGallery; }
-            else { console.warn("Modal background (#modalBG) not found."); }
-
-            // Modal navigation buttons
-            const prevImgBtn = document.getElementById('prevImgBtn');
-            if (prevImgBtn) { prevImgBtn.onclick = (e) => { e.stopPropagation(); navigateModal('prev'); }; }
-             else { console.warn("Previous image button (#prevImgBtn) not found."); }
-            const nextImgBtn = document.getElementById('nextImgBtn');
-            if (nextImgBtn) { nextImgBtn.onclick = (e) => { e.stopPropagation(); navigateModal('next'); }; }
-             else { console.warn("Next image button (#nextImgBtn) not found."); }
-
-        } catch (error) {
-            // Catch errors during initial listener setup
-            console.error("Error attaching initial static event listeners:", error);
-        }
-
-        // Global keydown listener for modal navigation and closing (using Esc key)
-        window.addEventListener("keydown", function(e) {
-            const modal = document.getElementById("galleryModal");
-            // Only act if the modal exists and is currently visible
-            if (!modal || modal.classList.contains("hidden")) return;
-            // Handle specific keys for modal interaction
-            switch (e.key) {
-                case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break; // Trigger previous image
-                case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break; // Trigger next image
-                case "Escape": closeModalGallery(); break; // Close modal on Escape
-            }
-        });
-
-        // --- Initial Content Load ---
-        loadNextTribute(); // Load the very first tribute card
-
-        // --- Setup Infinite Scroll ---
-        setupScrollObserver(); // Initialize the IntersectionObserver
-
+        console.log("DOM fully loaded. Initializing...");
+        attachGridEventListeners(); // Setup delegated listeners on the grid
+        try { // Attach listeners to static elements
+            const form = document.getElementById('tributeForm'); if (form) form.onsubmit = handleFormSubmit; else console.warn("#tributeForm not found.");
+            const cancel = document.getElementById('cancelEditBtn'); if (cancel) cancel.onclick = resetForm; else console.warn("#cancelEditBtn not found.");
+            const closeBtn = document.getElementById('closeModalBtn'); if (closeBtn) closeBtn.onclick = closeModalGallery; else console.warn("#closeModalBtn not found.");
+            const modalBg = document.getElementById('modalBG'); if (modalBg) modalBg.onclick = closeModalGallery; else console.warn("#modalBG not found.");
+            const prevBtn = document.getElementById('prevImgBtn'); if (prevBtn) prevBtn.onclick=(e)=>{e.stopPropagation();navigateModal('prev');}; else console.warn("#prevImgBtn not found.");
+            const nextBtn = document.getElementById('nextImgBtn'); if (nextBtn) nextBtn.onclick=(e)=>{e.stopPropagation();navigateModal('next');}; else console.warn("#nextImgBtn not found.");
+        } catch (error) { console.error("Error attaching static listeners:", error); }
+        // Global keydown listener for modal
+        window.addEventListener("keydown", function(e) { const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return; switch (e.key) { case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break; case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break; case "Escape": closeModalGallery(); break; } });
+        // Initial load & scroll setup
+        loadNextTribute();
+        setupScrollObserver();
         console.log("Initialization complete.");
     });
-
 </script>
 <!-- ======================================================== -->
 <!--                   END JAVASCRIPT                       -->
