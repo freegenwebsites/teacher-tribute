@@ -346,7 +346,15 @@
     /*                    UTILITY FUNCTIONS                   */
     /* ------------------------------------------------------ */
     /** Escapes HTML */
-    function escapeHtml(str) { return String(str).replace(/[&<>"']/g, s => ({'&': '&','<': '<','>': '>','"': '"',"'": '''} [s])); }
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, s => ({
+      '&': '&',
+      '<': '<',
+      '>': '>',
+      '"': '"',
+      "'": '&#39;'
+    }[s]));
+  }
     /** Formats Date String */
     function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const d = new Date(dbDateString.replace(' ', 'T').replace(' UTC', 'Z')); return isNaN(d.getTime()) ? 'Date unavailable' : d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { console.error("Date Format Error:", e); return ''; } }
 
