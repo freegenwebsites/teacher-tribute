@@ -138,9 +138,10 @@
     /* ------------------------------------------------------ */
     let tributes = [];              // Array holds data of all loaded tributes
     let editingTributeId = null;    // ID of tribute being edited, null if none
-    let nextPageToFetch = 1;        // Page number for the next single fetch (pageSize=1)
+    let nextPageToFetch = 1;        // Page number for the next single tribute fetch
     let isLoading = false;          // Flag: Is a fetch currently in progress?
     let allTributesLoaded = false;  // Flag: Are all tributes loaded from backend?
+    let autoLoadIntervalId = null;  /* NEW: ID for the auto-load timer */
 
     /* ------------------------------------------------------ */
     /*                        CONSTANTS                       */
@@ -151,6 +152,8 @@
     const CARD_GRADIENT_PAIRS = [ ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'], ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'], ['#fdf9ff', '#fffaf9'] ];
     // Colors for background patterns
     const patternColors = { light: 'rgba(255, 255, 255, 0.35)', dark: 'rgba(229, 131, 146, 0.06)', accent: 'rgba(206, 147, 216, 0.05)' };
+    // Timer interval for auto-loading (in milliseconds)
+    const AUTO_LOAD_INTERVAL = 15000; // 15 seconds
 
     /* ------------------------------------------------------ */
     /*                    UTILITY FUNCTIONS                   */
@@ -204,7 +207,7 @@
         return cardElement;
     }
 
-    /** Renders the fan photo gallery (Corrected structure) */
+    /** Renders the fan photo gallery */
     function renderFanGallery(tribute, tributeIdx) {
         const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
         if (!photoArray.length) return `<div class="fan-stack mb-1"></div>`; // Return empty if no photos
@@ -213,35 +216,35 @@
         const numPhotos = Math.min(photoArray.length, 4); // Max 4 photos shown
         // Angles & positions for fan effect
         const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-        const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
+        const hShift = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
 
         for (let i = 0; i < numPhotos; i++) {
             const photoSrc = photoArray[i];
             // Validate src (base64 or http/s)
             if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) {
-                console.warn(`Invalid photo src at index ${i} for tribute ${tribute.id}`);
+                console.warn(`Invalid photo src index ${i} for ID ${tribute.id}`);
                 continue; // Skip invalid item
             }
             const angle = spreadAngles[i];
-            const translateX = (numPhotos > 1) ? (i * 40) - horizontalShiftBase : 0;
-            const zIndex = numPhotos - i; // Last photo is highest z-index
+            const tX = (numPhotos > 1) ? (i * 40) - hShift : 0;
+            const z = numPhotos - i; // Last photo is highest z-index
 
-            // ** Fixed img tag structure **
+            // Create img tag
             imgMarkup += `
                 <img src="${escapeHtml(photoSrc)}"
                      class="fan-img"
                      data-tidx="${tributeIdx}"
                      data-pidx="${i}"
                      tabindex="0"
-                     style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};"
-                     alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || 'Anonymous')}"
-                     loading="lazy">`; // Closing tag here
+                     style="transform: rotate(${angle}deg) translateX(${tX}px); z-index: ${z};"
+                     alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || '?')}"
+                     loading="lazy">`;
         }
         return `<div class="fan-stack mb-1">${imgMarkup}</div>`; // Return container + images
     }
 
 
-    /** Generates HTML string for one tribute card */
+    /** Generates HTML for a single tribute card (Message text now wraps) */
     function renderTributeCard(tribute, idx) {
         // Extract data
         const tributeId = tribute.id; const fromName = tribute.from || "Anonymous";
@@ -261,13 +264,16 @@
         const cardBgStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
         const dateIcon = cardDateIcons[idx % cardDateIcons.length];
 
-        // Return HTML structure including fade-in class
+        // Return HTML structure
         return `
         <div class="tribute-card tribute-card-fade-in relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBgStyle}">
             <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;"> <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button> <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button> </div>
             ${renderFanGallery(tribute, idx)}
             <div class="text-pink-600 font-bold mb-2 text-center" style="font-family:'Indie Flower',cursive; font-size: 1.2rem;"> ${escapeHtml(fromName)} </div>
-            <div class="text-gray-700 mb-3 text-center px-1 text-sm" style="font-family:'Quicksand',sans-serif; max-height: 100px; overflow-y: auto;"> ${escapeHtml(message).replace(/\n/g, "<br>")} </div>
+            <!-- Message Div: No max-height or overflow needed -->
+            <div class="text-gray-700 mb-3 text-center px-1 text-sm w-full" style="font-family:'Quicksand',sans-serif;">
+                ${escapeHtml(message).replace(/\n/g, "<br>")}
+            </div>
             <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1"> <i class="fa-solid ${dateIcon} fa-xs"></i> <span>${formatDateString(date)}</span> </div>
         </div>`;
     }
@@ -276,80 +282,95 @@
     /*                API INTERACTION FUNCTIONS               */
     /* ------------------------------------------------------ */
 
-    /** Fetches the next single tribute */
+    /** Fetches the next single tribute from the backend */
     async function loadNextTribute() {
         const indicator = document.getElementById('singleLoadIndicator');
         const emptyState = document.getElementById('emptyState');
         const allLoadedMsg = document.getElementById('allLoadedMessage');
         const initialEmptyMsg = document.getElementById('initialEmptyMessage');
 
-        // Prevent fetch if already loading or all tributes are loaded
+        // Prevent fetch if already loading or finished
         if (isLoading || allTributesLoaded) {
             console.log("Skip load:", {isLoading, allTributesLoaded});
             return;
         }
         isLoading = true; // Set loading flag
-        if (indicator) indicator.classList.remove('hidden'); // Show loading spinner
-        const pageBeingFetched = nextPageToFetch; // Track page number for first load check
+        if (indicator) indicator.classList.remove('hidden'); // Show spinner
+        const pageBeingFetched = nextPageToFetch; // Remember page number for check
         console.log(`FETCHING page ${pageBeingFetched}...`);
 
         try {
             // Fetch page 'pageBeingFetched' with pageSize=1
             const response = await fetch(`/.netlify/functions/get-tributes?page=${pageBeingFetched}&pageSize=1`);
-            // Handle HTTP errors
-            if (!response.ok) {
-                let eMsg = `HTTP error! status: ${response.status}`;
-                try { const eData = await response.json(); eMsg = eData.error || eMsg; } catch(e){}
-                throw new Error(eMsg);
-            }
-            const data = await response.json(); // Parse JSON response
+            if (!response.ok) { /* Handle HTTP errors */ throw new Error(`HTTP Error ${response.status}`); }
+            const data = await response.json(); // Parse JSON
 
-            // Check if data is valid and contains tributes
+            // Check if tributes array exists and has items
             if (!data || !Array.isArray(data.tributes) || data.tributes.length === 0) {
-                // No more tributes found
+                // No more tributes
                 console.log("ALL TRIBUTES LOADED.");
-                allTributesLoaded = true; // Set flag to stop observer
-                // Show appropriate message
-                if (tributes.length === 0) { // If grid was always empty
-                     if(emptyState) emptyState.classList.remove('hidden'); // Show parent container
-                     if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); // Hide "end" message
-                     if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; // Show "be the first" message
-                } else { // If grid has items, show "reached end"
-                     if(emptyState) emptyState.classList.remove('hidden'); // Show parent container
-                     if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); // Show "end" message
-                     if(initialEmptyMsg) initialEmptyMsg.style.display = 'none'; // Hide "be the first" message
-                }
+                allTributesLoaded = true; // Set flag
+                stopAutoLoadTimer(); // Stop the auto-load timer
+                // Update empty state display logic
+                if (tributes.length === 0) { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; }
+                else { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'none'; }
             } else {
-                // Tribute received!
+                // Tribute received
                 const tribute = data.tributes[0];
                 console.log(`RECEIVED tribute ID: ${tribute.id}`);
                 renderSingleTribute(tribute); // Render it
-                nextPageToFetch++; // Increment page counter for the next fetch
+                nextPageToFetch++; // Increment page counter for next time
 
-                // ** FIX ** Setup observer only AFTER the first successful load
+                // If this was the first tribute, setup observer and timer
                 if (pageBeingFetched === 1) {
-                    console.log("First tribute loaded, setting up scroll observer now.");
+                    console.log("First tribute loaded, setting up observer and timer.");
                     setupScrollObserver();
+                    startAutoLoadTimer(); // Start auto-load now
                 }
             }
         } catch (error) {
             // Handle fetch errors
             console.error("Could not load next tribute:", error);
-            if (indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i>Error loading. Scroll to retry.`;
+            if (indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i>Error loading. Scroll/Wait to retry.`;
+            // Don't stop timer on error, allow retry
         } finally {
             // Always run after try/catch
             isLoading = false; // Reset loading flag
             // Hide indicator after a delay
-            if (indicator) {
-                setTimeout(() => {
-                    indicator.classList.add('hidden');
-                    indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`; // Reset text
-                }, 500); // Hide slightly slower
-            }
-            console.log("Fetch complete. State:", {isLoading, allTributesLoaded, nextPageToFetch}); // Log state
+            if (indicator) { setTimeout(() => { indicator.classList.add('hidden'); indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`; }, 500); }
+            console.log("Fetch complete. State:", {isLoading, allTributesLoaded, nextPageToFetch});
         }
     }
 
+
+    /* ------------------------------------------------------ */
+    /*           AUTO-LOAD TIMER FUNCTIONS                    */
+    /* ------------------------------------------------------ */
+
+    /** Starts the interval timer to auto-load tributes */
+    function startAutoLoadTimer() {
+        stopAutoLoadTimer(); // Clear any existing timer first
+        console.log(`Starting auto-load timer (${AUTO_LOAD_INTERVAL}ms)`);
+        autoLoadIntervalId = setInterval(() => {
+            console.log("Auto-load timer triggered.");
+            // Only try to load if not already loading and not finished
+            if (!isLoading && !allTributesLoaded) {
+                console.log("Auto-load timer calling loadNextTribute...");
+                loadNextTribute();
+            } else {
+                console.log("Auto-load timer skipped fetch:", {isLoading, allTributesLoaded});
+            }
+        }, AUTO_LOAD_INTERVAL); // Use constant interval
+    }
+
+    /** Stops the interval timer */
+    function stopAutoLoadTimer() {
+        if (autoLoadIntervalId) {
+            console.log("Stopping auto-load timer.");
+            clearInterval(autoLoadIntervalId); // Clear the interval
+            autoLoadIntervalId = null; // Reset the ID variable
+        }
+    }
 
     /* ------------------------------------------------------ */
     /*            ADD/EDIT/DELETE & RELOAD LOGIC              */
@@ -358,80 +379,48 @@
     /** Clears grid/state and reloads tributes from page 1 */
     async function resetAndReloadAll() {
         console.log(">>> RESETTING AND RELOADING ALL <<<");
-        // Get references to elements
-        const grid = document.getElementById("tributesGrid");
-        const emptyState = document.getElementById('emptyState');
-        const allLoadedMsg = document.getElementById('allLoadedMessage');
-        const initialEmptyMsg = document.getElementById('initialEmptyMessage');
+        stopAutoLoadTimer(); // Stop auto-load during reset
+        // Get references
+        const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
+        const allLoadedMsg = document.getElementById('allLoadedMessage'); const initialEmptyMsg = document.getElementById('initialEmptyMessage');
         const indicator = document.getElementById('singleLoadIndicator');
 
-        // Clear grid content
+        // Clear UI
         if (grid) grid.innerHTML = '';
+        if(emptyState) emptyState.classList.add('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
+        if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; if(indicator) indicator.classList.add('hidden');
 
-        // Reset state variables
-        tributes = [];
-        nextPageToFetch = 1;
-        isLoading = false;
-        allTributesLoaded = false;
+        // Reset State
+        tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false;
 
-        // Reset UI messages/indicators
-        if(emptyState) emptyState.classList.add('hidden');
-        if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
-        if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; // Show initial message potential
-        if(indicator) indicator.classList.add('hidden'); // Hide loading spinner
+        // Disconnect observer temporarily
+        if (observer) { observer.disconnect(); console.log("Observer disconnected during reset."); }
 
-        // Disconnect observer *before* starting load to prevent premature triggers
-        if (observer) {
-            observer.disconnect();
-            console.log("Observer disconnected during reset.");
-        }
-
-        // Load the first tribute again
+        // Load first tribute (observer/timer will restart inside if successful)
         await loadNextTribute();
-        // The observer will be set up again inside loadNextTribute if the first load is successful
     }
 
-    /** Submits tribute (new/update), then calls resetAndReloadAll */
+    /** Submits tribute (new/update), reloads on success */
     async function submitTribute(tributeData, idToUpdate = null) {
-        const isUpdating = idToUpdate !== null && !isNaN(parseInt(idToUpdate, 10));
-        const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
-        const method = isUpdating ? 'PUT' : 'POST';
-        const payload = { from: tributeData.from, msg: tributeData.msg, photos: tributeData.photos }; // Photos are base64
-        if (isUpdating) { payload.id = parseInt(idToUpdate, 10); }
-
+        const isUpdating = idToUpdate !== null; const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST';
+        const payload = { from: tributeData.from, msg: tributeData.msg, photos: tributeData.photos }; if (isUpdating) { payload.id = parseInt(idToUpdate, 10); }
         console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+payload.id : 'New'})`);
         try {
             const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (!response.ok) { let e = `HTTP Error ${response.status}`; try{ const d=await response.json();e=d.error||e; }catch(x){} throw new Error(e); }
-            console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`);
-            showConfetti();         // Show success animation
-            await resetAndReloadAll(); // Reload everything
-            return true;
-        } catch (error) {
-            console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error);
-            alert(`Error submitting tribute: ${error.message}`);
-            return false;
-        }
+            if (!response.ok) { /* Handle error */ throw new Error(`HTTP Error ${response.status}`); }
+            console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`); showConfetti(); await resetAndReloadAll(); return true;
+        } catch (error) { console.error(`Error submitting tribute:`, error); alert(`Error: ${error.message}`); return false; }
     }
 
-    /** Deletes tribute, then calls resetAndReloadAll */
+    /** Deletes tribute, reloads on success */
     async function deleteTribute(tributeId) {
-        const idToDelete = parseInt(tributeId, 10);
-        if (isNaN(idToDelete)) return false;
-        if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
-
-        console.log("Attempting to delete tribute ID:", idToDelete);
+        const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure?')) return false;
+        console.log("Deleting tribute ID:", idToDelete);
         try {
             const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
-            if (!response.ok) { let e = `HTTP Error ${response.status}`; try{ const d=await response.json();e=d.error||e; }catch(x){} throw new Error(e); }
-            console.log("Tribute deleted successfully:", idToDelete);
-            await resetAndReloadAll(); // Reload everything
-            return true;
-        } catch (error) {
-            console.error("Error deleting tribute:", error);
-            alert(`Error deleting tribute: ${error.message}`);
-            return false;
-        }
+            if (!response.ok) { /* Handle error */ throw new Error(`HTTP Error ${response.status}`); }
+            console.log("Tribute deleted:", idToDelete); await resetAndReloadAll(); return true;
+        } catch (error) { console.error("Error deleting tribute:", error); alert(`Error: ${error.message}`); return false; }
     }
 
     /* ------------------------------------------------------ */
@@ -440,192 +429,48 @@
 
     /** [TEMPORARY] Converts files to Base64 Data URLs */
     async function filesToDataURLs_Temporary(fileList) {
-        const MAX_FILES = 4, MAX_SIZE_MB = 20; // Limits
-        const files = Array.from(fileList).slice(0, MAX_FILES); // Limit number of files
-        // Create a promise for each file read
-        const promises = files.map(f => new Promise((res, rej) => {
-            if (!f.type.startsWith('image/')) return res(null); // Skip non-images
-            if (f.size > MAX_SIZE_MB * 1024 * 1024) { // Check size
-                alert(`File "${f.name}" is too large (max ${MAX_SIZE_MB}MB) and will be skipped.`);
-                return res(null);
-            }
-            const reader = new FileReader();
-            reader.onload = () => res(reader.result); // Resolve with base64 string
-            reader.onerror = rej; // Reject on error
-            reader.readAsDataURL(f); // Read file
-        }));
-        const results = await Promise.allSettled(promises); // Wait for all reads
-        // Return only successful base64 strings
-        return results.filter(r => r.status === 'fulfilled' && r.value !== null).map(r => r.value);
+        const MAX_FILES = 4, MAX_SIZE_MB = 20; const files = Array.from(fileList).slice(0, MAX_FILES);
+        const promises = files.map(f => new Promise((res, rej) => { if (!f.type.startsWith('image/')) return res(null); if (f.size > MAX_SIZE_MB * 1024 * 1024) { alert(`File "${f.name}" > ${MAX_SIZE_MB}MB.`); return res(null); } const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(f); }));
+        const results = await Promise.allSettled(promises); return results.filter(r => r.status === 'fulfilled' && r.value !== null).map(r => r.value);
     }
 
     /** Handles the tribute form submission */
     async function handleFormSubmit(e) {
-        e.preventDefault(); // Prevent default reload
-        // Get form elements
-        const btn = document.getElementById('submitBtn'), txt = document.getElementById('submitBtnText'),
-              fin = document.getElementById('photos'), nameIn = document.getElementById('fromName'), msgIn = document.getElementById('message');
-        if (!btn || !txt || !fin || !nameIn || !msgIn) return; // Exit if elements missing
-
-        if (isLoading) { alert("Please wait for loading to finish."); return; } // Prevent submit while loading
-
-        btn.disabled = true; // Disable button
-        const origTxt = editingTributeId ? "Update" : "Share"; // Store original text
-        let actTxt = editingTributeId ? 'Updating...' : 'Sharing...'; // Set initial processing text
-        txt.textContent = actTxt;
-
-        let photos = []; // Array for photo data
-
+        e.preventDefault(); const btn = document.getElementById('submitBtn'), txt = document.getElementById('submitBtnText'), fin = document.getElementById('photos'), nameIn = document.getElementById('fromName'), msgIn = document.getElementById('message'); if (!btn || !txt || !fin || !nameIn || !msgIn) return; if (isLoading) { alert("Wait for loading."); return; } btn.disabled = true; const origTxt = editingTributeId ? "Update" : "Share"; let actTxt = editingTributeId ? 'Updating...' : 'Sharing...'; txt.textContent = actTxt; let photos = [];
         try {
-            // Process photos (to Base64 for now)
-            const files = fin.files;
-            if (files.length > 0 && files.length <= 4) {
-                actTxt = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
-                txt.textContent = actTxt; // Update text if processing photos
-                photos = await filesToDataURLs_Temporary(files); // Await base64 conversion
-            } else if (files.length > 4) {
-                throw new Error("Too many photos selected (max 4)."); // Validation error
-            }
-            txt.textContent = actTxt; // Ensure text shows processing state
-
-            // Get and validate text inputs
-            const from = nameIn.value.trim() || "Anonymous";
-            const msg = msgIn.value.trim();
-            if (!msg) throw new Error("Message cannot be empty.");
-            if (msg.length > 1500) throw new Error("Message exceeds 1500 characters.");
-
-            // Prepare data and submit
-            const tributeData = { from, msg, photos }; // Photos = base64 array
-            const idUpd = editingTributeId ? parseInt(editingTributeId, 10) : null;
-            if (editingTributeId && isNaN(idUpd)) throw new Error("Invalid ID for update.");
-
-            const success = await submitTribute(tributeData, idUpd); // Send to backend
-
-            // Reset form only on success (reload is handled within submitTribute)
-            if (success) { resetForm(); }
-            else { btn.disabled = false; txt.textContent = origTxt; } // Re-enable on failure
-
-        } catch (error) {
-            // Handle errors from validation or submission
-            console.error("Form submit error:", error);
-            alert(error.message); // Show validation or submission error
-            btn.disabled = false; txt.textContent = origTxt; // Always re-enable button
-        }
+            const files = fin.files; if (files.length > 0 && files.length <= 4) { actTxt = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; txt.textContent = actTxt; photos = await filesToDataURLs_Temporary(files); if(photos.length < files.length){ alert("Some photos skipped.");} } else if (files.length > 4) { throw new Error("Max 4 photos."); } txt.textContent = actTxt;
+            const from = nameIn.value.trim() || "Anonymous"; const msg = msgIn.value.trim(); if (!msg) throw new Error("Message required."); if (msg.length > 1500) throw new Error("Message too long.");
+            const tributeData = { from, msg, photos }; const idUpd = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idUpd)) throw new Error("Invalid edit ID.");
+            const success = await submitTribute(tributeData, idUpd); if (success) { resetForm(); } else { btn.disabled = false; txt.textContent = origTxt; }
+        } catch (error) { console.error("Form submit error:", error); alert(error.message); btn.disabled = false; txt.textContent = origTxt; }
     }
 
-    /** Resets the form fields and editing state */
-    function resetForm() {
-        const form = document.getElementById('tributeForm'), txt = document.getElementById('submitBtnText'),
-              cancel = document.getElementById('cancelEditBtn'), btn = document.getElementById('submitBtn');
-        if (form) form.reset();                 // Clear form inputs
-        if (txt) txt.textContent = "Share";     // Reset submit button text
-        if (cancel) cancel.classList.add('hidden'); // Hide cancel button
-        if (btn) btn.disabled = false;          // Enable submit button
-        editingTributeId = null;                // Exit editing mode
-        console.log("Form reset.");
-    }
+    /** Resets the form */
+    function resetForm() { const f = document.getElementById('tributeForm'), t = document.getElementById('submitBtnText'), c = document.getElementById('cancelEditBtn'), b = document.getElementById('submitBtn'); if (f) f.reset(); if (t) t.textContent = "Share"; if (c) c.classList.add('hidden'); if (b) b.disabled = false; editingTributeId = null; console.log("Form reset."); }
 
-    /** Loads existing tribute data into the form for editing */
-    function loadEditForm(tributeId) {
-        const idL = parseInt(tributeId, 10); if (isNaN(idL)) return;
-        // Find tribute in the currently loaded 'tributes' array
-        const tEdit = tributes.find(t => t.id === idL);
-        if (!tEdit) { alert("Could not find tribute data to edit. Please ensure all tributes are loaded."); return; }
-
-        console.log("Loading for edit:", tEdit);
-        // Get form elements
-        const nIn = document.getElementById('fromName'), mIn = document.getElementById('message'), fIn = document.getElementById('photos');
-        // Populate fields
-        if (nIn) nIn.value = tEdit.from || '';
-        if (mIn) mIn.value = tEdit.msg || '';
-        if (fIn) fIn.value = ''; // Clear file input - user must re-select
-
-        editingTributeId = idL; // Set editing state
-
-        // Update buttons
-        const sTxt = document.getElementById('submitBtnText'), cBtn = document.getElementById('cancelEditBtn');
-        if (sTxt) sTxt.textContent = "Update";
-        if (cBtn) cBtn.classList.remove('hidden');
-
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to form
-    }
+    /** Loads tribute data into form for editing */
+    function loadEditForm(tributeId) { const idL = parseInt(tributeId, 10); if (isNaN(idL)) return; const tEdit = tributes.find(t => t.id === idL); if (!tEdit) { alert("Could not find tribute data."); return; } console.log("Loading for edit:", tEdit); const nIn = document.getElementById('fromName'), mIn = document.getElementById('message'), fIn = document.getElementById('photos'); if (nIn) nIn.value = tEdit.from || ''; if (mIn) mIn.value = tEdit.msg || ''; if (fIn) fIn.value = ''; editingTributeId = idL; const sTxt = document.getElementById('submitBtnText'), cBtn = document.getElementById('cancelEditBtn'); if (sTxt) sTxt.textContent = "Update"; if (cBtn) cBtn.classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
     /* ------------------------------------------------------ */
     /*                UI INTERACTION LISTENERS                */
     /* ------------------------------------------------------ */
 
     /** Attaches delegated listeners to the tribute grid */
-    function attachGridEventListeners() {
-        const grid = document.getElementById('tributesGrid'); if (!grid) return;
-
-        // Click handler for edit/delete/photo actions
-        grid.onclick = (e) => {
-            const t = e.target;
-            const btn = t.closest('button[data-act]'); // Find closest action button
-            const img = t.closest('.fan-img');        // Find closest fan image
-
-            if (btn) { // Handle action button click
-                e.stopPropagation(); const act = btn.getAttribute('data-act'); const id = btn.getAttribute('data-id'); if (!id) return;
-                if (act === 'edit') loadEditForm(id); else if (act === 'delete') deleteTribute(id); return;
-            }
-            if (img) { // Handle fan image click
-                e.stopPropagation(); const card = img.closest('.tribute-card'); const tIdx = card ? parseInt(card.getAttribute("data-cardidx"), 10) : NaN; const pIdx = parseInt(img.getAttribute("data-pidx"), 10);
-                if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } else { console.warn("Invalid modal indices.", {tIdx, pIdx}); } return;
-            }
-        };
-        // Keydown handler for accessibility (Enter/Space on images)
-        grid.onkeydown = (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.fan-img')) { e.preventDefault(); e.target.click(); } };
-        console.log("Grid listeners attached.");
-    }
+    function attachGridEventListeners() { const grid = document.getElementById('tributesGrid'); if (!grid) return; grid.onclick = (e) => { const t = e.target; const btn = t.closest('button[data-act]'); const img = t.closest('.fan-img'); if (btn) { e.stopPropagation(); const act = btn.getAttribute('data-act'); const id = btn.getAttribute('data-id'); if (!id) return; if (act === 'edit') loadEditForm(id); else if (act === 'delete') deleteTribute(id); return; } if (img) { e.stopPropagation(); const card = img.closest('.tribute-card'); const tIdx = card ? parseInt(card.getAttribute("data-cardidx"), 10) : NaN; const pIdx = parseInt(img.getAttribute("data-pidx"), 10); if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } else { console.warn("Invalid modal indices.", {tIdx, pIdx}); } return; } }; grid.onkeydown = (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.fan-img')) { e.preventDefault(); e.target.click(); } }; console.log("Grid listeners attached."); }
 
     /* ------------------------------------------------------ */
     /*                  MODAL GALLERY LOGIC                   */
     /* ------------------------------------------------------ */
-    let modalTributeIdx = 0, modalPhotoIdx = 0; // State for modal
+    let modalTributeIdx = 0, modalPhotoIdx = 0; // Modal state
 
     /** Shows the photo modal */
-    function showModalGallery(tIdx, pIdx) {
-        const m = document.getElementById("galleryModal");
-        // Validate indices and data
-        if (!m || typeof tIdx!=='number' || tIdx<0 || tIdx>=tributes.length || !tributes[tIdx]) { console.error("Invalid modal data:", tIdx); return; }
-        const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx!=='number' || pIdx<0 || pIdx>=t.photos.length) { console.error("Invalid photo index:", pIdx, t.photos); return; }
-        // Set state and render
-        modalTributeIdx = tIdx; modalPhotoIdx = pIdx;
-        renderModalImage();
-        m.classList.remove("hidden"); m.focus(); // Show and focus modal
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
-    }
-
-    /** Updates the modal content (image, caption, buttons) */
-    function renderModalImage() {
-        const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'),
-              prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn');
-        if (!img || !cap || !prev || !next) { closeModalGallery(); return; } // Exit if elements missing
-        const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : [];
-        const src = p[modalPhotoIdx];
-        // Validate image source
-        if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { console.error(`Invalid src index ${modalPhotoIdx}`); img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; }
-        // Update modal elements
-        img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`;
-        cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`;
-        prev.classList.toggle('hidden', modalPhotoIdx === 0); // Hide prev if first image
-        next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); // Hide next if last image
-    }
-
+    function showModalGallery(tIdx, pIdx) { const m = document.getElementById("galleryModal"); if (!m || typeof tIdx!=='number' || tIdx<0 || tIdx>=tributes.length || !tributes[tIdx]) { console.error("Invalid modal data:", tIdx); return; } const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx!=='number' || pIdx<0 || pIdx>=t.photos.length) { console.error("Invalid photo index:", pIdx, t.photos); return; } modalTributeIdx = tIdx; modalPhotoIdx = pIdx; renderModalImage(); m.classList.remove("hidden"); m.focus(); document.body.style.overflow = 'hidden'; }
+    /** Updates the modal content */
+    function renderModalImage() { const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'), prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn'); if (!img || !cap || !prev || !next) { closeModalGallery(); return; } const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : []; const src = p[modalPhotoIdx]; if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { console.error(`Invalid src index ${modalPhotoIdx}`); img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; } img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`; cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`; prev.classList.toggle('hidden', modalPhotoIdx === 0); next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); }
     /** Closes the photo modal */
-    function closeModalGallery() {
-        const m = document.getElementById("galleryModal"), i = document.getElementById('modalImg');
-        if (!m) return; m.classList.add("hidden"); // Hide modal
-        if (i) i.src = ''; // Clear image source
-        document.body.style.overflow = ''; // Restore page scroll
-    }
-
+    function closeModalGallery() { const m = document.getElementById("galleryModal"), i = document.getElementById('modalImg'); if (!m) return; m.classList.add("hidden"); if (i) i.src = ''; document.body.style.overflow = ''; }
     /** Navigates modal photos */
-    function navigateModal(dir) {
-        if (!tributes[modalTributeIdx]?.photos) return; const p = tributes[modalTributeIdx].photos;
-        if (dir === 'prev' && modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); }
-        else if (dir === 'next' && modalPhotoIdx < p.length - 1) { modalPhotoIdx++; renderModalImage(); }
-    }
+    function navigateModal(dir) { if (!tributes[modalTributeIdx]?.photos) return; const p = tributes[modalTributeIdx].photos; if (dir === 'prev' && modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } else if (dir === 'next' && modalPhotoIdx < p.length - 1) { modalPhotoIdx++; renderModalImage(); } }
 
     /* ------------------------------------------------------ */
     /*                   CONFETTI ANIMATION                   */
@@ -638,32 +483,21 @@
     /* ------------------------------------------------------ */
     let observer; // Holds the observer instance
 
-    /** Sets up IntersectionObserver to load more tributes */
+    /** Sets up IntersectionObserver */
     function setupScrollObserver() {
-        if (observer) { observer.disconnect(); console.log("Observer disconnected."); } // Clean up previous one
-        const scrollTrigger = document.getElementById('scrollTrigger'); // Element to watch
-        if (!scrollTrigger) { console.error("#scrollTrigger not found."); return; }
-
-        // Observer options - load earlier using rootMargin
-        const options = {
-            root: null, // Use viewport
-            rootMargin: '0px 0px 300px 0px', // Trigger 300px before element enters viewport bottom
-            threshold: 0.01 // Trigger as soon as 1% is "visible" based on rootMargin
-        };
-
-        // Create and configure the observer
+        if (observer) { observer.disconnect(); console.log("Observer disconnected."); }
+        const scrollTrigger = document.getElementById('scrollTrigger'); if (!scrollTrigger) return;
+        // Options: Load 300px before element is visible
+        const options = { root: null, rootMargin: '0px 0px 300px 0px', threshold: 0.01 };
         observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
-                console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`); // Log state
-                // Load next if intersecting, not already loading, and not all loaded
+                // console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`); // Can be noisy
                 if (entry.isIntersecting && !isLoading && !allTributesLoaded) {
                     console.log(">>> Observer triggering loadNextTribute <<<");
                     loadNextTribute();
                 }
             });
         }, options);
-
-        // Start observing the trigger element
         observer.observe(scrollTrigger);
         console.log("IntersectionObserver setup with rootMargin.");
     }
@@ -671,13 +505,10 @@
     /* ------------------------------------------------------ */
     /*              INITIALIZATION (DOM Ready)                */
     /* ------------------------------------------------------ */
-    // Runs when the page's HTML is fully loaded
     document.addEventListener("DOMContentLoaded", function() {
         console.log("DOM loaded. Initializing...");
-
-        // Attach event listeners
-        attachGridEventListeners(); // For dynamic content in the grid
-        try { // Attach listeners for static elements
+        attachGridEventListeners(); // Setup grid clicks
+        try { // Attach static listeners
             const form = document.getElementById('tributeForm'); if (form) form.onsubmit = handleFormSubmit; else console.warn("#tributeForm missing.");
             const cancel = document.getElementById('cancelEditBtn'); if (cancel) cancel.onclick = resetForm; else console.warn("#cancelEditBtn missing.");
             const closeBtn = document.getElementById('closeModalBtn'); if (closeBtn) closeBtn.onclick = closeModalGallery; else console.warn("#closeModalBtn missing.");
@@ -685,22 +516,11 @@
             const prevBtn = document.getElementById('prevImgBtn'); if (prevBtn) prevBtn.onclick=(e)=>{e.stopPropagation();navigateModal('prev');}; else console.warn("#prevImgBtn missing.");
             const nextBtn = document.getElementById('nextImgBtn'); if (nextBtn) nextBtn.onclick=(e)=>{e.stopPropagation();navigateModal('next');}; else console.warn("#nextImgBtn missing.");
         } catch (error) { console.error("Error attaching static listeners:", error); }
-
-        // Global listener for keyboard navigation in modal
-        window.addEventListener("keydown", function(e) {
-            const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return;
-            switch (e.key) {
-                case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break;
-                case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break;
-                case "Escape": closeModalGallery(); break;
-            }
-        });
-
-        // Load the first tribute card
+        // Global listener for modal keyboard nav
+        window.addEventListener("keydown", function(e) { const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return; switch (e.key) { case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break; case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break; case "Escape": closeModalGallery(); break; } });
+        // Initial load (Observer/Timer setup happens inside loadNextTribute on first success)
         console.log("Initiating first tribute load...");
         loadNextTribute();
-        // NOTE: Scroll observer is now set up *inside* loadNextTribute after the first load succeeds.
-
         console.log("Initialization complete.");
     });
 
