@@ -11,230 +11,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ----------------------------- */
-        /*      General Page Styles      */
-        /* ----------------------------- */
+        /* --- General Styles --- */
         body {
             font-family: 'Quicksand', sans-serif;
             min-height: 100vh;
             background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%);
             color: #546e7a;
-            letter-spacing: 0.02em;
-            box-sizing: border-box;
-            width: 100%;
-            overflow: initial !important; /* Allow body scroll */
         }
+        h1, h2, h3, .script-font { font-family: 'Indie Flower', cursive; }
+        .page-title { color: #e58392; font-size: 2.4rem; text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15); letter-spacing: 2px; }
+        .page-subtitle { color: #786d70; font-size: 1.15rem; opacity: 0.9; }
+        .highlight-text { color: #e58392; font-weight: 600; }
 
-        h1, h2, h3, .script-font {
-            font-family: 'Indie Flower', cursive; /* Handwritten style for titles */
-        }
-
-        .page-title {
-            color: #e58392;
-            font-size: 2.4rem;
-            text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15);
-            letter-spacing: 2px;
-        }
-
-        .page-subtitle {
-            color: #786d70;
-            font-size: 1.15rem;
-            opacity: 0.9;
-        }
-
-        .highlight-text {
-            color: #e58392;
-            font-weight: 600;
-        }
-
-        /* ----------------------------- */
-        /*       Tribute Card Styles     */
-        /* ----------------------------- */
+        /* --- Tribute Card --- */
         .tribute-card {
             position: relative;
             box-shadow: 0 10px 25px rgba(149, 157, 165, 0.1);
             border-radius: 1.8rem;
             padding: 1.9rem 1.6rem 1.2rem 1.6rem;
-            transition:
-                transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
-                box-shadow 0.19s;
+            transition: transform 0.24s cubic-bezier(.24,1.46,.54,1.07), box-shadow 0.19s;
             margin-bottom: 0.7rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden; /* Clip patterns */
+            overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(5px);
         }
-
-        /* Hide Edit/Delete/Date via CSS */
-        .tribute-card .absolute.right-3.top-3 { display: none !important; }
-        .tribute-card .absolute.bottom-3 { display: none !important; }
-
-        /* Hover Effect */
+        .tribute-card .absolute.right-3.top-3 { display: none !important; } /* Hide buttons */
+        .tribute-card .absolute.bottom-3 { display: none !important; }    /* Hide date */
         .tribute-card:hover {
             transform: translateY(-12px) scale(1.04) rotate(-1.6deg);
             z-index: 10;
             box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1);
         }
+        .tribute-card-fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .tribute-card-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+        .tribute-card .message-content { word-wrap: break-word; overflow-wrap: break-word; width: 100%; } /* Allow text wrap */
+        .tribute-card > div:not(.fan-stack), .tribute-card > button { position: relative; z-index: 1; }
+        .tribute-card > .absolute.right-3.top-3 { z-index: 2; }
 
-        /* Fade-In Animation */
-        .tribute-card-fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .tribute-card-fade-in.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* --- Fan Photo Stack --- */
+        .fan-stack { display: flex; align-items: center; justify-content: center; min-height: 112px; width: 176px; position: relative; margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; }
+        .fan-img { width: 96px; height: 96px; object-fit: cover; border-radius: 1.12rem; box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2); transform-origin: 50% 80%; position: absolute; background: #f9fafb; border: 2.5px solid #fff; z-index: 1; cursor: pointer; pointer-events: auto; filter: brightness(1) saturate(1.02); }
 
-        /* Message Content Area (No Scroll) */
-        .tribute-card .message-content {
-            word-wrap: break-word;      /* Allow long words to break */
-            overflow-wrap: break-word;  /* Better control for breaking */
-            width: 100%;                /* Ensure it takes card width */
-            /* No max-height or overflow-y */
-        }
+        /* --- Floating Elements --- */
+        .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.17; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
+        @keyframes floatCelebrate { 0% {transform: translateY(46px) scale(1.17);} 100% {transform: translateY(-220px) scale(1);} }
 
-        /* Z-index Control for Card Content */
-        .tribute-card > div:not(.fan-stack),
-        .tribute-card > button {
-            position: relative;
-            z-index: 1;
-        }
-        .tribute-card > .absolute.right-3.top-3 { /* Buttons above content */
-            z-index: 2;
-        }
+        /* --- Form & Buttons --- */
+        .form-container { background: linear-gradient(to right, #fdf5f7, #fef9fa); border-radius: 1rem; border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1); }
+        input, textarea { transition: all 0.2s; border: 1px solid #f0e3e8 !important; }
+        input:focus, textarea:focus { border-color: #ffbbd0 !important; box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important; }
+        .btn-gradient { background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%); transition: all 0.3s; box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3); border: none; } .btn-gradient:hover { background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%); box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4); transform: translateY(-2px); } .btn-gradient:active { transform: translateY(1px); box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4); }
 
-        /* ----------------------------- */
-        /*       Fan Photo Stack         */
-        /* ----------------------------- */
-        .fan-stack {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 112px;
-            width: 176px;
-            position: relative;
-            margin: 0 auto 1.2rem auto;
-            pointer-events: none; /* Click through container */
-            z-index: 1;
-        }
-        .fan-img {
-            width: 96px;
-            height: 96px;
-            object-fit: cover;
-            border-radius: 1.12rem;
-            box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2);
-            transform-origin: 50% 80%; /* Rotation point */
-            position: absolute;
-            background: #f9fafb;
-            border: 2.5px solid #fff;
-            z-index: 1; /* Base image z-index */
-            cursor: pointer;
-            pointer-events: auto; /* Make images clickable */
-            filter: brightness(1) saturate(1.02);
-        }
+        /* --- Loading Indicator --- */
+        #singleLoadIndicator { display: flex; justify-content: center; align-items: center; padding: 1rem 0; height: 4rem; transition: opacity 0.3s ease-in-out; }
+        .bouncing-arrow i { animation: bounce 1.5s infinite ease-in-out; font-size: 1.5rem; color: #f4a8bb; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        #singleLoadIndicator .fa-spinner { font-size: 1.5rem; color: #f4a8bb; }
 
-        /* ----------------------------- */
-        /*      Floating Elements        */
-        /* ----------------------------- */
-        .floating-celebrate {
-            position: absolute;
-            font-size: 1.23rem;
-            opacity: 0.17;
-            pointer-events: none;
-            animation: floatCelebrate 9.2s linear infinite;
-            z-index: 0; /* Behind everything */
-        }
-        @keyframes floatCelebrate {
-            0% { transform: translateY(46px) scale(1.17); }
-            100% { transform: translateY(-220px) scale(1); }
-        }
-
-        /* ----------------------------- */
-        /*          Form Styles          */
-        /* ----------------------------- */
-        .form-container {
-            background: linear-gradient(to right, #fdf5f7, #fef9fa);
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1);
-        }
-        input, textarea {
-            transition: all 0.2s;
-            border: 1px solid #f0e3e8 !important;
-        }
-        input:focus, textarea:focus {
-            border-color: #ffbbd0 !important;
-            box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important;
-        }
-        /* Remove number input arrows */
-        input::-webkit-inner-spin-button,
-        input::-webkit-outer-spin-button {
-             -webkit-appearance: none; margin: 0;
-        }
-        input[type="number"] { -moz-appearance: textfield; }
-
-        /* ----------------------------- */
-        /*         Button Styles         */
-        /* ----------------------------- */
-        .btn-gradient {
-            background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%);
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3);
-            border: none;
-        }
-        .btn-gradient:hover {
-            background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%);
-            box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4);
-            transform: translateY(-2px);
-        }
-        .btn-gradient:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4);
-        }
-
-        /* ----------------------------- */
-        /*     Loading Indicator Styles  */
-        /* ----------------------------- */
-        #singleLoadIndicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem 0;
-            height: 4rem; /* Fixed height to reduce layout shift */
-            transition: opacity 0.3s ease-in-out;
-        }
-        /* Animated bouncing arrow */
-        .bouncing-arrow i {
-            animation: bounce 1.5s infinite ease-in-out;
-            font-size: 1.5rem;
-            color: #f4a8bb; /* Pinkish arrow */
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); } /* Bounce up */
-        }
-        /* Spinner icon */
-        #singleLoadIndicator .fa-spinner {
-             font-size: 1.5rem;
-             color: #f4a8bb; /* Match arrow color */
-        }
-
-        /* ----------------------------- */
-        /*         Other Styles          */
-        /* ----------------------------- */
-        /* Custom Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar { width: 7px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
-        /* Confetti */
+        /* --- Other --- */
+        .custom-scrollbar::-webkit-scrollbar { width: 7px; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; } .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
+        input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } input[type="number"] { -moz-appearance: textfield; }
+        html, body { overflow: initial !important; box-sizing: border-box; width: 100%; }
         .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: flex; align-items: flex-start; justify-content: center; overflow: visible; } .confetti__dot { position: absolute; width: 18px; height: 18px; border-radius: 99px; opacity: 0.84; pointer-events: none; will-change: transform, opacity; animation: confetti-fall 1.7s linear forwards; } @keyframes confetti-fall { 0%{transform: translateY(-80px) scale(.9) rotate(-20deg);} 80%{opacity: 1;} 95%{opacity: .8;} 100%{transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;} }
-        /* Footer */
         .footer-party { min-height: 90px; padding-bottom: 0.1rem; position: relative; margin-top: 2.5rem; background: linear-gradient(88deg, #fce8ff 70%, #f8f1fc 100%); border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible; } .cap-throw { position: absolute; left: 25%; top: 14px; animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite; pointer-events: none; z-index: 2; } .cap-throw2 { left: 68%; top: 12px; animation-delay: 1.1s; animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite; } @keyframes capThrow { 0%{transform: translateY(0px) rotate(3deg);} 60%{transform: translateY(-50px) rotate(-30deg);} 100%{transform: translateY(0px) rotate(2deg);} } @keyframes capThrow2 { 0%{transform: translateY(0px) rotate(-7deg);} 62%{transform: translateY(-46px) rotate(20deg);} 100%{transform: translateY(0px) rotate(-5deg);} } .footer-teacher { position: absolute; right: 12%; bottom: 12px; z-index: 3; animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01); transform-origin: bottom right; } @keyframes waveHand { 0%,100%{transform: rotate(0);} 14%{transform: rotate(-7deg);} 19%{transform: rotate(11deg);} 25%{transform: rotate(-12deg);} 36%{transform: rotate(8deg);} 47%{transform: rotate(0);} }
-        /* Print */
         @media print { .custom-scrollbar {overflow: visible !important;} }
 
     </style>
@@ -250,10 +92,10 @@
     <span class="floating-celebrate left-3/5 top-96" style="animation-delay:2.36s; color:#4db6ac;"><i class="fa-solid fa-pencil"></i></span>
     <span class="floating-celebrate left-2/3 top-20" style="animation-delay:0.5s; color:#ffd54f;"><i class="fa-solid fa-bell"></i></span>
 
-    <!-- Main Content Container -->
+    <!-- Main Content -->
     <div class="max-w-5xl mx-auto mt-12 px-4">
 
-        <!-- Page Title & Description -->
+        <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="page-title mb-3 script-font"> 🌼 Happy Retirement, Mdm Teh! </h1>
             <p class="page-subtitle script-font">
@@ -262,31 +104,29 @@
             </p>
         </div>
 
-        <!-- Add/Edit Tribute Form -->
+        <!-- Tribute Form -->
         <form id="tributeForm" class="mb-10 form-container py-6 px-5 shadow-lg flex flex-wrap items-center justify-between">
             <input type="hidden" id="editIndex" value="">
-            <!-- Form Inputs -->
             <div class="flex flex-col w-full md:w-1/4 mb-3 md:mb-0 md:pr-3"> <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label> <input id="fromName" name="fromName" type="text" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="32" required placeholder="E.g. Alicia (Class of 2010)"> </div>
             <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-3 md:mb-0"> <label for="message" class="text-pink-500 font-semibold mb-1">Message</label> <textarea id="message" name="message" rows="2" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="1500" required placeholder="Write your message..."></textarea> </div>
             <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-3 md:mb-0"> <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label> <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100"> </div>
-            <!-- Form Buttons -->
             <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-3 md:mt-0"> <button id="submitBtn" type="submit" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150"> <i class="fa-solid fa-paper-plane mr-1"></i> <span id="submitBtnText">Share</span> </button> <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button> </div>
         </form>
 
-        <!-- Tribute Cards Grid -->
+        <!-- Tribute Grid -->
         <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 custom-scrollbar">
             <!-- Cards added here -->
         </div>
 
-        <!-- Loading Indicator (Spinner or Arrow) -->
+        <!-- Loading Indicator (Spinner/Arrow) -->
         <div id="singleLoadIndicator" class="text-center text-pink-400 mt-6 hidden h-10">
             <!-- Content controlled by JS -->
         </div>
 
-        <!-- Scroll Trigger Element -->
+        <!-- Scroll Trigger -->
         <div id="scrollTrigger" style="height: 50px;"></div>
 
-        <!-- Empty State / All Loaded Message -->
+        <!-- Empty/All Loaded Message -->
         <div id="emptyState" class="text-center text-pink-300 italic mt-10 text-lg hidden">
             <i class="fa-solid fa-star fa-bounce mr-2"></i>
             <span id="initialEmptyMessage">No tributes yet. Be the first to post!</span>
@@ -332,7 +172,8 @@
     let nextPageToFetch = 1;        // Next page number to fetch
     let isLoading = false;          // Is a fetch in progress?
     let allTributesLoaded = false;  // Are all tributes loaded?
-    let autoLoadIntervalId = null;  // ID for auto-load timer
+    let rapidLoadActive = false;    // Is the initial rapid load happening?
+    let rapidLoadTimerId = null;    // Timer ID for rapid loading
 
     /* ------------------------------------------------------ */
     /*                        CONSTANTS                       */
@@ -340,12 +181,14 @@
     const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
     const CARD_GRADIENT_PAIRS = [ ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'], ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'], ['#fdf9ff', '#fffaf9'] ];
     const patternColors = { light: 'rgba(255, 255, 255, 0.35)', dark: 'rgba(229, 131, 146, 0.06)', accent: 'rgba(206, 147, 216, 0.05)' };
-    const AUTO_LOAD_INTERVAL = 15000; // 15 seconds
+    const INITIAL_RAPID_LOAD_COUNT = 6; // How many cards to load rapidly at start
+    const RAPID_LOAD_INTERVAL = 2000;   // Interval for rapid load (2 seconds)
 
     /* ------------------------------------------------------ */
     /*                    UTILITY FUNCTIONS                   */
     /* ------------------------------------------------------ */
-    /** Escapes HTML */
+
+    /** Escapes HTML special characters in a string */
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
       '&': '&',
@@ -355,8 +198,31 @@
       "'": '&#39;'
     }[s]));
   }
-    /** Formats Date String */
-    function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const d = new Date(dbDateString.replace(' ', 'T').replace(' UTC', 'Z')); return isNaN(d.getTime()) ? 'Date unavailable' : d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { console.error("Date Format Error:", e); return ''; } }
+
+    /** Formats a DB date string into "Mmm D, YYYY" or fallback */
+    function formatDateString(dbDateString) {
+        if (!dbDateString || typeof dbDateString !== 'string') {
+            return '';
+        }
+        try {
+            // Attempt to parse potentially varied formats
+            const isoFriendlyString = dbDateString.replace(' ', 'T').replace(' UTC', 'Z');
+            const date = new Date(isoFriendlyString);
+            if (isNaN(date.getTime())) { // Check if date is valid
+                console.warn("Could not parse date:", dbDateString);
+                return 'Date unavailable';
+            }
+            // Format valid date
+            return date.toLocaleDateString("en-US", {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        } catch (e) {
+            console.error("Date Format Error:", dbDateString, e);
+            return ''; // Return empty on error
+        }
+    }
 
     /* ------------------------------------------------------ */
     /*                   RENDERING FUNCTIONS                  */
@@ -366,15 +232,28 @@
     function renderSingleTribute(tribute) {
         const grid = document.getElementById("tributesGrid");
         const emptyState = document.getElementById('emptyState');
-        if (!grid || !emptyState) return null;
-        emptyState.classList.add('hidden');
-        if (tributes.some(existing => existing.id === tribute.id)) { console.warn("Skip duplicate render:", tribute.id); return null; }
-        tributes.push(tribute);
+        if (!grid || !emptyState) { return null; }
+
+        emptyState.classList.add('hidden'); // Hide empty msg
+
+        // Prevent rendering duplicates
+        if (tributes.some(existing => existing.id === tribute.id)) {
+            console.warn("Skip duplicate render:", tribute.id);
+            return null;
+        }
+        tributes.push(tribute); // Add to state
         const cardIndex = tributes.length - 1;
-        const cardElement = createTributeCardElement(tribute, cardIndex); // Use refactored function
-        if (!cardElement) return null;
-        grid.appendChild(cardElement);
-        requestAnimationFrame(() => { setTimeout(() => { cardElement.classList.add('is-visible'); }, 50); });
+
+        // Create the card element using helper
+        const cardElement = createTributeCardElement(tribute, cardIndex);
+        if (!cardElement) { return null; }
+
+        grid.appendChild(cardElement); // Add to grid
+
+        // Trigger fade-in
+        requestAnimationFrame(() => {
+            setTimeout(() => { cardElement.classList.add('is-visible'); }, 50);
+        });
         return cardElement;
     }
 
@@ -383,14 +262,20 @@
         const fanStack = document.createElement('div');
         fanStack.className = 'fan-stack mb-1';
         const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-        if (!photoArray.length) return fanStack; // Return empty container
+        if (!photoArray.length) { return fanStack; } // Return empty container
+
         const numPhotos = Math.min(photoArray.length, 4);
         const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
         const hShift = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
+
         for (let i = 0; i < numPhotos; i++) {
             const photoSrc = photoArray[i];
-            if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) { console.warn(`Invalid src ${i} ID ${tribute.id}`); continue; }
+            if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) {
+                console.warn(`Invalid src ${i} ID ${tribute.id}`); continue;
+            }
             const angle = spreadAngles[i]; const tX = (numPhotos > 1) ? (i * 40) - hShift : 0; const z = numPhotos - i;
+
+            // Create image element
             const img = document.createElement('img');
             img.src = escapeHtml(photoSrc);
             img.className = 'fan-img';
@@ -398,70 +283,74 @@
             img.tabIndex = 0;
             img.style.transform = `rotate(${angle}deg) translateX(${tX}px)`; img.style.zIndex = z;
             img.alt = `Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || '?')}`; img.loading = 'lazy';
-            fanStack.appendChild(img);
+
+            fanStack.appendChild(img); // Add to container
         }
         return fanStack;
     }
 
-    /** Creates and returns a Tribute Card DOM element (Refactored) */
+    /** Creates and returns a Tribute Card DOM element (Formatted) */
     function createTributeCardElement(tribute, idx) {
         // 1. Extract Data
         const tributeId = tribute.id; const fromName = tribute.from || "Anonymous";
         const message = tribute.msg || ""; const date = tribute.date || "";
 
-        // 2. Create Main Card Div
+        // 2. Create Card Div
         const cardDiv = document.createElement('div');
         cardDiv.className = 'tribute-card tribute-card-fade-in relative';
         cardDiv.dataset.cardidx = idx; cardDiv.dataset.id = tributeId;
 
-        // 3. Apply Dynamic Styles (Gradient & Pattern)
+        // 3. Apply Styles
         const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
         const cardBaseGradient = `linear-gradient(135deg, ${gradientPair[0]} 0%, ${gradientPair[1]} 100%)`;
         let cardPatternStyle = '', cardPatternBgImage = ''; const cardPatternType = idx % 5;
         const pDark = patternColors.dark, pLight = patternColors.light, pAccent = patternColors.accent;
-        switch (cardPatternType) { /* Cases for patterns */
-            case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break; case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break; case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break; case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break; case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
+        switch (cardPatternType) {
+            case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break;
+            case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break;
+            case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break;
+            case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break;
+            case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
         }
         const cardBgStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
-        cardDiv.style.cssText = cardBgStyle; // Apply background
+        cardDiv.style.cssText = cardBgStyle;
 
-        // 4. Create and Append Hidden Edit/Delete Buttons
+        // 4. Edit/Delete Buttons (Hidden)
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'absolute right-3 top-3 flex space-x-2'; buttonContainer.style.zIndex = '5';
         buttonContainer.innerHTML = ` <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button> <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button> `;
         cardDiv.appendChild(buttonContainer);
 
-        // 5. Create and Append Fan Gallery
+        // 5. Fan Gallery
         cardDiv.appendChild(createFanGalleryElement(tribute, idx));
 
-        // 6. Create and Append Sender Name
+        // 6. Sender Name
         const nameDiv = document.createElement('div');
         nameDiv.className = 'text-pink-600 font-bold mb-2 text-center'; nameDiv.style.cssText = "font-family:'Indie Flower',cursive; font-size: 1.2rem;";
-        nameDiv.textContent = escapeHtml(fromName); // Use textContent
+        nameDiv.textContent = escapeHtml(fromName);
         cardDiv.appendChild(nameDiv);
 
-        // 7. Create and Append Message (Uses message-content class)
+        // 7. Message (Wraps)
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message-content text-gray-700 mb-3 text-center px-1 text-sm w-full';
         messageDiv.style.fontFamily = "'Quicksand', sans-serif";
-        messageDiv.innerHTML = escapeHtml(message).replace(/\n/g, "<br>"); // Use innerHTML for <br>
+        messageDiv.innerHTML = escapeHtml(message).replace(/\n/g, "<br>");
         cardDiv.appendChild(messageDiv);
 
-        // 8. Create and Append Hidden Date
+        // 8. Date (Hidden)
         const dateDiv = document.createElement('div'); const dateIcon = cardDateIcons[idx % cardDateIcons.length];
         dateDiv.className = 'text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1';
         dateDiv.innerHTML = `<i class="fa-solid ${dateIcon} fa-xs"></i> <span>${formatDateString(date)}</span>`;
         cardDiv.appendChild(dateDiv);
 
-        // 9. Return the fully constructed DOM element
-        return cardDiv;
+        return cardDiv; // Return completed element
     }
 
     /* ------------------------------------------------------ */
     /*                API INTERACTION FUNCTIONS               */
     /* ------------------------------------------------------ */
 
-    /** Fetches the next single tribute from the backend */
+    /** Fetches the next single tribute */
     async function loadNextTribute() {
         const indicator = document.getElementById('singleLoadIndicator');
         const emptyState = document.getElementById('emptyState');
@@ -469,6 +358,7 @@
         const initialEmptyMsg = document.getElementById('initialEmptyMessage');
 
         if (isLoading || allTributesLoaded) { return; } // Exit if busy or done
+
         isLoading = true;
         updateIndicatorState(); // Show spinner
         const pageBeingFetched = nextPageToFetch;
@@ -482,14 +372,13 @@
             if (!data || !Array.isArray(data.tributes) || data.tributes.length === 0) {
                 // No more tributes
                 console.log("ALL TRIBUTES LOADED.");
-                allTributesLoaded = true; // Set flag
-                stopAutoLoadTimer();    // Stop timer
-                // Update empty/all loaded message visibility
-                if(emptyState){ emptyState.classList.remove('hidden'); }
-                if (tributes.length === 0) {
+                allTributesLoaded = true;
+                stopRapidLoadTimer(); // Stop rapid load if running
+                if(emptyState) emptyState.classList.remove('hidden'); // Show empty state container
+                if (tributes.length === 0) { // If grid was always empty
                      if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
                      if(initialEmptyMsg) initialEmptyMsg.style.display = 'block';
-                } else {
+                } else { // If grid has items, show "all loaded"
                      if(allLoadedMsg) allLoadedMsg.classList.remove('hidden');
                      if(initialEmptyMsg) initialEmptyMsg.style.display = 'none';
                 }
@@ -497,31 +386,84 @@
                 // Tribute received
                 const tribute = data.tributes[0];
                 console.log(`RECEIVED tribute ID: ${tribute.id}`);
-                renderSingleTribute(tribute); // Render card
-                nextPageToFetch++;            // Increment page for next time
+                renderSingleTribute(tribute);
+                nextPageToFetch++; // Increment for next time
 
-                // Setup observer & timer only AFTER first successful load
-                if (pageBeingFetched === 1) {
-                    console.log("First tribute loaded, setup observer/timer.");
-                    setupScrollObserver();
-                    startAutoLoadTimer();
+                // If this was part of the initial rapid load batch, continue it
+                if (rapidLoadActive && tributes.length < INITIAL_RAPID_LOAD_COUNT) {
+                    // Schedule the next rapid load (if not already finished)
+                    if (!allTributesLoaded) {
+                        startRapidLoadTimer(true); // Restart timer for next rapid load
+                    } else {
+                        stopRapidLoadTimer(); // Stop if all loaded during batch
+                    }
                 }
+                // If this was the *last* card of the initial batch, setup scroll observer
+                else if (rapidLoadActive && tributes.length >= INITIAL_RAPID_LOAD_COUNT) {
+                    stopRapidLoadTimer(); // Finished rapid load
+                    console.log("Initial batch loaded, setting up scroll observer.");
+                    setupScrollObserver(); // Now rely on scrolling
+                }
+                 // Handle case where total tributes < initial batch size
+                else if (rapidLoadActive && allTributesLoaded) {
+                    stopRapidLoadTimer();
+                    console.log("All tributes loaded during initial batch.");
+                     // No need to setup scroll observer if everything is already loaded
+                }
+
+
             }
         } catch (error) {
             console.error("Could not load next tribute:", error);
-            // Show error in indicator, leave it visible
             if(indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> Error. Scroll/Wait to retry.`;
-            allTributesLoaded = false; // Allow potential retry
+            allTributesLoaded = false; // Allow retry
+            stopRapidLoadTimer(); // Stop rapid load on error
         } finally {
-            isLoading = false;      // Reset loading flag
-            updateIndicatorState(); // Update indicator (show arrow or hide if done)
+            isLoading = false;
+            updateIndicatorState(); // Update indicator (arrow or hidden)
             console.log("Fetch complete. State:", {isLoading, allTributesLoaded, nextPageToFetch});
         }
     }
 
     /* ------------------------------------------------------ */
-    /*           AUTO-LOAD TIMER / INDICATOR                  */
+    /*           RAPID LOAD / INDICATOR / OBSERVER            */
     /* ------------------------------------------------------ */
+
+     /** Starts the rapid load process or timer */
+    function startRapidLoadTimer(isContinuation = false) {
+        stopRapidLoadTimer(); // Clear previous timer
+        rapidLoadActive = true; // Set flag
+
+        // If continuing, use the interval
+        if (isContinuation) {
+            console.log(`Starting rapid load interval (${RAPID_LOAD_INTERVAL}ms)`);
+            rapidLoadTimerId = setTimeout(() => {
+                console.log("Rapid load timer triggered.");
+                if (!isLoading && !allTributesLoaded && rapidLoadActive) {
+                    loadNextTribute();
+                }
+            }, RAPID_LOAD_INTERVAL);
+        } else {
+            // If starting fresh, load immediately
+            console.log("Starting initial rapid load sequence...");
+            if (!isLoading && !allTributesLoaded) {
+                loadNextTribute();
+            }
+        }
+    }
+
+    /** Stops the rapid load timer and flag */
+    function stopRapidLoadTimer() {
+        if (rapidLoadTimerId) {
+            clearTimeout(rapidLoadTimerId);
+            rapidLoadTimerId = null;
+        }
+        // Only set rapidLoadActive to false if we aren't immediately restarting it
+        if (rapidLoadActive && tributes.length >= INITIAL_RAPID_LOAD_COUNT || allTributesLoaded) {
+             rapidLoadActive = false;
+             console.log("Rapid load sequence finished or stopped.");
+        }
+    }
 
     /** Updates the loading indicator (Spinner/Arrow/Hidden) */
     function updateIndicatorState() {
@@ -529,39 +471,35 @@
         if (!indicator) return;
 
         if (isLoading) {
-            // Show spinner when actively loading
             indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading...`;
             indicator.classList.remove('hidden');
         } else if (!allTributesLoaded) {
-            // Show bouncing arrow if NOT loading and NOT finished
             indicator.innerHTML = `<span class="bouncing-arrow"><i class="fa-solid fa-chevron-down"></i></span>`;
             indicator.classList.remove('hidden');
         } else {
-            // Hide indicator completely if all loaded
-            indicator.classList.add('hidden');
+            indicator.classList.add('hidden'); // Hide when all loaded
         }
     }
 
-    /** Starts the interval timer to auto-load tributes */
-    function startAutoLoadTimer() {
-        stopAutoLoadTimer(); // Clear existing timer
-        console.log(`Starting auto-load timer (${AUTO_LOAD_INTERVAL}ms)`);
-        autoLoadIntervalId = setInterval(() => {
-            console.log("Auto-load timer tick.");
-            if (!isLoading && !allTributesLoaded) { // Check conditions
-                console.log("Auto-load calling loadNextTribute...");
-                loadNextTribute();
-            } else { console.log("Auto-load timer skipped fetch:", {isLoading, allTributesLoaded}); }
-        }, AUTO_LOAD_INTERVAL);
-    }
+    let observer; // Holds the scroll observer instance
 
-    /** Stops the interval timer */
-    function stopAutoLoadTimer() {
-        if (autoLoadIntervalId) {
-            console.log("Stopping auto-load timer.");
-            clearInterval(autoLoadIntervalId);
-            autoLoadIntervalId = null;
-        }
+    /** Sets up IntersectionObserver */
+    function setupScrollObserver() {
+        if (observer) { observer.disconnect(); console.log("Observer disconnected."); } // Clean up
+        const scrollTrigger = document.getElementById('scrollTrigger'); if (!scrollTrigger) return;
+
+        // Options: Load 300px before visible
+        const options = { root: null, rootMargin: '0px 0px 300px 0px', threshold: 0.01 };
+        observer = new IntersectionObserver((entries, observerInstance) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !isLoading && !allTributesLoaded && !rapidLoadActive) { // Only trigger if rapid load is NOT active
+                    console.log(">>> Scroll Observer triggering loadNextTribute <<<");
+                    loadNextTribute(); // Load only ONE card on scroll
+                }
+            });
+        }, options);
+        observer.observe(scrollTrigger);
+        console.log("Scroll IntersectionObserver setup.");
     }
 
     /* ------------------------------------------------------ */
@@ -571,21 +509,26 @@
     /** Clears grid/state and reloads tributes from page 1 */
     async function resetAndReloadAll() {
         console.log(">>> RESETTING AND RELOADING ALL <<<");
-        stopAutoLoadTimer(); // Stop timer
-        // Get references
+        stopRapidLoadTimer(); // Stop timers
+        if (observer) { observer.disconnect(); } // Disconnect observer
+
+        // Get elements
         const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
         const allLoadedMsg = document.getElementById('allLoadedMessage'); const initialEmptyMsg = document.getElementById('initialEmptyMessage');
         const indicator = document.getElementById('singleLoadIndicator');
+
         // Clear UI
         if (grid) grid.innerHTML = '';
         if(emptyState) emptyState.classList.add('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
         if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; if(indicator) indicator.classList.add('hidden');
+
         // Reset State
-        tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false;
-        // Disconnect observer
-        if (observer) { observer.disconnect(); console.log("Observer disconnected."); }
-        // Reload first tribute (observer/timer will restart inside if successful)
-        await loadNextTribute();
+        tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false; rapidLoadActive = false;
+
+        // Start the initial load sequence again
+        console.log("Triggering initial load sequence after reset.");
+        startRapidLoadTimer(false); // Start rapid load from scratch
+        updateIndicatorState(); // Update indicator immediately
     }
 
     /** Submits tribute (new/update), reloads on success */
@@ -652,9 +595,9 @@
     let modalTributeIdx = 0, modalPhotoIdx = 0; // Modal state
 
     /** Shows the photo modal */
-    function showModalGallery(tIdx, pIdx) { const m = document.getElementById("galleryModal"); if (!m || typeof tIdx!=='number' || tIdx<0 || tIdx>=tributes.length || !tributes[tIdx]) { console.error("Invalid modal data:", tIdx); return; } const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx!=='number' || pIdx<0 || pIdx>=t.photos.length) { console.error("Invalid photo index:", pIdx, t.photos); return; } modalTributeIdx = tIdx; modalPhotoIdx = pIdx; renderModalImage(); m.classList.remove("hidden"); m.focus(); document.body.style.overflow = 'hidden'; }
+    function showModalGallery(tIdx, pIdx) { const m = document.getElementById("galleryModal"); if (!m || typeof tIdx!=='number' || tIdx<0 || tIdx>=tributes.length || !tributes[tIdx]) { return; } const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx!=='number' || pIdx<0 || pIdx>=t.photos.length) { return; } modalTributeIdx = tIdx; modalPhotoIdx = pIdx; renderModalImage(); m.classList.remove("hidden"); m.focus(); document.body.style.overflow = 'hidden'; }
     /** Updates the modal content */
-    function renderModalImage() { const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'), prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn'); if (!img || !cap || !prev || !next) { closeModalGallery(); return; } const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : []; const src = p[modalPhotoIdx]; if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { console.error(`Invalid src index ${modalPhotoIdx}`); img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; } img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`; cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`; prev.classList.toggle('hidden', modalPhotoIdx === 0); next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); }
+    function renderModalImage() { const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'), prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn'); if (!img || !cap || !prev || !next) { closeModalGallery(); return; } const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : []; const src = p[modalPhotoIdx]; if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; } img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`; cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`; prev.classList.toggle('hidden', modalPhotoIdx === 0); next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); }
     /** Closes the photo modal */
     function closeModalGallery() { const m = document.getElementById("galleryModal"), i = document.getElementById('modalImg'); if (!m) return; m.classList.add("hidden"); if (i) i.src = ''; document.body.style.overflow = ''; }
     /** Navigates modal photos */
@@ -666,29 +609,6 @@
     /** Shows confetti */
     function showConfetti() { const c=document.getElementById('confettiBox'); if(!c)return; c.style.display='flex'; c.innerHTML=''; const o=['#f8bbd0','#f48fb1','#f06292','#ec407a','#e91e63','#d81b60','#ce93d8','#ba68c8','#ab47bc','#9c27b0','#ffccbc','#ffab91','#ff8a65','#ff7043']; const n=30+Math.floor(15*Math.random()); for(let i=0;i<n;i++){ let d=document.createElement('span'); d.className='confetti__dot'; d.style.background=o[Math.floor(Math.random()*o.length)]; d.style.left=(2+96*Math.random())+'%'; d.style.top=(-5+Math.random()*10)+'%'; d.style.animationDelay=(Math.random()*0.9).toFixed(2)+'s'; d.style.opacity=(0.6+0.4*Math.random()).toFixed(2); const s=0.8+Math.random()*0.4; d.style.transform=`scale(${s.toFixed(2)})`; c.appendChild(d); } setTimeout(()=>{if(c){c.style.display='none';c.innerHTML='';}},2100); }
 
-    /* ------------------------------------------------------ */
-    /*          INFINITE SCROLL INTERSECTION OBSERVER         */
-    /* ------------------------------------------------------ */
-    let observer; // Holds the observer instance
-
-    /** Sets up IntersectionObserver */
-    function setupScrollObserver() {
-        if (observer) { observer.disconnect(); console.log("Observer disconnected."); }
-        const scrollTrigger = document.getElementById('scrollTrigger'); if (!scrollTrigger) return;
-        // Options: Load 300px before element is visible
-        const options = { root: null, rootMargin: '0px 0px 300px 0px', threshold: 0.01 };
-        observer = new IntersectionObserver((entries, observerInstance) => {
-            entries.forEach(entry => {
-                // console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`); // Noisy
-                if (entry.isIntersecting && !isLoading && !allTributesLoaded) {
-                    console.log(">>> Observer triggering loadNextTribute <<<");
-                    loadNextTribute();
-                }
-            });
-        }, options);
-        observer.observe(scrollTrigger);
-        console.log("IntersectionObserver setup with rootMargin.");
-    }
 
     /* ------------------------------------------------------ */
     /*              INITIALIZATION (DOM Ready)                */
@@ -706,11 +626,12 @@
         } catch (error) { console.error("Error attaching static listeners:", error); }
         // Global listener for modal keyboard nav
         window.addEventListener("keydown", function(e) { const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return; switch (e.key) { case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break; case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break; case "Escape": closeModalGallery(); break; } });
-        // Initial load (Observer/Timer setup happens inside loadNextTribute on first success)
-        console.log("Initiating first tribute load...");
-        loadNextTribute();
-        // Update indicator initially (shows arrow if not loading)
-        updateIndicatorState();
+
+        // Initial load sequence
+        console.log("Starting initial tribute load sequence...");
+        startRapidLoadTimer(false); // Start the rapid load (loads first, then schedules next)
+        updateIndicatorState();     // Show initial indicator state (arrow)
+
         console.log("Initialization complete.");
     });
 
