@@ -14,7 +14,6 @@
     body {
       font-family: 'Quicksand', sans-serif;
       min-height: 100vh;
-      /* --- CHANGE: Updated background to a subtle pinkish gradient --- */
       background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%);
       color: #546e7a;
       letter-spacing: 0.02em;
@@ -31,6 +30,7 @@
       border-radius: 1.8rem;
       padding: 1.9rem 1.6rem 1.2rem 1.6rem;
       transition:
+        /* Keep hover transitions */
         transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
         box-shadow 0.19s;
       margin-bottom: 0.7rem;
@@ -43,22 +43,21 @@
     }
 
     /* --- ADDED: Hide Edit/Delete Buttons and Date --- */
-    .tribute-card .absolute.right-3.top-3 { /* Targets the button container */
-        display: none !important; /* Hides the div containing Edit/Delete buttons */
+    .tribute-card .absolute.right-3.top-3 {
+        display: none !important;
+    }
+    .tribute-card .absolute.bottom-3 {
+        display: none !important;
     }
 
-    .tribute-card .absolute.bottom-3 { /* Targets the date container */
-        display: none !important; /* Hides the div containing the date */
-    }
-
-    .tribute-card:hover, .tribute-card.card-mobile-anim {
+    .tribute-card:hover { /* Removed card-mobile-anim here, apply animation on load */
       transform: translateY(-12px) scale(1.04) rotate(-1.6deg);
       z-index: 10;
       box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1);
     }
 
     /* --- Fan image stack --- */
-    .fan-stack {
+    .fan-stack { /* ... keep existing styles ... */
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -70,8 +69,7 @@
       pointer-events: none;
       z-index: 1;
     }
-
-    .fan-img {
+    .fan-img { /* ... keep existing styles ... */
       width: 96px;
       height: 96px;
       object-fit: cover;
@@ -88,7 +86,7 @@
     }
 
     /* Floating celebration elements */
-    .floating-celebrate {
+    .floating-celebrate { /* ... keep existing styles ... */
       position: absolute;
       font-size: 1.23rem;
       opacity: 0.17;
@@ -96,206 +94,95 @@
       animation: floatCelebrate 9.2s linear infinite;
       z-index: 0;
     }
-
-    @keyframes floatCelebrate {
-      0% {transform: translateY(46px) scale(1.17);}
-      100% {transform: translateY(-220px) scale(1);}
-    }
+    @keyframes floatCelebrate { /* ... keep existing ... */ }
 
     /* Custom scrollbar */
     .custom-scrollbar::-webkit-scrollbar {width: 7px;}
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cfd8dc;
-      border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #eceff1;
-    }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
 
     /* Remove num arrows */
-    input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+    input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
 
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-
-    html, body {
-      overflow: initial !important;
-      box-sizing: border-box;
-      width: 100%;
-    }
+    html, body { overflow: initial !important; box-sizing: border-box; width: 100%; }
 
     /* Form styling */
-    .form-container {
-      background: linear-gradient(to right, #fdf5f7, #fef9fa); /* Slightly pinkish form background */
+    .form-container { /* ... keep existing styles ... */
+      background: linear-gradient(to right, #fdf5f7, #fef9fa);
       border-radius: 1rem;
       border: 1px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1); /* Adjusted shadow color */
+      box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1);
     }
-
-    input, textarea {
-      transition: all 0.2s;
-      border: 1px solid #f0e3e8 !important; /* Pinkish border */
+    input, textarea { /* ... keep existing styles ... */
+        transition: all 0.2s;
+        border: 1px solid #f0e3e8 !important;
     }
-
-    input:focus, textarea:focus {
-      border-color: #ffbbd0 !important; /* Pinker focus border */
-      box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important; /* Pinker focus shadow */
+    input:focus, textarea:focus { /* ... keep existing styles ... */
+        border-color: #ffbbd0 !important;
+        box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important;
     }
 
     /* Button styles */
-    .btn-gradient {
-      background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%); /* Pinker gradient button */
+    .btn-gradient { /* ... keep existing styles ... */
+      background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%);
       transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3); /* Pinker shadow */
+      box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3);
       border: none;
     }
-
-    .btn-gradient:hover {
-      background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%); /* Lighter pink hover */
-      box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4);
-      transform: translateY(-2px);
+    .btn-gradient:hover { /* ... keep existing styles ... */
+        background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%);
+        box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4);
+        transform: translateY(-2px);
     }
-
-    .btn-gradient:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4);
+    .btn-gradient:active { /* ... keep existing styles ... */
+        transform: translateY(1px);
+        box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4);
     }
 
     /* Confetti */
-    .confetti {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      pointer-events: none;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      overflow: visible;
-    }
-
-    .confetti__dot {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-radius: 99px;
-      opacity: 0.84;
-      pointer-events: none;
-      will-change: transform, opacity;
-      animation: confetti-fall 1.7s linear forwards;
-    }
-
-    @keyframes confetti-fall {
-      0% {transform: translateY(-80px) scale(.9) rotate(-20deg);}
-      80% {opacity: 1;}
-      95% {opacity: .8;}
-      100% {transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;}
-    }
+    .confetti { /* ... keep existing styles ... */ }
+    .confetti__dot { /* ... keep existing styles ... */ }
+    @keyframes confetti-fall { /* ... keep existing styles ... */ }
 
     /* Footer animations */
-    .footer-party {
-      min-height: 90px;
-      padding-bottom: 0.1rem;
-      position: relative;
-      margin-top: 2.5rem;
-      background: linear-gradient(88deg, #fce8ff 70%, #f8f1fc 100%); /* Lighter pink/lavender footer */
-      border-radius: 28px 28px 0px 0px;
-      box-shadow: 0 0 0 #fff;
-      overflow: visible;
-    }
-
-    .cap-throw {
-      position: absolute;
-      left: 25%;
-      top: 14px;
-      animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .cap-throw2 {
-      left: 68%;
-      top: 12px;
-      animation-delay: 1.1s;
-      animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite;
-    }
-
-    @keyframes capThrow {
-      0% {transform: translateY(0px) rotate(3deg);}
-      60% {transform: translateY(-50px) rotate(-30deg);}
-      100% {transform: translateY(0px) rotate(2deg);}
-    }
-
-    @keyframes capThrow2 {
-      0% {transform: translateY(0px) rotate(-7deg);}
-      62% {transform: translateY(-46px) rotate(20deg);}
-      100% {transform: translateY(0px) rotate(-5deg);}
-    }
-
-    .footer-teacher {
-      position: absolute;
-      right: 12%;
-      bottom: 12px;
-      z-index: 3;
-      animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01);
-      transform-origin: bottom right;
-    }
-
-    @keyframes waveHand {
-      0%,100% {transform: rotate(0);}
-      14% {transform: rotate(-7deg);}
-      19% {transform: rotate(11deg);}
-      25% {transform: rotate(-12deg);}
-      36% {transform: rotate(8deg);}
-      47% {transform: rotate(0);}
-    }
+    .footer-party { /* ... keep existing styles ... */ }
+    .cap-throw { /* ... keep existing styles ... */ }
+    .cap-throw2 { /* ... keep existing styles ... */ }
+    @keyframes capThrow { /* ... keep existing styles ... */ }
+    @keyframes capThrow2 { /* ... keep existing styles ... */ }
+    .footer-teacher { /* ... keep existing styles ... */ }
+    @keyframes waveHand { /* ... keep existing styles ... */ }
 
     /* Print */
-    @media print {
-      .custom-scrollbar {overflow: visible !important;}
-    }
+    @media print { /* ... keep existing ... */ }
 
-    /* Ensure content elements are above the card background pattern */
-    .tribute-card > div:not(.fan-stack), /* Text divs */
-    .tribute-card > button { /* Edit/Delete buttons */
-      position: relative;
-      z-index: 1;
-    }
+    /* Z-index */
+    .tribute-card > div:not(.fan-stack), .tribute-card > button { position: relative; z-index: 1; }
+    .tribute-card > .absolute.right-3.top-3 { z-index: 2; }
 
-    .tribute-card > .absolute.right-3.top-3 { /* Buttons container */
-      z-index: 2;
-    }
+    /* Aesthetics */
+    .page-title { /* ... keep existing styles ... */ }
+    .page-subtitle { /* ... keep existing styles ... */ }
+    .highlight-text { /* ... keep existing styles ... */ }
 
-    /* New styles for improved aesthetics */
-    .page-title {
-      color: #e58392; /* Pinkish title */
-      font-size: 2.4rem;
-      text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15); /* Pinkish shadow */
-      letter-spacing: 2px;
+    /* --- NEW: Fade-in Animation --- */
+    .tribute-card-fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     }
-
-    .page-subtitle {
-      color: #786d70; /* Adjusted subtitle color for pink bg */
-      font-size: 1.15rem;
-      opacity: 0.9;
+    .tribute-card-fade-in.is-visible {
+        opacity: 1;
+        transform: translateY(0);
     }
-
-    .highlight-text {
-      color: #e58392; /* Pinkish highlight */
-      font-weight: 600;
-    }
+    /* --- End Fade-in --- */
 
   </style>
 </head>
-<body class="pb-10 selection:bg-pink-100"> <!-- Adjusted selection color -->
-  <!-- Floating celebration elements with updated colors (some pink added) -->
-  <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#f09fa8;"><i class="fa-solid fa-book"></i></span> <!-- Pinkish book -->
+<body class="pb-10 selection:bg-pink-100">
+  <!-- Floating elements -->
+  <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#f09fa8;"><i class="fa-solid fa-book"></i></span>
   <span class="floating-celebrate left-1/4 top-56" style="animation-delay:1.6s; color:#ffb74d;"><i class="fa-solid fa-apple-whole"></i></span>
   <span class="floating-celebrate right-14 top-28" style="animation-delay:0.9s; color:#81c784;"><i class="fa-solid fa-seedling"></i></span>
   <span class="floating-celebrate left-1/3 top-44" style="animation-delay:2.1s; color:#ce93d8;"><i class="fa-solid fa-flower"></i></span>
@@ -306,7 +193,6 @@
   <div class="max-w-5xl mx-auto mt-12 px-4">
     <!-- Title & Description -->
     <div class="text-center mb-8">
-      <!-- --- CHANGE: Updated teacher's name in the main title --- -->
       <h1 class="page-title mb-3 script-font"> 🌼 Happy Retirement, Mdm Teh! </h1>
       <p class="page-subtitle script-font">
         A wonderful teacher leaves a mark on hearts forever.<br>
@@ -318,17 +204,16 @@
     <form id="tributeForm" class="mb-10 form-container py-6 px-5 shadow-lg flex flex-wrap items-center justify-between">
       <input type="hidden" id="editIndex" value="">
       <div class="flex flex-col w-full md:w-1/4 mb-3 md:mb-0 md:pr-3">
-        <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label> <!-- Label color adjusted -->
+        <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label>
         <input id="fromName" name="fromName" type="text" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="32" required placeholder="E.g. Alicia (Class of 2010)">
       </div>
       <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-3 md:mb-0">
-        <label for="message" class="text-pink-500 font-semibold mb-1">Message</label> <!-- Label color adjusted -->
-        <!-- --- CHANGE: Increased message length limit --- -->
+        <label for="message" class="text-pink-500 font-semibold mb-1">Message</label>
         <textarea id="message" name="message" rows="2" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="1500" required placeholder="Write your message..."></textarea>
       </div>
       <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-3 md:mb-0">
-        <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label> <!-- Label color adjusted -->
-        <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100"> <!-- Adjusted file input colors -->
+        <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label>
+        <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100">
       </div>
       <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-3 md:mt-0">
         <button id="submitBtn" type="submit" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150">
@@ -342,40 +227,34 @@
     <!-- Tribute Cards Grid -->
     <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 custom-scrollbar"></div>
 
-    <!-- Loading Indicator and Load More Button -->
-    <div id="loadingIndicator" class="text-center text-pink-400 italic mt-6 hidden">
-        <i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading more tributes...
-    </div>
-    <div id="loadMoreContainer" class="text-center mt-6">
-        <button id="loadMoreBtn" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150 hidden">
-            <i class="fa-solid fa-chevron-down mr-1"></i> Load More Tributes
-        </button>
+    <!-- NEW: Loading Indicator for single card fetch -->
+    <div id="singleLoadIndicator" class="text-center text-pink-400 italic mt-6 hidden h-10"> <!-- Added fixed height -->
+        <i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...
     </div>
 
+    <!-- NEW: Element to trigger loading when it becomes visible -->
+    <div id="scrollTrigger" style="height: 50px;"></div> <!-- Invisible element to observe -->
+
     <!-- Empty State Message -->
-    <div id="emptyState" class="text-center text-pink-300 italic mt-10 text-lg hidden"> <!-- Adjusted empty state color -->
+    <div id="emptyState" class="text-center text-pink-300 italic mt-10 text-lg hidden">
       <i class="fa-solid fa-star fa-bounce mr-2"></i>No tributes yet. Be the first to post your memory!
+      <p id="allLoadedMessage" class="text-sm mt-2 hidden">Looks like you've reached the end!</p>
     </div>
 
   </div> <!-- Closing the max-w-5xl container -->
 
   <!-- Modal for single photo view -->
   <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <!-- ... keep existing modal structure ... -->
     <div class="absolute inset-0 cursor-pointer" id="modalBG"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border border-pink-100"> <!-- Modal border color -->
-      <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-pink-400 hover:text-pink-600 focus:outline-none z-10" title="Close"> <!-- Button colors -->
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border border-pink-100">
+      <button type="button" id="closeModalBtn" class="absolute right-2 top-2 text-2xl text-pink-400 hover:text-pink-600 focus:outline-none z-10" title="Close"><i class="fa-solid fa-xmark"></i></button>
       <div class="w-full flex items-center justify-center mb-3">
-        <button type="button" id="prevImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden"> <!-- Button colors -->
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
+        <button type="button" id="prevImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden"><i class="fa-solid fa-chevron-left"></i></button>
         <div id="modalImgContainer" class="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl overflow-hidden bg-gray-50 shadow">
           <img id="modalImg" src="" alt="Gallery Image" class="object-contain mx-auto" style="max-height:50vh;">
         </div>
-        <button type="button" id="nextImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden"> <!-- Button colors -->
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
+        <button type="button" id="nextImgBtn" class="text-xl text-pink-300 hover:text-pink-600 px-3 focus:outline-none hidden"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
       <div id="galleryCaption" class="text-center text-sm mt-2 mb-2 text-gray-500"></div>
     </div>
@@ -383,80 +262,43 @@
 
   <!-- Animated Celebration Footer -->
   <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
-    <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-pink-400 text-2xl"></i></div> <!-- Adjusted cap color -->
-    <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-amber-400 text-2xl"></i></div>
-    <span class="footer-teacher">
-      <svg width="56" height="70" viewBox="0 0 56 70" fill="none">
-        <ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/>
-        <circle cx="28" cy="34" r="20" fill="#fff"/>
-        <ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/>
-        <ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/>
-        <ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/>
-        <ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/>
-        <rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/>
-        <rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/>
-        <ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/>
-      </svg>
-    </span>
-    <span class="block font-semibold pt-10 pb-1 script-font" style="font-size:1.23rem;color:#e58392;text-shadow:0 1px 5px #fce8ffa8;"> <!-- Adjusted text color/shadow -->
-      🎉 With heartfelt wishes for your next amazing chapter! 🎉
-    </span>
-    <span class="block text-gray-500 pb-1" style="font-size:1rem;">
-      Made with <i class="fa-solid fa-heart text-pink-400"></i> by everyone who is grateful for you. <!-- Adjusted heart color -->
-    </span>
+    <!-- ... keep existing footer structure ... -->
+     <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-pink-400 text-2xl"></i></div>
+     <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-amber-400 text-2xl"></i></div>
+     <span class="footer-teacher"> <svg width="56" height="70" viewBox="0 0 56 70" fill="none"><ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/><circle cx="28" cy="34" r="20" fill="#fff"/><ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/><ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/><ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/><ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/><rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/><rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/><ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/></svg> </span>
+     <span class="block font-semibold pt-10 pb-1 script-font" style="font-size:1.23rem;color:#e58392;text-shadow:0 1px 5px #fce8ffa8;"> 🎉 With heartfelt wishes for your next amazing chapter! 🎉 </span>
+     <span class="block text-gray-500 pb-1" style="font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-400"></i> by everyone who is grateful for you. </span>
   </footer>
 
   <!-- Confetti effect container -->
   <div id="confettiBox" class="confetti" style="pointer-events: none; display:none;"></div>
 
+<!-- ======================================================== -->
+<!--                  START JAVASCRIPT                      -->
+<!-- ======================================================== -->
 <script>
   // --- STATE ---
-  let tributes = []; // Holds *all loaded* tributes for modal/editing reference
+  let tributes = []; // Holds *all loaded* tribute data for modal/editing/state reference
   let editingTributeId = null;
-  // --- PAGINATION STATE ---
-  let currentPage = 1;
-  const pageSize = 30; // How many tributes to fetch per page. Adjust as needed.
-  let totalPages = 1;
+  // --- SINGLE LOAD STATE ---
+  let nextPageToFetch = 1; // Tracks the *page number* for the next tribute (pageSize=1)
   let isLoading = false; // Prevent multiple simultaneous loads
+  let allTributesLoaded = false; // Flag when no more tributes are available
 
   // --- CONSTANTS ---
   const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
   const CARD_GRADIENT_PAIRS = [
-    ['#fef6f8', '#fdf3f6'], // Very Soft Pink -> Slightly Deeper Soft Pink
-    ['#fef9f9', '#fff7f9'], // Soft Pink White -> Soft Pink White (Subtle)
-    ['#fdf6ff', '#fef9fd'], // Soft Lavender Pink -> Soft Pinkish Lavender
-    ['#fff9fa', '#fdf8fe'], // Pink White -> Lavender White
-    ['#fff9f9', '#fef9f7'], // Soft Pink -> Very Soft Peach Pink
-    ['#fbfdff', '#fdfcfb'], // Almost White Blue -> Almost White Pink
-    ['#fdf9ff', '#fffaf9']  // Lavender White -> Pink White
+    ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'],
+    ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'],
+    ['#fdf9ff', '#fffaf9']
   ];
   const patternColors = {
-    light: 'rgba(255, 255, 255, 0.35)', // Lighter white for more contrast on pink
-    dark: 'rgba(229, 131, 146, 0.06)', // Subtle pink for dark pattern elements
-    accent: 'rgba(206, 147, 216, 0.05)' // Soft purple/pink accent
+    light: 'rgba(255, 255, 255, 0.35)', dark: 'rgba(229, 131, 146, 0.06)', accent: 'rgba(206, 147, 216, 0.05)'
   };
 
   // --- UTILITY FUNCTIONS ---
-
-  // --- Color Conversion & Manipulation --- (No changes needed here)
   function hexToRgb(hex) { let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null; }
-  function rgbToHsl(r, g, b) { r /= 255; g /= 255; b /= 255; let max = Math.max(r, g, b), min = Math.min(r, g, b); let h, s, l = (max + min) / 2; if (max == min) { h = s = 0; } else { let d = max - min; s = l > 0.5 ? d / (2 - max - min) : d / (max + min); switch (max) { case r: h = (g - b) / d + (g < b ? 6 : 0); break; case g: h = (b - r) / d + 2; break; case b: h = (r - g) / d + 4; break; } h /= 6; } return { h: h * 360, s: s * 100, l: l * 100 }; }
-  function hslToRgb(h, s, l) { h /= 360; s /= 100; l /= 100; let r, g, b; if (s == 0) { r = g = b = l; } else { const hue2rgb = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1/6) return p + (q - p) * 6 * t; if (t < 1/2) return q; if (t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; }; let q = l < 0.5 ? l * (1 + s) : l + s - l * s; let p = 2 * l - q; r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3); } return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) }; }
-  function rgbToHex(r, g, b) { const clamp = (val) => Math.max(0, Math.min(255, Math.round(val))); const rHex = clamp(r).toString(16).padStart(2, '0'); const gHex = clamp(g).toString(16).padStart(2, '0'); const bHex = clamp(b).toString(16).padStart(2, '0'); return `#${rHex}${gHex}${bHex}`; }
-  function adjustLightness(hsl, amount) { let newL = Math.max(0, Math.min(100, hsl.l + amount)); return { h: hsl.h, s: hsl.s, l: newL }; }
-  function hexToRgba(hex, alpha) { const rgb = hexToRgb(hex); const validAlpha = Math.max(0, Math.min(1, alpha)); return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${validAlpha})` : `rgba(0,0,0,${validAlpha})`; }
-  function invertColor(hex) { const rgb = hexToRgb(hex); if (!rgb) return '#ffffff'; const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000; return brightness > 125 ? '#000000' : '#FFFFFF'; }
-  function adjustColor(hex, amount) { const rgb = hexToRgb(hex); if (!rgb) return hex; const r = Math.max(0, Math.min(255, rgb.r + amount)); const g = Math.max(0, Math.min(255, rgb.g + amount)); const b = Math.max(0, Math.min(255, rgb.b + amount)); return rgbToHex(r, g, b); }
-  // --- End Color Utilities ---
-
-  function getNameColorIndex(name) {
-    if (!name) return 0;
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) { hash = (hash << 5) - hash + name.charCodeAt(i); hash |= 0; }
-    return Math.abs(hash);
-  }
-
-  function escapeHtml(str) {
+    function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
       '&': '&',
       '<': '<',
@@ -465,930 +307,339 @@
       "'": '&#39;'
     }[s]));
   }
-
-
   function formatDateString(dbDateString) {
     if (!dbDateString || typeof dbDateString !== 'string') return '';
     try {
-      // Attempt to handle various potential formats, favoring ISO-like
       const isoFriendlyString = dbDateString.replace(' ', 'T').replace(' UTC', 'Z');
       const date = new Date(isoFriendlyString);
-
-      // Check if the date is valid
-      if (isNaN(date.getTime())) {
-          // Fallback for non-standard formats if necessary, e.g., manual parsing
-          // For now, return a simple indicator or the original string
-          console.warn("Could not parse date:", dbDateString);
-          return 'Date unavailable'; // Or return '';
-      }
+      if (isNaN(date.getTime())) { console.warn("Could not parse date:", dbDateString); return 'Date unavailable'; }
       return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-    } catch (e) {
-      console.error("Error formatting date:", dbDateString, e);
-      return ''; // Return empty string on error
-    }
+    } catch (e) { console.error("Error formatting date:", dbDateString, e); return ''; }
   }
-
-
-  async function filesToDataURLs(fileList) {
-    const MAX_FILES = 4;
-    const MAX_SIZE_MB = 20;
-    const filesToProcess = Array.from(fileList).slice(0, MAX_FILES);
-    const readerPromises = filesToProcess.map(file => {
-      return new Promise((resolve, reject) => {
-        if (!file.type.startsWith('image/')) {
-          console.warn(`Skipping non-image file: ${file.name}`);
-          return resolve(null); // Resolve with null for non-images
-        }
-        if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-           console.warn(`Skipping large file (> ${MAX_SIZE_MB}MB): ${file.name}`);
-           alert(`File "${file.name}" is too large (max ${MAX_SIZE_MB}MB).`);
-          return resolve(null); // Resolve with null for large files
-        }
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result); // Resolve with Data URL on success
-        reader.onerror = (error) => {
-            console.error("FileReader error:", error);
-            reject(new Error(`Error reading file: ${file.name}`)); // Reject with an error
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    // Use Promise.allSettled to handle individual file reading errors gracefully
-    const results = await Promise.allSettled(readerPromises);
-    const successfulURLs = results
-        .filter(result => result.status === 'fulfilled' && result.value !== null)
-        .map(result => result.value);
-
-    // Log any errors from failed file reads
-    results.filter(result => result.status === 'rejected').forEach(result => {
-        console.error("File reading failed:", result.reason);
-    });
-
-    return successfulURLs; // Return only the successfully read Data URLs
-  }
-
 
   // --- RENDERING LOGIC ---
 
-  // Renders a *page* of tributes, appending them
-  function renderTributesPage(newTributes) {
+  // Appends a SINGLE tribute card and applies fade-in
+  function renderSingleTribute(tribute) {
       const grid = document.getElementById("tributesGrid");
       const emptyState = document.getElementById('emptyState');
-      if (!grid || !emptyState) {
-          console.error("Tribute grid or empty state element not found!");
-          return;
+      if (!grid || !emptyState) return null;
+
+      emptyState.classList.add('hidden'); // Hide empty state if we're adding a card
+
+      // Check for duplicates just in case
+      if (tributes.some(existing => existing.id === tribute.id)) {
+          console.warn("Duplicate tribute ID detected, skipping render:", tribute.id);
+          return null; // Indicate skip
       }
+      tributes.push(tribute);
 
-      // If it's the first page and it's empty, show empty state
-      if (currentPage === 1 && newTributes.length === 0 && tributes.length === 0) { // Check overall tributes too
-          grid.innerHTML = ''; // Ensure grid is empty
-          emptyState.classList.remove('hidden');
-          return;
-      }
+      const cardIndex = tributes.length - 1;
+      const cardHtml = renderTributeCard(tribute, cardIndex);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = cardHtml.trim();
+      const cardElement = tempDiv.firstChild;
 
-      // Otherwise, hide empty state (even if appending to an existing list)
-      emptyState.classList.add('hidden');
+      if (!cardElement) return null;
 
-      let htmlToAppend = '';
-      const baseIndex = tributes.length; // Get current total count before adding new ones
+      // Initial state for animation is set by the class in renderTributeCard
+      // cardElement.classList.add('tribute-card-fade-in'); // Already added in renderTributeCard
 
-      newTributes.forEach((tribute, index) => {
-          // Add the new tribute to the main array *before* rendering
-          // Check for duplicates by ID before pushing, although backend should ideally handle this
-          if (!tributes.some(existing => existing.id === tribute.id)) {
-              tributes.push(tribute);
-              // Render the card using the *new overall index* in the `tributes` array
-              htmlToAppend += renderTributeCard(tribute, tributes.length - 1); // Use the latest index
-          } else {
-              console.warn("Duplicate tribute ID detected, skipping render:", tribute.id);
-          }
+      grid.appendChild(cardElement);
+
+      // Trigger the fade-in animation
+      requestAnimationFrame(() => {
+          setTimeout(() => { cardElement.classList.add('is-visible'); }, 50);
       });
 
-      grid.insertAdjacentHTML('beforeend', htmlToAppend); // Append new cards
-
-      // No need to re-attach listeners if using event delegation correctly
-      // attachCardEventListeners(); // Remove this if using delegation properly
-
-      setupCardAnimations(); // Apply animations to newly added cards
+      return cardElement; // Return the added element
   }
 
   // Renders the fan gallery part of a card
   function renderFanGallery(tribute, tributeIdx) {
     const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-    if (!photoArray.length) {
-        return `<div class="fan-stack mb-1"></div>`; // Return empty container if no photos
-    }
+    if (!photoArray.length) return `<div class="fan-stack mb-1"></div>`;
     let imgMarkup = "";
-    const numPhotos = Math.min(photoArray.length, 4); // Show max 4 photos
+    const numPhotos = Math.min(photoArray.length, 4);
     const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-    // Calculate horizontal shift to center the fan stack roughly
-    const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0; // Adjusted shift base
-
+    const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
     for (let i = 0; i < numPhotos; i++) {
-      // Validate photo URL/Data URL
-      if (typeof photoArray[i] !== 'string' || !photoArray[i].startsWith('data:image') && !photoArray[i].startsWith('http')) {
-          console.warn(`Invalid photo data at index ${i} for tribute ${tribute.id}`);
-          continue; // Skip invalid photo entries
-      }
+      if (typeof photoArray[i] !== 'string' || (!photoArray[i].startsWith('data:image') && !photoArray[i].startsWith('http'))) { console.warn(`Invalid photo data at index ${i} for tribute ${tribute.id}`); continue; }
       const angle = spreadAngles[i];
-      // Adjust translateX based on the number of photos for better centering
       const translateX = (numPhotos > 1) ? (i * 40) - horizontalShiftBase : 0;
-      const zIndex = numPhotos - i; // Stack photos visually
-
-      // Add tabindex for accessibility and data attributes for event handling
-      imgMarkup += `
-        <img
-          src="${escapeHtml(photoArray[i])}"
-          class="fan-img"
-          data-tidx="${tributeIdx}"
-          data-pidx="${i}"
-          tabindex="0"
-          style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};"
-          alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || 'Anonymous')}"
-          loading="lazy" <!-- Add lazy loading -->
-        >
-      `;
+      const zIndex = numPhotos - i;
+      imgMarkup += ` <img src="${escapeHtml(photoArray[i])}" class="fan-img" data-tidx="${tributeIdx}" data-pidx="${i}" tabindex="0" style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};" alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || 'Anonymous')}" loading="lazy"> `;
     }
     return `<div class="fan-stack mb-1">${imgMarkup}</div>`;
   }
 
-
-  // Renders a single tribute card HTML string
+  // Renders a single tribute card HTML string (includes fade-in class)
   function renderTributeCard(tribute, idx) {
-    const tributeId = tribute.id;
-    // Ensure required fields have fallbacks
-    const fromName = tribute.from || "Anonymous";
-    const message = tribute.msg || ""; // Message can be empty, but use fallback if undefined/null
-    const date = tribute.date || ""; // Use raw date string from backend
+      const tributeId = tribute.id;
+      const fromName = tribute.from || "Anonymous";
+      const message = tribute.msg || "";
+      const date = tribute.date || "";
+      const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
+      const gradientColor1 = gradientPair[0], gradientColor2 = gradientPair[1];
+      const cardBaseGradient = `linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%)`;
+      let cardPatternStyle = '', cardPatternBgImage = ''; const cardPatternType = idx % 5; const patternColorDark = patternColors.dark, patternColorLight = patternColors.light;
+      switch (cardPatternType) { /* ... cases for patterns ... */
+        case 0: cardPatternBgImage = `radial-gradient(${patternColorDark} 3%, transparent 4%), radial-gradient(${patternColorDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break;
+        case 1: cardPatternBgImage = `linear-gradient(135deg, ${patternColorDark} 1%, transparent 2%, transparent 50%, ${patternColorDark} 50%, ${patternColorDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break;
+        case 2: cardPatternBgImage = `linear-gradient(45deg, ${patternColorLight} 10%, transparent 12%, transparent 90%, ${patternColorLight} 91%, ${patternColorLight}), linear-gradient(135deg, ${patternColorLight} 10%, transparent 12%, transparent 90%, ${patternColorLight} 91%, ${patternColorLight})`; cardPatternStyle = `background-size: 38px 38px;`; break;
+        case 3: const waveSvgColor = patternColors.accent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgWaveCard = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(waveSvgColor)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgWaveCard)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break;
+        case 4: cardPatternBgImage = `radial-gradient(${patternColorDark} 0.8px, transparent 0), radial-gradient(${patternColorDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
+      }
+      const cardBackgroundStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
+      const dateIconClass = cardDateIcons[idx % cardDateIcons.length];
 
-    // Select Card Background Gradient
-    const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
-    const gradientColor1 = gradientPair[0];
-    const gradientColor2 = gradientPair[1];
-    const cardBaseGradient = `linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%)`;
-
-    // Generate Card Background Pattern
-    let cardPatternStyle = '';
-    let cardPatternBgImage = '';
-    const cardPatternType = idx % 5; // Cycle through 5 pattern types
-    const patternColorDark = patternColors.dark;
-    const patternColorLight = patternColors.light;
-
-    switch (cardPatternType) {
-        case 0: // Subtle Polka Dots
-            cardPatternBgImage = `radial-gradient(${patternColorDark} 3%, transparent 4%), radial-gradient(${patternColorDark} 3%, transparent 4%)`;
-            cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`;
-            break;
-        case 1: // Subtle Diagonal Stripes
-            cardPatternBgImage = `linear-gradient(135deg, ${patternColorDark} 1%, transparent 2%, transparent 50%, ${patternColorDark} 50%, ${patternColorDark} 51%, transparent 52%, transparent 100%)`;
-            cardPatternStyle = `background-size: 40px 40px;`;
-            break;
-        case 2: // Subtle Crosshatch
-             cardPatternBgImage = `linear-gradient(45deg, ${patternColorLight} 10%, transparent 12%, transparent 90%, ${patternColorLight} 91%, ${patternColorLight}), linear-gradient(135deg, ${patternColorLight} 10%, transparent 12%, transparent 90%, ${patternColorLight} 91%, ${patternColorLight})`;
-             cardPatternStyle = `background-size: 38px 38px;`;
-             break;
-        case 3: // Subtle Wavy Lines
-            const waveSvgColor = patternColors.accent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); // Adjust alpha
-            const svgWaveCard = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(waveSvgColor)}' stroke-width='0.8'/></svg>`;
-            cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgWaveCard)}")`;
-            cardPatternStyle = `background-size: 60px; background-repeat: repeat;`;
-            break;
-        case 4: // Subtle Noise
-            cardPatternBgImage = `radial-gradient(${patternColorDark} 0.8px, transparent 0), radial-gradient(${patternColorDark} 0.8px, transparent 0)`;
-            cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`;
-            break;
-    }
-
-    const cardBackgroundStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
-    const dateIconClass = cardDateIcons[idx % cardDateIcons.length]; // Cycle through date icons
-
-    // Card HTML structure
-    // Use data-cardidx attribute for the overall index in the 'tributes' array
-    return `
-      <div class="tribute-card relative io-observed" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBackgroundStyle}">
-        <!-- Buttons Container - HIDDEN BY CSS -->
-        <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;">
-          <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300">
-            <i class="fa-solid fa-pen fa-xs"></i>
-          </button>
-          <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300">
-            <i class="fa-solid fa-trash fa-xs"></i>
-          </button>
-        </div>
-
-        ${renderFanGallery(tribute, idx)}
-
-        <div class="text-pink-600 font-bold mb-2 text-center" style="font-family:'Indie Flower',cursive; font-size: 1.2rem;"> <!-- Adjusted font size -->
-          ${escapeHtml(fromName)}
-        </div>
-        <div class="text-gray-700 mb-3 text-center px-1 text-sm" style="font-family:'Quicksand',sans-serif; max-height: 100px; overflow-y: auto;"> <!-- Adjusted font, size, added scroll -->
-          ${escapeHtml(message).replace(/\n/g, "<br>")}
-        </div>
-        <!-- Date Container - HIDDEN BY CSS -->
-        <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1">
-          <i class="fa-solid ${dateIconClass} fa-xs"></i>
-          <span>${formatDateString(date)}</span>
-        </div>
+      // Main card div includes 'tribute-card-fade-in'
+      return `
+      <div class="tribute-card tribute-card-fade-in relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBackgroundStyle}">
+          <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;">
+              <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button>
+              <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button>
+          </div>
+          ${renderFanGallery(tribute, idx)}
+          <div class="text-pink-600 font-bold mb-2 text-center" style="font-family:'Indie Flower',cursive; font-size: 1.2rem;"> ${escapeHtml(fromName)} </div>
+          <div class="text-gray-700 mb-3 text-center px-1 text-sm" style="font-family:'Quicksand',sans-serif; max-height: 100px; overflow-y: auto;"> ${escapeHtml(message).replace(/\n/g, "<br>")} </div>
+          <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1"> <i class="fa-solid ${dateIconClass} fa-xs"></i> <span>${formatDateString(date)}</span> </div>
       </div>
-    `;
+      `;
   }
-
 
   // --- API INTERACTIONS ---
 
-  // Fetches a specific page of tributes
-  async function fetchAndRenderTributes(pageToFetch = 1) {
-    const grid = document.getElementById("tributesGrid");
-    const emptyState = document.getElementById('emptyState');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
+  // Fetches the NEXT SINGLE tribute
+  async function loadNextTribute() {
+      const loadingIndicator = document.getElementById('singleLoadIndicator');
+      const emptyState = document.getElementById('emptyState');
+      const allLoadedMsg = document.getElementById('allLoadedMessage');
 
-    // Basic validation and prevent concurrent requests
-    if (!grid || !emptyState || !loadingIndicator || !loadMoreBtn || isLoading) {
-        if (isLoading) console.log("Fetch already in progress, skipping.");
-        return;
-    }
+      if (isLoading || allTributesLoaded) { console.log("Skipping loadNextTribute:", { isLoading, allTributesLoaded }); return; }
+      isLoading = true;
+      if (loadingIndicator) loadingIndicator.classList.remove('hidden');
+      console.log(`Fetching next tribute (page ${nextPageToFetch})...`);
 
-    isLoading = true;
-    currentPage = pageToFetch; // Update global state for the page being fetched
+      try {
+          const response = await fetch(`/.netlify/functions/get-tributes?page=${nextPageToFetch}&pageSize=1`);
+          if (!response.ok) { let errorMsg = `HTTP error! status: ${response.status}`; try { const errorData = await response.json(); errorMsg = errorData.error || errorMsg; } catch (e) {} throw new Error(errorMsg); }
+          const data = await response.json();
 
-    // Update UI for loading state
-    if (currentPage > 1) { // Loading more pages
-        loadingIndicator.classList.remove('hidden');
-        loadMoreBtn.classList.add('hidden');
-    } else { // Initial load (page 1)
-        grid.innerHTML = '<p class="text-pink-400 text-center col-span-full italic py-4">Loading tributes...</p>'; // Show initial loading message
-        emptyState.classList.add('hidden'); // Ensure empty state is hidden initially
-        loadMoreBtn.classList.add('hidden'); // Ensure load more is hidden initially
-        tributes = []; // Clear the local cache on a fresh load (page 1)
-    }
-
-    try {
-      console.log(`Fetching page ${currentPage}, size ${pageSize}`);
-      const response = await fetch(`/.netlify/functions/get-tributes?page=${currentPage}&pageSize=${pageSize}`);
-
-      if (!response.ok) {
-          // Try to parse error message from backend if available
-          let errorBody = "Unknown error";
-          try { errorBody = await response.text(); } catch(e) {/* ignore */}
-          throw new Error(`HTTP error! status: ${response.status}, message: ${errorBody}`);
-      }
-
-      const data = await response.json();
-
-      // Validate response structure
-      if (!data || !Array.isArray(data.tributes) || !data.pagination) {
-        throw new Error("Invalid response structure received from server.");
-      }
-
-      const newTributes = data.tributes;
-      const paginationInfo = data.pagination;
-
-      // Clear initial loading message *before* rendering if it was page 1
-      if (currentPage === 1 && grid.querySelector('p.italic')) {
-          grid.innerHTML = '';
-      }
-
-      renderTributesPage(newTributes); // Render the fetched page's tributes
-
-      // Update pagination state from the response
-      totalPages = parseInt(paginationInfo.totalPages, 10) || 1;
-      // Use the actual current page from response in case backend adjusted it
-      currentPage = parseInt(paginationInfo.currentPage, 10) || 1;
-
-      updateLoadMoreButton(); // Update button visibility based on new state
-
-    } catch (error) {
-      console.error("Could not load tributes:", error);
-       // Show error message in the grid *only* if it's the first page load failing
-       if (currentPage === 1) {
-           grid.innerHTML = `<p class="text-red-500 text-center col-span-full py-4">Could not load tributes. ${error.message}. Please try again later.</p>`;
-           emptyState.classList.add('hidden'); // Keep empty state hidden on error
-           loadMoreBtn.classList.add('hidden'); // Keep load more hidden on error
-       } else {
-            // For subsequent load failures, maybe show an alert or a small message near the button
-            alert(`Failed to load more tributes: ${error.message}`);
-            // Attempt to show the button again so user can retry
-            updateLoadMoreButton();
-       }
-    } finally {
-      isLoading = false; // Reset loading flag
-      loadingIndicator.classList.add('hidden'); // Always hide indicator after attempt
-
-      // Ensure button state is correct after fetch attempt, unless there was a critical error on page 1
-      const isPage1Error = currentPage === 1 && grid.querySelector('.text-red-500');
-      if (!isPage1Error) {
-        updateLoadMoreButton();
-      }
-    }
-  }
-
-
-  // Helper function to manage the visibility of the "Load More" button
-  function updateLoadMoreButton() {
-      const loadMoreBtn = document.getElementById('loadMoreBtn');
-      if (!loadMoreBtn) return;
-
-      // Show button if we are not on the last page AND not currently loading
-      if (currentPage < totalPages && !isLoading) {
-          loadMoreBtn.classList.remove('hidden');
-      } else {
-          loadMoreBtn.classList.add('hidden');
+          if (!data || !Array.isArray(data.tributes) || data.tributes.length === 0) {
+              console.log("All tributes loaded.");
+              allTributesLoaded = true;
+              if (tributes.length === 0) { emptyState.classList.remove('hidden'); allLoadedMsg.classList.add('hidden'); }
+              else { emptyState.classList.add('hidden'); allLoadedMsg?.classList.remove('hidden'); }
+          } else {
+              const tribute = data.tributes[0];
+              renderSingleTribute(tribute);
+              nextPageToFetch++;
+          }
+      } catch (error) {
+          console.error("Could not load next tribute:", error);
+          if (loadingIndicator) loadingIndicator.innerText = "Error loading. Try scrolling again.";
+      } finally {
+          isLoading = false;
+          if (loadingIndicator) { setTimeout(() => { loadingIndicator.classList.add('hidden'); loadingIndicator.innerText = "Loading next tribute..."; }, 300); }
       }
   }
 
+  // --- Modified Add/Edit/Delete Handling ---
+  async function resetAndReloadAll() {
+      console.log("Resetting and reloading all tributes...");
+      const grid = document.getElementById("tributesGrid");
+      const emptyState = document.getElementById('emptyState');
+      const allLoadedMsg = document.getElementById('allLoadedMessage');
+      if (grid) grid.innerHTML = '';
+      tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false;
+      if(emptyState) emptyState.classList.add('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
+      document.getElementById('singleLoadIndicator')?.classList.add('hidden');
+      await loadNextTribute();
+      setupScrollObserver(); // Re-observe after reload
+  }
 
-  // Submits a new tribute or updates an existing one
+  // Calls resetAndReloadAll on success
   async function submitTribute(tributeData, idToUpdate = null) {
-    const isUpdating = idToUpdate !== null && !isNaN(parseInt(idToUpdate, 10));
-    const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
-    const method = isUpdating ? 'PUT' : 'POST';
-
-    // Prepare payload, ensuring ID is included only for updates
-    const payload = {
-        from: tributeData.from,
-        msg: tributeData.msg,
-        photos: tributeData.photos // Send photos array (Data URLs)
-    };
-    if (isUpdating) {
-        payload.id = parseInt(idToUpdate, 10);
-    }
-
-    console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+payload.id : 'New'}):`, {from: payload.from, msg: payload.msg, photoCount: payload.photos.length}); // Avoid logging full Data URLs
-
-    try {
-      const response = await fetch(endpoint, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        let errorMsg = `HTTP error! status: ${response.status}`;
-        try {
-            const errorData = await response.json();
-            errorMsg = errorData.error || errorMsg;
-        } catch (e) { /* Ignore if response is not JSON */ }
-        throw new Error(errorMsg);
-      }
-
-      const responseData = await response.json(); // Assuming backend returns the added/updated tribute or success message
-      console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully. Response:`, responseData);
-
-      showConfetti(); // Show success animation
-
-      // Reload the *first page* to ensure the latest data (including the new/updated one) is shown at the top
-      await fetchAndRenderTributes(1);
-
-      return true; // Indicate success
-
-    } catch (error) {
-      console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error);
-      alert(`Error ${isUpdating ? 'updating' : 'sharing'} tribute: ${error.message}`);
-      return false; // Indicate failure
-    }
+      const isUpdating = idToUpdate !== null && !isNaN(parseInt(idToUpdate, 10));
+      const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
+      const method = isUpdating ? 'PUT' : 'POST';
+      const payload = { from: tributeData.from, msg: tributeData.msg, photos: tributeData.photos }; // photos are base64
+      if (isUpdating) { payload.id = parseInt(idToUpdate, 10); }
+      console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+payload.id : 'New'})`);
+      try {
+          const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (!response.ok) { throw new Error(`HTTP Error ${response.status}`); }
+          console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`);
+          showConfetti();
+          await resetAndReloadAll(); // Reload everything
+          return true;
+      } catch (error) { console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error); alert(`Error: ${error.message}`); return false; }
   }
 
-
-  // Deletes a tribute by its ID
+  // Calls resetAndReloadAll on success
   async function deleteTribute(tributeId) {
-    const idToDelete = parseInt(tributeId, 10);
-    if (isNaN(idToDelete)) {
-        console.error("Invalid ID provided for deletion:", tributeId);
-        alert("Cannot delete: Invalid tribute ID.");
-        return false;
-    }
+      const idToDelete = parseInt(tributeId, 10);
+      if (isNaN(idToDelete)) return false;
+      if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
+      console.log("Attempting to delete tribute ID:", idToDelete);
+      try {
+          const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
+          if (!response.ok) { throw new Error(`HTTP Error ${response.status}`); }
+          console.log("Tribute deleted successfully:", idToDelete);
+          await resetAndReloadAll(); // Reload everything
+          return true;
+      } catch (error) { console.error("Error deleting tribute:", error); alert(`Error: ${error.message}`); return false; }
+  }
 
-    // Confirmation dialog
-    if (!confirm('Are you sure you want to delete this tribute? This action cannot be undone.')) {
-        return false; // User cancelled
-    }
-
-    console.log("Attempting to delete tribute ID:", idToDelete);
-
-    try {
-      const response = await fetch('/.netlify/functions/delete-tribute', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: idToDelete }) // Send ID in the body
+  // --- FORM HANDLING (Includes Temporary Base64 Photo Processing) ---
+  async function filesToDataURLs_Temporary(fileList) {
+    const MAX_FILES = 4, MAX_SIZE_MB = 20;
+    const filesToProcess = Array.from(fileList).slice(0, MAX_FILES);
+    const readerPromises = filesToProcess.map(file => {
+      return new Promise((resolve, reject) => {
+        if (!file.type.startsWith('image/')) return resolve(null);
+        if (file.size > MAX_SIZE_MB * 1024 * 1024) { alert(`File "${file.name}" > ${MAX_SIZE_MB}MB.`); return resolve(null); }
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
-
-      if (!response.ok) {
-        let errorMsg = `HTTP error! status: ${response.status}`;
-        try {
-            const errorData = await response.json();
-            errorMsg = errorData.error || errorMsg;
-        } catch (e) { /* Ignore if response is not JSON */ }
-        throw new Error(errorMsg);
-      }
-
-      console.log("Tribute deleted successfully:", idToDelete);
-      // Optionally parse success message from response if needed
-      // const responseData = await response.json();
-
-      // Reload the *first page* to reflect the deletion
-      await fetchAndRenderTributes(1);
-
-      return true; // Indicate success
-
-    } catch (error) {
-      console.error("Error deleting tribute:", error);
-      alert(`Error deleting tribute: ${error.message}`);
-      return false; // Indicate failure
-    }
+    });
+     const results = await Promise.allSettled(readerPromises);
+     return results.filter(r => r.status === 'fulfilled' && r.value !== null).map(r => r.value);
   }
 
-
-  // --- FORM HANDLING ---
-
-  // Handles the submission of the tribute form
   async function handleFormSubmit(e) {
-    e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn'), submitBtnText = document.getElementById('submitBtnText'), fileInput = document.getElementById('photos');
+      if (!submitBtn || !submitBtnText || !fileInput) return;
+      if (isLoading) { alert("Please wait for loading."); return; }
+      submitBtn.disabled = true;
+      const originalBtnText = editingTributeId ? "Update" : "Share";
+      let actionText = editingTributeId ? 'Updating...' : 'Sharing...';
+      let photos = [];
+      try {
+          if (fileInput.files.length > 0 && fileInput.files.length <= 4) {
+              actionText = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
+              submitBtnText.textContent = actionText;
+              photos = await filesToDataURLs_Temporary(fileInput.files);
+          } else if (fileInput.files.length > 4) { throw new Error("Too many photos selected (max 4)."); }
+          submitBtnText.textContent = actionText;
 
-    const submitBtn = document.getElementById('submitBtn');
-    const submitBtnText = document.getElementById('submitBtnText');
-    const fileInput = document.getElementById('photos');
-    const nameInput = document.getElementById('fromName');
-    const messageInput = document.getElementById('message');
+          const from = document.getElementById('fromName').value.trim() || "Anonymous";
+          const msg = document.getElementById('message').value.trim();
+          if (!msg) { throw new Error("Message cannot be empty."); }
+          if (msg.length > 1500) { throw new Error("Message exceeds 1500 characters."); }
 
-    // Basic validation
-    if (!submitBtn || !submitBtnText || !fileInput || !nameInput || !messageInput) {
-        console.error("Form elements not found.");
-        return;
-    }
-    if (isLoading) { // Prevent submission while loading tributes
-        alert("Please wait for tributes to finish loading before submitting.");
-        return;
-    }
+          const tributeData = { from, msg, photos }; // Photos are base64
+          const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null;
+          if (editingTributeId && isNaN(idToUpdate)) { throw new Error("Invalid tribute ID for update."); }
 
-    submitBtn.disabled = true; // Disable button during processing
-    const originalBtnText = editingTributeId ? "Update" : "Share";
-    let actionText = editingTributeId ? 'Updating...' : 'Sharing...';
-
-    // Check if photos are selected BEFORE reading them
-    if (fileInput.files.length > 0) {
-        actionText = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
-    }
-    submitBtnText.textContent = actionText;
-
-    let photos = []; // Array to hold photo Data URLs
-
-    try {
-      // Process photos if files are selected
-      if (fileInput.files.length > 0) {
-        console.log(`Processing ${fileInput.files.length} photos...`);
-        photos = await filesToDataURLs(fileInput.files); // Await the async processing
-        console.log("Photos processed:", photos.length, "successfully read.");
-        if (photos.length !== fileInput.files.length) {
-            alert("Some photos could not be processed (check size or type). Proceeding with valid photos.");
-        }
-      }
-
-      const from = nameInput.value.trim() || "Anonymous"; // Get name, default to Anonymous
-      const msg = messageInput.value.trim(); // Get message
-
-      // Validate required fields
-      if (!msg) {
-         alert("Please enter a message for your tribute.");
-         throw new Error("Message cannot be empty."); // Throw error to stop processing
-      }
-      // Validate message length (already set in HTML maxlength, but good for robustness)
-      if (msg.length > 1500) {
-          alert("Your message is too long. Please keep it under 1500 characters.");
-          throw new Error("Message exceeds 1500 characters.");
-      }
-
-      // Prepare tribute data object
-      const tributeData = { from, msg, photos };
-
-      // Determine if updating or adding
-      const idToUpdate = editingTributeId ? parseInt(editingTributeId, 10) : null;
-      if (editingTributeId && isNaN(idToUpdate)) {
-          throw new Error("Invalid tribute ID for update."); // Should not happen if loaded correctly
-      }
-
-      // Call the API function to submit/update
-      const success = await submitTribute(tributeData, idToUpdate);
-
-      if (success) {
-        resetForm(); // Clear form only on successful submission
-      } else {
-        // Re-enable button if submission failed (unless it was a known validation error handled above)
-        submitBtn.disabled = false;
-        submitBtnText.textContent = originalBtnText;
-      }
-
-    } catch (error) {
-      console.error("Error handling form submit:", error);
-      // Re-enable button after error, except for specific validation errors caught above
-      if (error.message !== "Message cannot be empty." && error.message !== "Message exceeds 1500 characters.") {
-         // Maybe show error.message in an alert here if not already done by submitTribute
-      }
-      submitBtn.disabled = false; // Always re-enable after error
-      submitBtnText.textContent = originalBtnText; // Reset button text
-    }
+          const success = await submitTribute(tributeData, idToUpdate);
+          if (success) { resetForm(); } else { submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; }
+      } catch (error) { console.error("Error handling form submit:", error); alert(error.message); submitBtn.disabled = false; submitBtnText.textContent = originalBtnText; }
   }
 
-
-  // Resets the form fields and cancels editing mode
+  // resetForm
   function resetForm() {
-    const form = document.getElementById('tributeForm');
-    const submitBtnText = document.getElementById('submitBtnText');
-    const cancelBtn = document.getElementById('cancelEditBtn');
-    const submitBtn = document.getElementById('submitBtn');
-
-    if (form) form.reset(); // Reset all form fields
-    if (submitBtnText) submitBtnText.textContent = "Share"; // Reset button text
-    if (cancelBtn) cancelBtn.classList.add('hidden'); // Hide cancel button
-    if (submitBtn) submitBtn.disabled = false; // Re-enable submit button
-
-    editingTributeId = null; // Exit editing mode
-    console.log("Form reset and editing cancelled.");
+    const form = document.getElementById('tributeForm'); const submitBtnText = document.getElementById('submitBtnText'); const cancelBtn = document.getElementById('cancelEditBtn'); const submitBtn = document.getElementById('submitBtn');
+    if (form) form.reset(); if (submitBtnText) submitBtnText.textContent = "Share"; if (cancelBtn) cancelBtn.classList.add('hidden'); if (submitBtn) submitBtn.disabled = false;
+    editingTributeId = null; console.log("Form reset and editing cancelled.");
   }
 
-
-  // Loads tribute data into the form for editing
+  // loadEditForm
   function loadEditForm(tributeId) {
-    const idToLoad = parseInt(tributeId, 10);
-    if (isNaN(idToLoad)) {
-        console.error("Invalid ID for editing:", tributeId);
-        return;
-    }
-
-    // Find the tribute in the locally cached 'tributes' array
+    const idToLoad = parseInt(tributeId, 10); if (isNaN(idToLoad)) return;
     const tributeToEdit = tributes.find(t => t.id === idToLoad);
-
-    if (!tributeToEdit) {
-        // If not found, it might be on an unloaded page or deleted.
-        alert("Could not find tribute data to edit. It might be on a page not yet loaded or has been deleted. Please load more tributes or refresh.");
-        return;
-    }
-
+    if (!tributeToEdit) { alert("Could not find tribute data to edit. It might be on a page not yet loaded or deleted."); return; }
     console.log("Loading tribute for editing:", tributeToEdit);
-
-    const nameInput = document.getElementById('fromName');
-    const messageInput = document.getElementById('message');
-    const fileInput = document.getElementById('photos'); // Clear file input for editing
-
-    // Populate form fields
-    if (nameInput) nameInput.value = tributeToEdit.from || ''; // Use fallback for safety
-    if (messageInput) messageInput.value = tributeToEdit.msg || ''; // Use fallback
-
-    // Clear the file input - user must re-select photos if they want to change/add them during edit
-    if (fileInput) fileInput.value = '';
-    // Note: You cannot programmatically set the value of a file input for security reasons.
-    // We don't pre-fill photos; user must re-upload if changing. Backend should handle merging/replacing.
-
-    editingTributeId = idToLoad; // Set the global editing ID
-
-    // Update button states
-    const submitBtnText = document.getElementById('submitBtnText');
-    const cancelBtn = document.getElementById('cancelEditBtn');
-    if (submitBtnText) submitBtnText.textContent = "Update"; // Change submit button text
-    if (cancelBtn) cancelBtn.classList.remove('hidden'); // Show cancel button
-
-    // Scroll to the top to make the form visible
+    const nameInput = document.getElementById('fromName'); const messageInput = document.getElementById('message'); const fileInput = document.getElementById('photos');
+    if (nameInput) nameInput.value = tributeToEdit.from || ''; if (messageInput) messageInput.value = tributeToEdit.msg || ''; if (fileInput) fileInput.value = ''; // Clear file input
+    editingTributeId = idToLoad;
+    const submitBtnText = document.getElementById('submitBtnText'); const cancelBtn = document.getElementById('cancelEditBtn');
+    if (submitBtnText) submitBtnText.textContent = "Update"; if (cancelBtn) cancelBtn.classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // --- UI INTERACTIONS ---
 
-  // --- UI INTERACTIONS (Modal, Card Buttons, Animations) ---
-
-  // Attaches event listeners using delegation on the grid container
+  // Event delegation for grid clicks (edit/delete/photo)
   function attachGridEventListeners() {
-    const grid = document.getElementById('tributesGrid');
-    if (!grid) {
-        console.error("Tribute grid not found for attaching listeners.");
-        return;
-    }
-
-    // Single click listener on the grid container
+    const grid = document.getElementById('tributesGrid'); if (!grid) return;
     grid.onclick = function handleGridClick(event) {
       const target = event.target;
-
-      // Check if an action button (edit/delete) was clicked
-      const actionButton = target.closest('button[data-act]');
-      if (actionButton) {
-        event.stopPropagation(); // Prevent triggering other potential listeners
-        const action = actionButton.getAttribute('data-act');
-        const id = actionButton.getAttribute('data-id');
-        if (!id) { console.warn("Action button clicked without data-id"); return; }
-
-        if (action === 'edit') {
-            console.log("Edit action clicked for ID:", id);
-            loadEditForm(id);
-        } else if (action === 'delete') {
-            console.log("Delete action clicked for ID:", id);
-            deleteTribute(id);
-        }
-        return; // Action handled
-      }
-
-      // Check if a photo image inside the fan stack was clicked
-      const photoImage = target.closest('.fan-img');
-      if (photoImage) {
-        event.stopPropagation();
-        // Get the overall tribute index from the parent card's data attribute
-        const cardElement = photoImage.closest('.tribute-card');
-        const tributeIndex = cardElement ? parseInt(cardElement.getAttribute("data-cardidx"), 10) : NaN;
-        const photoIndex = parseInt(photoImage.getAttribute("data-pidx"), 10);
-
-        // Validate indices and ensure tribute exists in the loaded array
-        if (!isNaN(tributeIndex) && !isNaN(photoIndex) && tributes[tributeIndex]) {
-          console.log(`Photo clicked: Tribute Index ${tributeIndex}, Photo Index ${photoIndex}`);
-          showModalGallery(tributeIndex, photoIndex);
-        } else {
-            console.warn("Could not determine valid indices for modal gallery from clicked photo.", { tributeIndex, photoIndex });
-        }
-        return; // Action handled
-      }
-
-      // Add other potential click targets within the card if needed
+      const actionButton = target.closest('button[data-act]'); const photoImage = target.closest('.fan-img');
+      if (actionButton) { event.stopPropagation(); const action = actionButton.getAttribute('data-act'); const id = actionButton.getAttribute('data-id'); if (!id) return; if (action === 'edit') loadEditForm(id); else if (action === 'delete') deleteTribute(id); return; }
+      if (photoImage) { event.stopPropagation(); const cardElement = photoImage.closest('.tribute-card'); const tributeIndex = cardElement ? parseInt(cardElement.getAttribute("data-cardidx"), 10) : NaN; const photoIndex = parseInt(photoImage.getAttribute("data-pidx"), 10); if (!isNaN(tributeIndex) && !isNaN(photoIndex) && tributes[tributeIndex]) { showModalGallery(tributeIndex, photoIndex); } else { console.warn("Could not determine indices for modal.", { tributeIndex, photoIndex }); } return; }
     };
-
-    // Add keydown listener to grid for accessibility on focusable elements (like fan images)
-    grid.onkeydown = function handleGridKeyDown(event) {
-        // Handle Enter/Space key press on focused fan images to open modal
-        if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.fan-img')) {
-            event.preventDefault(); // Prevent default spacebar scroll
-            event.target.click(); // Trigger the click handler defined above
-        }
-        // Handle Enter/Space on action buttons? Click handler should suffice.
-    };
-
+     grid.onkeydown = function handleGridKeyDown(event) { if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.fan-img')) { event.preventDefault(); event.target.click(); } };
     console.log("Event listeners attached to tributesGrid.");
   }
 
-
-  // Sets up Intersection Observer for card entry animations
-  function setupCardAnimations() {
-    if ('IntersectionObserver' in window) {
-      // Select only cards that *haven't* been observed yet (or re-observe if needed)
-      // Using a class '.io-observed' to mark observed elements
-      const cardsToObserve = document.querySelectorAll('.tribute-card:not(.io-animated)');
-
-      if (cardsToObserve.length === 0) return; // No new cards to observe
-
-      const observer = new IntersectionObserver((entries, observerInstance) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const card = entry.target;
-            card.classList.add('card-mobile-anim'); // Add animation class
-            card.classList.add('io-animated'); // Mark as animated
-            // Optional: remove animation class after it completes to allow re-triggering if needed
-            // setTimeout(() => card.classList.remove('card-mobile-anim'), 700);
-
-            observerInstance.unobserve(card); // Stop observing once animated
-          }
-        });
-      }, { threshold: 0.30 }); // Adjust threshold as needed (0.3 means 30% visible)
-
-      cardsToObserve.forEach(card => observer.observe(card));
-      // console.log(`Observing ${cardsToObserve.length} new cards for animation.`);
-
-    } else {
-      // Fallback or message if IntersectionObserver is not supported
-      console.warn("IntersectionObserver not supported, skipping card entry animations.");
-      // Optionally, apply a simpler effect or just show all cards immediately
-      document.querySelectorAll('.tribute-card:not(.io-animated)').forEach(card => {
-          card.classList.add('io-animated'); // Mark them anyway
-      });
-    }
-  }
-
-
   // --- Modal Gallery Logic ---
-  let modalTributeIdx = 0; // Index of the tribute in the global `tributes` array
-  let modalPhotoIdx = 0;   // Index of the photo within that tribute's `photos` array
-
-  // Shows the modal gallery for a specific tribute and photo index
+  let modalTributeIdx = 0, modalPhotoIdx = 0;
   function showModalGallery(tributeIdx, photoIdx) {
     const modal = document.getElementById("galleryModal");
-    // Validate input indices and tribute data
-    if (!modal || typeof tributeIdx !== 'number' || tributeIdx < 0 || tributeIdx >= tributes.length || !tributes[tributeIdx]) {
-        console.error("Invalid tribute index or tribute data for modal gallery:", tributeIdx);
-        return;
-    }
+    if (!modal || typeof tributeIdx !== 'number' || tributeIdx < 0 || tributeIdx >= tributes.length || !tributes[tributeIdx]) { console.error("Invalid data for modal:", tributeIdx); return; }
     const tribute = tributes[tributeIdx];
-    if (!Array.isArray(tribute.photos) || typeof photoIdx !== 'number' || photoIdx < 0 || photoIdx >= tribute.photos.length) {
-         console.error("Invalid photo index or photos array for modal gallery:", photoIdx, tribute.photos);
-         return;
-    }
-
-    modalTributeIdx = tributeIdx; // Store the indices globally for navigation
-    modalPhotoIdx = photoIdx;
-
-    renderModalImage(); // Render the initial image and controls
-
-    modal.classList.remove("hidden"); // Show the modal
-    modal.focus(); // Focus the modal container for keyboard navigation
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    console.log(`Showing modal for Tribute ${tributeIdx}, Photo ${photoIdx}`);
+    if (!Array.isArray(tribute.photos) || typeof photoIdx !== 'number' || photoIdx < 0 || photoIdx >= tribute.photos.length) { console.error("Invalid photo index for modal:", photoIdx, tribute.photos); return; }
+    modalTributeIdx = tributeIdx; modalPhotoIdx = photoIdx;
+    renderModalImage();
+    modal.classList.remove("hidden"); modal.focus(); document.body.style.overflow = 'hidden';
   }
-
-  // Renders the image, caption, and navigation buttons inside the modal
   function renderModalImage() {
-    const modalImg = document.getElementById('modalImg');
-    const caption = document.getElementById('galleryCaption');
-    const prevBtn = document.getElementById('prevImgBtn');
-    const nextBtn = document.getElementById('nextImgBtn');
-
-    if (!modalImg || !caption || !prevBtn || !nextBtn) {
-        console.error("Modal image, caption, or navigation buttons not found!");
-        closeModalGallery(); // Close modal if elements are missing
-        return;
-    }
-
-    const tribute = tributes[modalTributeIdx]; // Get the current tribute
-    // Ensure photos is an array, even if empty
-    const photos = Array.isArray(tribute.photos) ? tribute.photos : [];
-    const currentPhotoSrc = photos[modalPhotoIdx]; // Get the photo source URL/Data URL
-
-    // Validate the photo source
-    if (typeof currentPhotoSrc !== 'string' || (!currentPhotoSrc.startsWith('data:image') && !currentPhotoSrc.startsWith('http'))) {
-        console.error(`Invalid image source at index ${modalPhotoIdx} for tribute ${tribute.id}`);
-        // Optionally display an error image or close the modal
-        modalImg.alt = "Invalid image source";
-        modalImg.src = ""; // Clear src or set to a placeholder
-        caption.textContent = "Error loading image.";
-        prevBtn.classList.add('hidden'); // Hide nav buttons
-        nextBtn.classList.add('hidden');
-        return; // Stop further processing for this image
-    }
-
-    // Set the image source and alt text
-    modalImg.src = currentPhotoSrc;
-    modalImg.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(tribute.from || 'Anonymous')}`;
-
-    // Update the caption
-    caption.textContent = `${escapeHtml(tribute.from || 'Anonymous')}: Photo ${modalPhotoIdx + 1} of ${photos.length}`;
-
-    // Toggle visibility of previous/next buttons based on current index
-    prevBtn.classList.toggle('hidden', modalPhotoIdx === 0); // Hide prev on first image
-    nextBtn.classList.toggle('hidden', modalPhotoIdx >= photos.length - 1); // Hide next on last image
+    const modalImg = document.getElementById('modalImg'), caption = document.getElementById('galleryCaption'), prevBtn = document.getElementById('prevImgBtn'), nextBtn = document.getElementById('nextImgBtn');
+    if (!modalImg || !caption || !prevBtn || !nextBtn) { closeModalGallery(); return; }
+    const tribute = tributes[modalTributeIdx]; const photos = Array.isArray(tribute.photos) ? tribute.photos : []; const currentPhotoSrc = photos[modalPhotoIdx];
+    if (typeof currentPhotoSrc !== 'string' || (!currentPhotoSrc.startsWith('data:image') && !currentPhotoSrc.startsWith('http'))) { console.error(`Invalid image source at index ${modalPhotoIdx}`); modalImg.alt = "Invalid image"; modalImg.src = ""; caption.textContent = "Error loading image."; prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); return; }
+    modalImg.src = currentPhotoSrc; modalImg.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(tribute.from || 'Anonymous')}`; caption.textContent = `${escapeHtml(tribute.from || 'Anonymous')}: Photo ${modalPhotoIdx + 1} of ${photos.length}`;
+    prevBtn.classList.toggle('hidden', modalPhotoIdx === 0); nextBtn.classList.toggle('hidden', modalPhotoIdx >= photos.length - 1);
   }
-
-
-  // Closes the modal gallery
-  function closeModalGallery() {
-    const modal = document.getElementById("galleryModal");
-    const modalImg = document.getElementById('modalImg'); // To clear src
-    if (!modal) return;
-
-    modal.classList.add("hidden"); // Hide the modal
-    if (modalImg) {
-        modalImg.src = ''; // Clear image src to free up memory/stop loading
-        modalImg.alt = 'Gallery Image'; // Reset alt text
-    }
-    document.body.style.overflow = ''; // Restore background scrolling
-    console.log("Modal closed.");
-  }
-
-  // Navigates to the previous or next image in the modal
-  function navigateModal(direction) {
-    if (!tributes[modalTributeIdx] || !Array.isArray(tributes[modalTributeIdx].photos)) {
-        console.warn("Cannot navigate modal, tribute or photos data missing.");
-        return;
-    }
-    const photos = tributes[modalTributeIdx].photos;
-
-    if (direction === 'prev' && modalPhotoIdx > 0) {
-      modalPhotoIdx--; // Decrement photo index
-      console.log("Navigating modal to previous image, index:", modalPhotoIdx);
-      renderModalImage(); // Re-render modal content
-    } else if (direction === 'next' && modalPhotoIdx < photos.length - 1) {
-      modalPhotoIdx++; // Increment photo index
-      console.log("Navigating modal to next image, index:", modalPhotoIdx);
-      renderModalImage(); // Re-render modal content
-    } else {
-        console.log("Modal navigation reached beginning or end.");
-    }
-  }
-
+  function closeModalGallery() { const modal = document.getElementById("galleryModal"), modalImg = document.getElementById('modalImg'); if (!modal) return; modal.classList.add("hidden"); if (modalImg) modalImg.src = ''; document.body.style.overflow = ''; }
+  function navigateModal(direction) { if (!tributes[modalTributeIdx] || !Array.isArray(tributes[modalTributeIdx].photos)) return; const photos = tributes[modalTributeIdx].photos; if (direction === 'prev' && modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } else if (direction === 'next' && modalPhotoIdx < photos.length - 1) { modalPhotoIdx++; renderModalImage(); } }
 
   // --- Confetti Animation ---
   function showConfetti() {
-    const confettiBox = document.getElementById('confettiBox');
-    if (!confettiBox) return;
-
-    confettiBox.style.display = 'flex'; // Make container visible
-    confettiBox.innerHTML = ''; // Clear any previous confetti
-
-    // Updated confetti colors for pink theme
-    const colors = ['#f8bbd0','#f48fb1','#f06292','#ec407a','#e91e63','#d81b60','#ce93d8','#ba68c8','#ab47bc','#9c27b0','#ffccbc','#ffab91','#ff8a65','#ff7043'];
-    const numConfetti = 30 + Math.floor(15 * Math.random()); // More confetti!
-
-    for (let i = 0; i < numConfetti; i++) {
-      let dot = document.createElement('span');
-      dot.className = 'confetti__dot';
-      // Random color
-      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
-      // Random horizontal position
-      dot.style.left = (2 + 96 * Math.random()) + '%';
-      // Random starting vertical position (slightly above view)
-      dot.style.top = (-5 + Math.random() * 10) + '%';
-      // Random animation delay for staggered fall
-      dot.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's';
-      // Random opacity
-      dot.style.opacity = (0.6 + 0.4 * Math.random()).toFixed(2);
-      // Random size variation (optional)
-      const scale = 0.8 + Math.random() * 0.4;
-      dot.style.transform = `scale(${scale.toFixed(2)})`;
-
-      confettiBox.appendChild(dot);
-    }
-
-    // Automatically hide confetti container after animation duration
-    setTimeout(() => {
-      if (confettiBox) {
-          confettiBox.style.display = 'none'; // Hide container
-          confettiBox.innerHTML = ''; // Clear dots
-      }
-    }, 2100); // Should be slightly longer than the animation duration (1.7s)
+    const c = document.getElementById('confettiBox'); if (!c) return; c.style.display = 'flex'; c.innerHTML = '';
+    const o = ['#f8bbd0','#f48fb1','#f06292','#ec407a','#e91e63','#d81b60','#ce93d8','#ba68c8','#ab47bc','#9c27b0','#ffccbc','#ffab91','#ff8a65','#ff7043'];
+    const n = 30 + Math.floor(15 * Math.random()); for (let i = 0; i < n; i++) { let d = document.createElement('span'); d.className = 'confetti__dot'; d.style.background = o[Math.floor(Math.random() * o.length)]; d.style.left = (2 + 96 * Math.random()) + '%'; d.style.top = (-5 + Math.random() * 10) + '%'; d.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's'; d.style.opacity = (0.6 + 0.4 * Math.random()).toFixed(2); const s = 0.8 + Math.random() * 0.4; d.style.transform = `scale(${s.toFixed(2)})`; c.appendChild(d); }
+    setTimeout(() => { if (c) { c.style.display = 'none'; c.innerHTML = ''; } }, 2100);
   }
 
+  // --- Infinite Scroll Setup ---
+  let observer;
+  function setupScrollObserver() {
+      if (observer) { observer.disconnect(); }
+      const scrollTrigger = document.getElementById('scrollTrigger'); if (!scrollTrigger) return;
+      const options = { root: null, rootMargin: '0px', threshold: 0.1 };
+      observer = new IntersectionObserver((entries, observerInstance) => {
+          entries.forEach(entry => { if (entry.isIntersecting && !isLoading && !allTributesLoaded) { loadNextTribute(); } });
+      }, options);
+      observer.observe(scrollTrigger); console.log("IntersectionObserver setup for infinite scroll.");
+  }
 
   // --- INITIALIZATION & GLOBAL EVENT LISTENERS ---
   document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM fully loaded and parsed");
-
-    // Fetch the first page of tributes on initial load
-    fetchAndRenderTributes(1);
-
-    // Attach event listeners (delegated listeners first)
-    attachGridEventListeners(); // Attach listeners to the grid container
-
-    // Attach listeners to static elements
-    try {
-      const tributeForm = document.getElementById('tributeForm');
-      if (tributeForm) {
-        tributeForm.onsubmit = handleFormSubmit;
-        console.log("Form submit handler attached.");
-      } else { console.warn("Tribute form (#tributeForm) not found."); }
-
-      const cancelBtn = document.getElementById('cancelEditBtn');
-      if (cancelBtn) { cancelBtn.onclick = resetForm; }
-      else { console.warn("Cancel edit button (#cancelEditBtn) not found."); }
-
-      // Modal listeners
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      if (closeModalBtn) { closeModalBtn.onclick = closeModalGallery; }
-      else { console.warn("Close modal button (#closeModalBtn) not found."); }
-
-      const modalBG = document.getElementById('modalBG');
-      if (modalBG) { modalBG.onclick = closeModalGallery; }
-      else { console.warn("Modal background (#modalBG) not found."); }
-
-      const prevImgBtn = document.getElementById('prevImgBtn');
-      if (prevImgBtn) { prevImgBtn.onclick = (e) => { e.stopPropagation(); navigateModal('prev'); }; }
-      else { console.warn("Previous image button (#prevImgBtn) not found."); }
-
-      const nextImgBtn = document.getElementById('nextImgBtn');
-      if (nextImgBtn) { nextImgBtn.onclick = (e) => { e.stopPropagation(); navigateModal('next'); }; }
-      else { console.warn("Next image button (#nextImgBtn) not found."); }
-
-      // Load More button listener
-      const loadMoreBtn = document.getElementById('loadMoreBtn');
-      if (loadMoreBtn) {
-          loadMoreBtn.onclick = () => {
-              if (!isLoading) { // Prevent clicking while already loading
-                  console.log("Load More button clicked.");
-                  fetchAndRenderTributes(currentPage + 1); // Fetch the next page
-              } else {
-                  console.log("Load More clicked but already loading.");
-              }
-          };
-          console.log("Load More button listener attached.");
-      } else { console.warn("Load More button (#loadMoreBtn) not found."); }
-
-    } catch (error) {
-      console.error("Error attaching initial static event listeners:", error);
-    }
-
-    // Global keydown listener specifically for modal navigation/closing
-    window.addEventListener("keydown", function(e) {
-      const modal = document.getElementById("galleryModal");
-      // Check if modal exists and is visible
-      if (!modal || modal.classList.contains("hidden")) return;
-
-      // Handle navigation/closing only if modal is active
-      switch (e.key) {
-        case "ArrowLeft":
-            document.getElementById('prevImgBtn')?.click(); // Safely click prev button
-            break;
-        case "ArrowRight":
-            document.getElementById('nextImgBtn')?.click(); // Safely click next button
-            break;
-        case "Escape":
-            closeModalGallery(); // Close modal on Escape key
-            break;
-      }
-    });
-
-    console.log("Initialization complete.");
+      console.log("DOM fully loaded and parsed");
+      attachGridEventListeners();
+      try {
+         const tributeForm = document.getElementById('tributeForm'); if (tributeForm) { tributeForm.onsubmit = handleFormSubmit; } else { console.warn("Tribute form not found."); }
+         const cancelBtn = document.getElementById('cancelEditBtn'); if (cancelBtn) { cancelBtn.onclick = resetForm; }
+         const closeModalBtn=document.getElementById('closeModalBtn');if(closeModalBtn){closeModalBtn.onclick=closeModalGallery;}else { console.warn("Close modal button not found."); }
+         const modalBG=document.getElementById('modalBG');if(modalBG){modalBG.onclick=closeModalGallery;} else { console.warn("Modal background not found."); }
+         const prevImgBtn=document.getElementById('prevImgBtn');if(prevImgBtn){prevImgBtn.onclick=(e)=>{e.stopPropagation();navigateModal('prev');};} else { console.warn("Prev image button not found."); }
+         const nextImgBtn=document.getElementById('nextImgBtn');if(nextImgBtn){nextImgBtn.onclick=(e)=>{e.stopPropagation();navigateModal('next');};} else { console.warn("Next image button not found."); }
+      } catch (error) { console.error("Error attaching initial static event listeners:", error); }
+      window.addEventListener("keydown", function(e) { const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return; switch (e.key) { case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break; case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break; case "Escape": closeModalGallery(); break; } });
+      loadNextTribute(); // Initial load
+      setupScrollObserver(); // Setup infinite scroll
+      console.log("Initialization complete.");
   });
 </script>
+<!-- ======================================================== -->
+<!--                   END JAVASCRIPT                       -->
+<!-- ======================================================== -->
 
 </body>
 </html>
