@@ -11,43 +11,232 @@
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* General Styles */
-        body { font-family: 'Quicksand', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%); color: #546e7a; }
-        h1, h2, h3, .script-font { font-family: 'Indie Flower', cursive; }
+        /* ----------------------------- */
+        /*      General Page Styles      */
+        /* ----------------------------- */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%);
+            color: #546e7a;
+            letter-spacing: 0.02em;
+            box-sizing: border-box;
+            width: 100%;
+            overflow: initial !important; /* Allow body scroll */
+        }
 
-        /* Tribute Card Base */
-        .tribute-card { position: relative; box-shadow: 0 10px 25px rgba(149, 157, 165, 0.1); border-radius: 1.8rem; padding: 1.9rem 1.6rem 1.2rem 1.6rem; transition: transform 0.24s cubic-bezier(.24,1.46,.54,1.07), box-shadow 0.19s; margin-bottom: 0.7rem; display: flex; flex-direction: column; align-items: center; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); }
-        /* Hide elements via CSS */
-        .tribute-card .absolute.right-3.top-3 { display: none !important; } /* Edit/Delete Buttons */
-        .tribute-card .absolute.bottom-3 { display: none !important; } /* Date */
-        /* Hover effect */
-        .tribute-card:hover { transform: translateY(-12px) scale(1.04) rotate(-1.6deg); z-index: 10; box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1); }
+        h1, h2, h3, .script-font {
+            font-family: 'Indie Flower', cursive; /* Handwritten style for titles */
+        }
 
-        /* Card Fade-In Animation */
-        .tribute-card-fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .tribute-card-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+        .page-title {
+            color: #e58392;
+            font-size: 2.4rem;
+            text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15);
+            letter-spacing: 2px;
+        }
 
-        /* Fan Photo Stack */
-        .fan-stack { display: flex; align-items: center; justify-content: center; min-height: 112px; width: 176px; position: relative; margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; }
-        .fan-img { width: 96px; height: 96px; object-fit: cover; border-radius: 1.12rem; box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2); transform-origin: 50% 80%; position: absolute; background: #f9fafb; border: 2.5px solid #fff; z-index: 1; cursor: pointer; pointer-events: auto; filter: brightness(1) saturate(1.02); }
+        .page-subtitle {
+            color: #786d70;
+            font-size: 1.15rem;
+            opacity: 0.9;
+        }
 
-        /* Floating Elements */
-        .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.17; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
-        @keyframes floatCelebrate { 0% {transform: translateY(46px) scale(1.17);} 100% {transform: translateY(-220px) scale(1);} }
+        .highlight-text {
+            color: #e58392;
+            font-weight: 600;
+        }
 
-        /* Misc Styles (Scrollbar, Form, Buttons, Footer, etc.) */
-        .custom-scrollbar::-webkit-scrollbar { width: 7px; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; } .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
-        input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } input[type="number"] { -moz-appearance: textfield; }
-        html, body { overflow: initial !important; box-sizing: border-box; width: 100%; }
-        .form-container { background: linear-gradient(to right, #fdf5f7, #fef9fa); border-radius: 1rem; border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1); }
-        input, textarea { transition: all 0.2s; border: 1px solid #f0e3e8 !important; }
-        input:focus, textarea:focus { border-color: #ffbbd0 !important; box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important; }
-        .btn-gradient { background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%); transition: all 0.3s; box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3); border: none; } .btn-gradient:hover { background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%); box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4); transform: translateY(-2px); } .btn-gradient:active { transform: translateY(1px); box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4); }
+        /* ----------------------------- */
+        /*       Tribute Card Styles     */
+        /* ----------------------------- */
+        .tribute-card {
+            position: relative;
+            box-shadow: 0 10px 25px rgba(149, 157, 165, 0.1);
+            border-radius: 1.8rem;
+            padding: 1.9rem 1.6rem 1.2rem 1.6rem;
+            transition:
+                transform 0.24s cubic-bezier(.24,1.46,.54,1.07),
+                box-shadow 0.19s;
+            margin-bottom: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden; /* Clip patterns */
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Hide Edit/Delete/Date via CSS */
+        .tribute-card .absolute.right-3.top-3 { display: none !important; }
+        .tribute-card .absolute.bottom-3 { display: none !important; }
+
+        /* Hover Effect */
+        .tribute-card:hover {
+            transform: translateY(-12px) scale(1.04) rotate(-1.6deg);
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1);
+        }
+
+        /* Fade-In Animation */
+        .tribute-card-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .tribute-card-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Message Content Area (No Scroll) */
+        .tribute-card .message-content {
+            word-wrap: break-word;      /* Allow long words to break */
+            overflow-wrap: break-word;  /* Better control for breaking */
+            width: 100%;                /* Ensure it takes card width */
+            /* No max-height or overflow-y */
+        }
+
+        /* Z-index Control for Card Content */
+        .tribute-card > div:not(.fan-stack),
+        .tribute-card > button {
+            position: relative;
+            z-index: 1;
+        }
+        .tribute-card > .absolute.right-3.top-3 { /* Buttons above content */
+            z-index: 2;
+        }
+
+        /* ----------------------------- */
+        /*       Fan Photo Stack         */
+        /* ----------------------------- */
+        .fan-stack {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 112px;
+            width: 176px;
+            position: relative;
+            margin: 0 auto 1.2rem auto;
+            pointer-events: none; /* Click through container */
+            z-index: 1;
+        }
+        .fan-img {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 1.12rem;
+            box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2);
+            transform-origin: 50% 80%; /* Rotation point */
+            position: absolute;
+            background: #f9fafb;
+            border: 2.5px solid #fff;
+            z-index: 1; /* Base image z-index */
+            cursor: pointer;
+            pointer-events: auto; /* Make images clickable */
+            filter: brightness(1) saturate(1.02);
+        }
+
+        /* ----------------------------- */
+        /*      Floating Elements        */
+        /* ----------------------------- */
+        .floating-celebrate {
+            position: absolute;
+            font-size: 1.23rem;
+            opacity: 0.17;
+            pointer-events: none;
+            animation: floatCelebrate 9.2s linear infinite;
+            z-index: 0; /* Behind everything */
+        }
+        @keyframes floatCelebrate {
+            0% { transform: translateY(46px) scale(1.17); }
+            100% { transform: translateY(-220px) scale(1); }
+        }
+
+        /* ----------------------------- */
+        /*          Form Styles          */
+        /* ----------------------------- */
+        .form-container {
+            background: linear-gradient(to right, #fdf5f7, #fef9fa);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1);
+        }
+        input, textarea {
+            transition: all 0.2s;
+            border: 1px solid #f0e3e8 !important;
+        }
+        input:focus, textarea:focus {
+            border-color: #ffbbd0 !important;
+            box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important;
+        }
+        /* Remove number input arrows */
+        input::-webkit-inner-spin-button,
+        input::-webkit-outer-spin-button {
+             -webkit-appearance: none; margin: 0;
+        }
+        input[type="number"] { -moz-appearance: textfield; }
+
+        /* ----------------------------- */
+        /*         Button Styles         */
+        /* ----------------------------- */
+        .btn-gradient {
+            background: linear-gradient(135deg, #f09fa8 0%, #e58392 100%);
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(229, 131, 146, 0.3);
+            border: none;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #f4b0b8 0%, #ec9aa6 100%);
+            box-shadow: 0 6px 15px rgba(229, 131, 146, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-gradient:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 5px rgba(229, 131, 146, 0.4);
+        }
+
+        /* ----------------------------- */
+        /*     Loading Indicator Styles  */
+        /* ----------------------------- */
+        #singleLoadIndicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+            height: 4rem; /* Fixed height to reduce layout shift */
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* Animated bouncing arrow */
+        .bouncing-arrow i {
+            animation: bounce 1.5s infinite ease-in-out;
+            font-size: 1.5rem;
+            color: #f4a8bb; /* Pinkish arrow */
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); } /* Bounce up */
+        }
+        /* Spinner icon */
+        #singleLoadIndicator .fa-spinner {
+             font-size: 1.5rem;
+             color: #f4a8bb; /* Match arrow color */
+        }
+
+        /* ----------------------------- */
+        /*         Other Styles          */
+        /* ----------------------------- */
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 7px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
+        /* Confetti */
         .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: flex; align-items: flex-start; justify-content: center; overflow: visible; } .confetti__dot { position: absolute; width: 18px; height: 18px; border-radius: 99px; opacity: 0.84; pointer-events: none; will-change: transform, opacity; animation: confetti-fall 1.7s linear forwards; } @keyframes confetti-fall { 0%{transform: translateY(-80px) scale(.9) rotate(-20deg);} 80%{opacity: 1;} 95%{opacity: .8;} 100%{transform: translateY(400px) scale(1.05) rotate(80deg); opacity:0;} }
+        /* Footer */
         .footer-party { min-height: 90px; padding-bottom: 0.1rem; position: relative; margin-top: 2.5rem; background: linear-gradient(88deg, #fce8ff 70%, #f8f1fc 100%); border-radius: 28px 28px 0px 0px; box-shadow: 0 0 0 #fff; overflow: visible; } .cap-throw { position: absolute; left: 25%; top: 14px; animation: capThrow 2.8s cubic-bezier(.39,1.5,.59,.81) infinite; pointer-events: none; z-index: 2; } .cap-throw2 { left: 68%; top: 12px; animation-delay: 1.1s; animation: capThrow2 3.5s cubic-bezier(.40,1.45,.61,.9) infinite; } @keyframes capThrow { 0%{transform: translateY(0px) rotate(3deg);} 60%{transform: translateY(-50px) rotate(-30deg);} 100%{transform: translateY(0px) rotate(2deg);} } @keyframes capThrow2 { 0%{transform: translateY(0px) rotate(-7deg);} 62%{transform: translateY(-46px) rotate(20deg);} 100%{transform: translateY(0px) rotate(-5deg);} } .footer-teacher { position: absolute; right: 12%; bottom: 12px; z-index: 3; animation: waveHand 2.1s infinite cubic-bezier(.6,1.6,.3,1.01); transform-origin: bottom right; } @keyframes waveHand { 0%,100%{transform: rotate(0);} 14%{transform: rotate(-7deg);} 19%{transform: rotate(11deg);} 25%{transform: rotate(-12deg);} 36%{transform: rotate(8deg);} 47%{transform: rotate(0);} }
+        /* Print */
         @media print { .custom-scrollbar {overflow: visible !important;} }
-        .tribute-card > div:not(.fan-stack), .tribute-card > button { position: relative; z-index: 1; } .tribute-card > .absolute.right-3.top-3 { z-index: 2; }
-        .page-title { color: #e58392; font-size: 2.4rem; text-shadow: 0 2px 5px rgba(229, 131, 146, 0.15); letter-spacing: 2px; } .page-subtitle { color: #786d70; font-size: 1.15rem; opacity: 0.9; } .highlight-text { color: #e58392; font-weight: 600; }
+
     </style>
 </head>
 <body class="pb-10 selection:bg-pink-100">
@@ -76,33 +265,35 @@
         <!-- Add/Edit Tribute Form -->
         <form id="tributeForm" class="mb-10 form-container py-6 px-5 shadow-lg flex flex-wrap items-center justify-between">
             <input type="hidden" id="editIndex" value="">
+            <!-- Form Inputs -->
             <div class="flex flex-col w-full md:w-1/4 mb-3 md:mb-0 md:pr-3"> <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label> <input id="fromName" name="fromName" type="text" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="32" required placeholder="E.g. Alicia (Class of 2010)"> </div>
             <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-3 md:mb-0"> <label for="message" class="text-pink-500 font-semibold mb-1">Message</label> <textarea id="message" name="message" rows="2" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="1500" required placeholder="Write your message..."></textarea> </div>
             <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-3 md:mb-0"> <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label> <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100"> </div>
+            <!-- Form Buttons -->
             <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-3 md:mt-0"> <button id="submitBtn" type="submit" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150"> <i class="fa-solid fa-paper-plane mr-1"></i> <span id="submitBtnText">Share</span> </button> <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button> </div>
         </form>
 
         <!-- Tribute Cards Grid -->
         <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 custom-scrollbar">
-            <!-- Tribute cards added here by JS -->
+            <!-- Cards added here -->
         </div>
 
-        <!-- Loading Indicator (shown while fetching next card) -->
-        <div id="singleLoadIndicator" class="text-center text-pink-400 italic mt-6 hidden h-10">
-            <i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...
+        <!-- Loading Indicator (Spinner or Arrow) -->
+        <div id="singleLoadIndicator" class="text-center text-pink-400 mt-6 hidden h-10">
+            <!-- Content controlled by JS -->
         </div>
 
-        <!-- Scroll Trigger (invisible element watched by IntersectionObserver) -->
+        <!-- Scroll Trigger Element -->
         <div id="scrollTrigger" style="height: 50px;"></div>
 
-        <!-- Empty State Message (shown initially or when all loaded) -->
+        <!-- Empty State / All Loaded Message -->
         <div id="emptyState" class="text-center text-pink-300 italic mt-10 text-lg hidden">
             <i class="fa-solid fa-star fa-bounce mr-2"></i>
-            <span id="initialEmptyMessage">No tributes yet. Be the first to post your memory!</span>
-            <p id="allLoadedMessage" class="text-sm mt-2 hidden">Looks like you've reached the end!</p>
+            <span id="initialEmptyMessage">No tributes yet. Be the first to post!</span>
+            <p id="allLoadedMessage" class="text-sm mt-2 hidden">All tributes have been loaded.</p>
         </div>
 
-    </div> <!-- End Main Content Container -->
+    </div> <!-- End Main Content -->
 
     <!-- Photo Modal -->
     <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-50 hidden flex items-center justify-center">
@@ -122,8 +313,8 @@
     <footer class="footer-party w-full text-center mt-10 relative text-base pb-1 select-none">
         <div class="cap-throw"><i class="fa-solid fa-graduation-cap text-pink-400 text-2xl"></i></div> <div class="cap-throw cap-throw2"><i class="fa-solid fa-graduation-cap text-amber-400 text-2xl"></i></div>
         <span class="footer-teacher"> <svg width="56" height="70" viewBox="0 0 56 70" fill="none"><ellipse cx="28" cy="63" rx="25" ry="6" fill="#ffe0b2"/><circle cx="28" cy="34" r="20" fill="#fff"/><ellipse cx="28" cy="43.5" rx="9.5" ry="7.5" fill="#f8bbd0"/><ellipse cx="28" cy="31" rx="13" ry="14" fill="#febc97"/><ellipse cx="23" cy="23" rx="3" ry="2" fill="#624338"/><ellipse cx="33" cy="23" rx="3" ry="2" fill="#624338"/><rect x="18" y="38" width="20" height="4" rx="2" fill="#e57373"/><rect x="25" y="49" width="6" height="18" rx="3" fill="#90caf9"/><ellipse cx="45" cy="40" rx="4" ry="4.5" fill="#febc97" style="transform-origin:45px 40px"/></svg> </span>
-        <span class="block font-semibold pt-10 pb-1 script-font" style="font-size:1.23rem;color:#e58392;text-shadow:0 1px 5px #fce8ffa8;"> 🎉 With heartfelt wishes for your next amazing chapter! 🎉 </span>
-        <span class="block text-gray-500 pb-1" style="font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-400"></i> by everyone who is grateful for you. </span>
+        <span class="block font-semibold pt-10 pb-1 script-font" style="font-size:1.23rem;color:#e58392;text-shadow:0 1px 5px #fce8ffa8;"> 🎉 Wishing you the best! 🎉 </span>
+        <span class="block text-gray-500 pb-1" style="font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-400"></i> by everyone grateful for you. </span>
     </footer>
 
     <!-- Confetti -->
@@ -136,146 +327,126 @@
     /* ------------------------------------------------------ */
     /*                     GLOBAL STATE                       */
     /* ------------------------------------------------------ */
-    let tributes = [];              // Array holds data of all loaded tributes
-    let editingTributeId = null;    // ID of tribute being edited, null if none
-    let nextPageToFetch = 1;        // Page number for the next single tribute fetch
-    let isLoading = false;          // Flag: Is a fetch currently in progress?
-    let allTributesLoaded = false;  // Flag: Are all tributes loaded from backend?
-    let autoLoadIntervalId = null;  /* NEW: ID for the auto-load timer */
+    let tributes = [];              // Holds data for all loaded tributes
+    let editingTributeId = null;    // ID of tribute being edited
+    let nextPageToFetch = 1;        // Next page number to fetch
+    let isLoading = false;          // Is a fetch in progress?
+    let allTributesLoaded = false;  // Are all tributes loaded?
+    let autoLoadIntervalId = null;  // ID for auto-load timer
 
     /* ------------------------------------------------------ */
     /*                        CONSTANTS                       */
     /* ------------------------------------------------------ */
-    // Icons used for dates on cards
     const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
-    // Background gradient pairs for cards
     const CARD_GRADIENT_PAIRS = [ ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'], ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'], ['#fdf9ff', '#fffaf9'] ];
-    // Colors for background patterns
     const patternColors = { light: 'rgba(255, 255, 255, 0.35)', dark: 'rgba(229, 131, 146, 0.06)', accent: 'rgba(206, 147, 216, 0.05)' };
-    // Timer interval for auto-loading (in milliseconds)
     const AUTO_LOAD_INTERVAL = 15000; // 15 seconds
 
     /* ------------------------------------------------------ */
     /*                    UTILITY FUNCTIONS                   */
     /* ------------------------------------------------------ */
-    /** Escapes HTML special characters */
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, s => ({
-      '&': '&',
-      '<': '<',
-      '>': '>',
-      '"': '"',
-      "'": '&#39;'
-    }[s]));
-  }
-    /** Formats DB date string */
+    /** Escapes HTML */
+    function escapeHtml(str) { return String(str).replace(/[&<>"']/g, s => ({'&': '&','<': '<','>': '>','"': '"',"'": '''} [s])); }
+    /** Formats Date String */
     function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const d = new Date(dbDateString.replace(' ', 'T').replace(' UTC', 'Z')); return isNaN(d.getTime()) ? 'Date unavailable' : d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { console.error("Date Format Error:", e); return ''; } }
 
     /* ------------------------------------------------------ */
     /*                   RENDERING FUNCTIONS                  */
     /* ------------------------------------------------------ */
 
-    /** Appends a single tribute card to the grid with fade-in */
+    /** Appends a single tribute card DOM element to the grid */
     function renderSingleTribute(tribute) {
-        const grid = document.getElementById("tributesGrid"); // Grid container
-        const emptyState = document.getElementById('emptyState'); // Empty message div
-        if (!grid || !emptyState) return null; // Exit if elements missing
-
-        emptyState.classList.add('hidden'); // Hide empty message
-
-        // Avoid rendering duplicates
-        if (tributes.some(existing => existing.id === tribute.id)) {
-            console.warn("Skip duplicate render:", tribute.id);
-            return null;
-        }
-        // Add to local state array
+        const grid = document.getElementById("tributesGrid");
+        const emptyState = document.getElementById('emptyState');
+        if (!grid || !emptyState) return null;
+        emptyState.classList.add('hidden');
+        if (tributes.some(existing => existing.id === tribute.id)) { console.warn("Skip duplicate render:", tribute.id); return null; }
         tributes.push(tribute);
-        const cardIndex = tributes.length - 1; // Get index for this new card
-
-        // Generate HTML and create DOM element
-        const cardHtml = renderTributeCard(tribute, cardIndex);
-        const tempDiv = document.createElement('div'); tempDiv.innerHTML = cardHtml.trim(); const cardElement = tempDiv.firstChild;
+        const cardIndex = tributes.length - 1;
+        const cardElement = createTributeCardElement(tribute, cardIndex); // Use refactored function
         if (!cardElement) return null;
-
-        // Append (initially invisible due to CSS class added in renderTributeCard)
         grid.appendChild(cardElement);
-
-        // Trigger fade-in animation after a brief delay
-        requestAnimationFrame(() => {
-            setTimeout(() => { cardElement.classList.add('is-visible'); }, 50);
-        });
+        requestAnimationFrame(() => { setTimeout(() => { cardElement.classList.add('is-visible'); }, 50); });
         return cardElement;
     }
 
-    /** Renders the fan photo gallery */
-    function renderFanGallery(tribute, tributeIdx) {
+    /** Creates and returns the Fan Gallery DOM Structure */
+    function createFanGalleryElement(tribute, tributeIdx) {
+        const fanStack = document.createElement('div');
+        fanStack.className = 'fan-stack mb-1';
         const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-        if (!photoArray.length) return `<div class="fan-stack mb-1"></div>`; // Return empty if no photos
-
-        let imgMarkup = "";
-        const numPhotos = Math.min(photoArray.length, 4); // Max 4 photos shown
-        // Angles & positions for fan effect
+        if (!photoArray.length) return fanStack; // Return empty container
+        const numPhotos = Math.min(photoArray.length, 4);
         const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
         const hShift = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
-
         for (let i = 0; i < numPhotos; i++) {
             const photoSrc = photoArray[i];
-            // Validate src (base64 or http/s)
-            if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) {
-                console.warn(`Invalid photo src index ${i} for ID ${tribute.id}`);
-                continue; // Skip invalid item
-            }
-            const angle = spreadAngles[i];
-            const tX = (numPhotos > 1) ? (i * 40) - hShift : 0;
-            const z = numPhotos - i; // Last photo is highest z-index
-
-            // Create img tag
-            imgMarkup += `
-                <img src="${escapeHtml(photoSrc)}"
-                     class="fan-img"
-                     data-tidx="${tributeIdx}"
-                     data-pidx="${i}"
-                     tabindex="0"
-                     style="transform: rotate(${angle}deg) translateX(${tX}px); z-index: ${z};"
-                     alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || '?')}"
-                     loading="lazy">`;
+            if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) { console.warn(`Invalid src ${i} ID ${tribute.id}`); continue; }
+            const angle = spreadAngles[i]; const tX = (numPhotos > 1) ? (i * 40) - hShift : 0; const z = numPhotos - i;
+            const img = document.createElement('img');
+            img.src = escapeHtml(photoSrc);
+            img.className = 'fan-img';
+            img.dataset.tidx = tributeIdx; img.dataset.pidx = i;
+            img.tabIndex = 0;
+            img.style.transform = `rotate(${angle}deg) translateX(${tX}px)`; img.style.zIndex = z;
+            img.alt = `Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || '?')}`; img.loading = 'lazy';
+            fanStack.appendChild(img);
         }
-        return `<div class="fan-stack mb-1">${imgMarkup}</div>`; // Return container + images
+        return fanStack;
     }
 
-
-    /** Generates HTML for a single tribute card (Message text now wraps) */
-    function renderTributeCard(tribute, idx) {
-        // Extract data
+    /** Creates and returns a Tribute Card DOM element (Refactored) */
+    function createTributeCardElement(tribute, idx) {
+        // 1. Extract Data
         const tributeId = tribute.id; const fromName = tribute.from || "Anonymous";
         const message = tribute.msg || ""; const date = tribute.date || "";
-        // Dynamic styles (gradient, pattern, date icon)
+
+        // 2. Create Main Card Div
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'tribute-card tribute-card-fade-in relative';
+        cardDiv.dataset.cardidx = idx; cardDiv.dataset.id = tributeId;
+
+        // 3. Apply Dynamic Styles (Gradient & Pattern)
         const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
         const cardBaseGradient = `linear-gradient(135deg, ${gradientPair[0]} 0%, ${gradientPair[1]} 100%)`;
         let cardPatternStyle = '', cardPatternBgImage = ''; const cardPatternType = idx % 5;
         const pDark = patternColors.dark, pLight = patternColors.light, pAccent = patternColors.accent;
         switch (cardPatternType) { /* Cases for patterns */
-            case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break;
-            case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break;
-            case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break;
-            case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break;
-            case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
+            case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break; case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break; case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break; case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break; case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
         }
         const cardBgStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
-        const dateIcon = cardDateIcons[idx % cardDateIcons.length];
+        cardDiv.style.cssText = cardBgStyle; // Apply background
 
-        // Return HTML structure
-        return `
-        <div class="tribute-card tribute-card-fade-in relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBgStyle}">
-            <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;"> <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button> <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button> </div>
-            ${renderFanGallery(tribute, idx)}
-            <div class="text-pink-600 font-bold mb-2 text-center" style="font-family:'Indie Flower',cursive; font-size: 1.2rem;"> ${escapeHtml(fromName)} </div>
-            <!-- Message Div: No max-height or overflow needed -->
-            <div class="text-gray-700 mb-3 text-center px-1 text-sm w-full" style="font-family:'Quicksand',sans-serif;">
-                ${escapeHtml(message).replace(/\n/g, "<br>")}
-            </div>
-            <div class="text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1"> <i class="fa-solid ${dateIcon} fa-xs"></i> <span>${formatDateString(date)}</span> </div>
-        </div>`;
+        // 4. Create and Append Hidden Edit/Delete Buttons
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'absolute right-3 top-3 flex space-x-2'; buttonContainer.style.zIndex = '5';
+        buttonContainer.innerHTML = ` <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button> <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button> `;
+        cardDiv.appendChild(buttonContainer);
+
+        // 5. Create and Append Fan Gallery
+        cardDiv.appendChild(createFanGalleryElement(tribute, idx));
+
+        // 6. Create and Append Sender Name
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'text-pink-600 font-bold mb-2 text-center'; nameDiv.style.cssText = "font-family:'Indie Flower',cursive; font-size: 1.2rem;";
+        nameDiv.textContent = escapeHtml(fromName); // Use textContent
+        cardDiv.appendChild(nameDiv);
+
+        // 7. Create and Append Message (Uses message-content class)
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message-content text-gray-700 mb-3 text-center px-1 text-sm w-full';
+        messageDiv.style.fontFamily = "'Quicksand', sans-serif";
+        messageDiv.innerHTML = escapeHtml(message).replace(/\n/g, "<br>"); // Use innerHTML for <br>
+        cardDiv.appendChild(messageDiv);
+
+        // 8. Create and Append Hidden Date
+        const dateDiv = document.createElement('div'); const dateIcon = cardDateIcons[idx % cardDateIcons.length];
+        dateDiv.className = 'text-xs text-pink-400 absolute bottom-3 left-1/2 transform -translate-x-1/2 flex items-center gap-1';
+        dateDiv.innerHTML = `<i class="fa-solid ${dateIcon} fa-xs"></i> <span>${formatDateString(date)}</span>`;
+        cardDiv.appendChild(dateDiv);
+
+        // 9. Return the fully constructed DOM element
+        return cardDiv;
     }
 
     /* ------------------------------------------------------ */
@@ -289,86 +460,99 @@
         const allLoadedMsg = document.getElementById('allLoadedMessage');
         const initialEmptyMsg = document.getElementById('initialEmptyMessage');
 
-        // Prevent fetch if already loading or finished
-        if (isLoading || allTributesLoaded) {
-            console.log("Skip load:", {isLoading, allTributesLoaded});
-            return;
-        }
-        isLoading = true; // Set loading flag
-        if (indicator) indicator.classList.remove('hidden'); // Show spinner
-        const pageBeingFetched = nextPageToFetch; // Remember page number for check
+        if (isLoading || allTributesLoaded) { return; } // Exit if busy or done
+        isLoading = true;
+        updateIndicatorState(); // Show spinner
+        const pageBeingFetched = nextPageToFetch;
         console.log(`FETCHING page ${pageBeingFetched}...`);
 
         try {
-            // Fetch page 'pageBeingFetched' with pageSize=1
             const response = await fetch(`/.netlify/functions/get-tributes?page=${pageBeingFetched}&pageSize=1`);
-            if (!response.ok) { /* Handle HTTP errors */ throw new Error(`HTTP Error ${response.status}`); }
-            const data = await response.json(); // Parse JSON
+            if (!response.ok) { throw new Error(`HTTP Error ${response.status}`); }
+            const data = await response.json();
 
-            // Check if tributes array exists and has items
             if (!data || !Array.isArray(data.tributes) || data.tributes.length === 0) {
                 // No more tributes
                 console.log("ALL TRIBUTES LOADED.");
                 allTributesLoaded = true; // Set flag
-                stopAutoLoadTimer(); // Stop the auto-load timer
-                // Update empty state display logic
-                if (tributes.length === 0) { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; }
-                else { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'none'; }
+                stopAutoLoadTimer();    // Stop timer
+                // Update empty/all loaded message visibility
+                if(emptyState){ emptyState.classList.remove('hidden'); }
+                if (tributes.length === 0) {
+                     if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
+                     if(initialEmptyMsg) initialEmptyMsg.style.display = 'block';
+                } else {
+                     if(allLoadedMsg) allLoadedMsg.classList.remove('hidden');
+                     if(initialEmptyMsg) initialEmptyMsg.style.display = 'none';
+                }
             } else {
                 // Tribute received
                 const tribute = data.tributes[0];
                 console.log(`RECEIVED tribute ID: ${tribute.id}`);
-                renderSingleTribute(tribute); // Render it
-                nextPageToFetch++; // Increment page counter for next time
+                renderSingleTribute(tribute); // Render card
+                nextPageToFetch++;            // Increment page for next time
 
-                // If this was the first tribute, setup observer and timer
+                // Setup observer & timer only AFTER first successful load
                 if (pageBeingFetched === 1) {
-                    console.log("First tribute loaded, setting up observer and timer.");
+                    console.log("First tribute loaded, setup observer/timer.");
                     setupScrollObserver();
-                    startAutoLoadTimer(); // Start auto-load now
+                    startAutoLoadTimer();
                 }
             }
         } catch (error) {
-            // Handle fetch errors
             console.error("Could not load next tribute:", error);
-            if (indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i>Error loading. Scroll/Wait to retry.`;
-            // Don't stop timer on error, allow retry
+            // Show error in indicator, leave it visible
+            if(indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> Error. Scroll/Wait to retry.`;
+            allTributesLoaded = false; // Allow potential retry
         } finally {
-            // Always run after try/catch
-            isLoading = false; // Reset loading flag
-            // Hide indicator after a delay
-            if (indicator) { setTimeout(() => { indicator.classList.add('hidden'); indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`; }, 500); }
+            isLoading = false;      // Reset loading flag
+            updateIndicatorState(); // Update indicator (show arrow or hide if done)
             console.log("Fetch complete. State:", {isLoading, allTributesLoaded, nextPageToFetch});
         }
     }
 
+    /* ------------------------------------------------------ */
+    /*           AUTO-LOAD TIMER / INDICATOR                  */
+    /* ------------------------------------------------------ */
 
-    /* ------------------------------------------------------ */
-    /*           AUTO-LOAD TIMER FUNCTIONS                    */
-    /* ------------------------------------------------------ */
+    /** Updates the loading indicator (Spinner/Arrow/Hidden) */
+    function updateIndicatorState() {
+        const indicator = document.getElementById('singleLoadIndicator');
+        if (!indicator) return;
+
+        if (isLoading) {
+            // Show spinner when actively loading
+            indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading...`;
+            indicator.classList.remove('hidden');
+        } else if (!allTributesLoaded) {
+            // Show bouncing arrow if NOT loading and NOT finished
+            indicator.innerHTML = `<span class="bouncing-arrow"><i class="fa-solid fa-chevron-down"></i></span>`;
+            indicator.classList.remove('hidden');
+        } else {
+            // Hide indicator completely if all loaded
+            indicator.classList.add('hidden');
+        }
+    }
 
     /** Starts the interval timer to auto-load tributes */
     function startAutoLoadTimer() {
-        stopAutoLoadTimer(); // Clear any existing timer first
+        stopAutoLoadTimer(); // Clear existing timer
         console.log(`Starting auto-load timer (${AUTO_LOAD_INTERVAL}ms)`);
         autoLoadIntervalId = setInterval(() => {
-            console.log("Auto-load timer triggered.");
-            // Only try to load if not already loading and not finished
-            if (!isLoading && !allTributesLoaded) {
-                console.log("Auto-load timer calling loadNextTribute...");
+            console.log("Auto-load timer tick.");
+            if (!isLoading && !allTributesLoaded) { // Check conditions
+                console.log("Auto-load calling loadNextTribute...");
                 loadNextTribute();
-            } else {
-                console.log("Auto-load timer skipped fetch:", {isLoading, allTributesLoaded});
-            }
-        }, AUTO_LOAD_INTERVAL); // Use constant interval
+            } else { console.log("Auto-load timer skipped fetch:", {isLoading, allTributesLoaded}); }
+        }, AUTO_LOAD_INTERVAL);
     }
 
     /** Stops the interval timer */
     function stopAutoLoadTimer() {
         if (autoLoadIntervalId) {
             console.log("Stopping auto-load timer.");
-            clearInterval(autoLoadIntervalId); // Clear the interval
-            autoLoadIntervalId = null; // Reset the ID variable
+            clearInterval(autoLoadIntervalId);
+            autoLoadIntervalId = null;
         }
     }
 
@@ -379,24 +563,20 @@
     /** Clears grid/state and reloads tributes from page 1 */
     async function resetAndReloadAll() {
         console.log(">>> RESETTING AND RELOADING ALL <<<");
-        stopAutoLoadTimer(); // Stop auto-load during reset
+        stopAutoLoadTimer(); // Stop timer
         // Get references
         const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState');
         const allLoadedMsg = document.getElementById('allLoadedMessage'); const initialEmptyMsg = document.getElementById('initialEmptyMessage');
         const indicator = document.getElementById('singleLoadIndicator');
-
         // Clear UI
         if (grid) grid.innerHTML = '';
         if(emptyState) emptyState.classList.add('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
         if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; if(indicator) indicator.classList.add('hidden');
-
         // Reset State
         tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false;
-
-        // Disconnect observer temporarily
-        if (observer) { observer.disconnect(); console.log("Observer disconnected during reset."); }
-
-        // Load first tribute (observer/timer will restart inside if successful)
+        // Disconnect observer
+        if (observer) { observer.disconnect(); console.log("Observer disconnected."); }
+        // Reload first tribute (observer/timer will restart inside if successful)
         await loadNextTribute();
     }
 
@@ -407,7 +587,7 @@
         console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+payload.id : 'New'})`);
         try {
             const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (!response.ok) { /* Handle error */ throw new Error(`HTTP Error ${response.status}`); }
+            if (!response.ok) { throw new Error(`HTTP Error ${response.status}`); }
             console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`); showConfetti(); await resetAndReloadAll(); return true;
         } catch (error) { console.error(`Error submitting tribute:`, error); alert(`Error: ${error.message}`); return false; }
     }
@@ -418,7 +598,7 @@
         console.log("Deleting tribute ID:", idToDelete);
         try {
             const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
-            if (!response.ok) { /* Handle error */ throw new Error(`HTTP Error ${response.status}`); }
+            if (!response.ok) { throw new Error(`HTTP Error ${response.status}`); }
             console.log("Tribute deleted:", idToDelete); await resetAndReloadAll(); return true;
         } catch (error) { console.error("Error deleting tribute:", error); alert(`Error: ${error.message}`); return false; }
     }
@@ -438,7 +618,7 @@
     async function handleFormSubmit(e) {
         e.preventDefault(); const btn = document.getElementById('submitBtn'), txt = document.getElementById('submitBtnText'), fin = document.getElementById('photos'), nameIn = document.getElementById('fromName'), msgIn = document.getElementById('message'); if (!btn || !txt || !fin || !nameIn || !msgIn) return; if (isLoading) { alert("Wait for loading."); return; } btn.disabled = true; const origTxt = editingTributeId ? "Update" : "Share"; let actTxt = editingTributeId ? 'Updating...' : 'Sharing...'; txt.textContent = actTxt; let photos = [];
         try {
-            const files = fin.files; if (files.length > 0 && files.length <= 4) { actTxt = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; txt.textContent = actTxt; photos = await filesToDataURLs_Temporary(files); if(photos.length < files.length){ alert("Some photos skipped.");} } else if (files.length > 4) { throw new Error("Max 4 photos."); } txt.textContent = actTxt;
+            const files = fin.files; if (files.length > 0 && files.length <= 4) { actTxt = editingTributeId ? 'Processing...' : 'Processing...'; txt.textContent = actTxt; photos = await filesToDataURLs_Temporary(files); if(photos.length < files.length){ alert("Some photos skipped.");} } else if (files.length > 4) { throw new Error("Max 4 photos."); } txt.textContent = actTxt;
             const from = nameIn.value.trim() || "Anonymous"; const msg = msgIn.value.trim(); if (!msg) throw new Error("Message required."); if (msg.length > 1500) throw new Error("Message too long.");
             const tributeData = { from, msg, photos }; const idUpd = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idUpd)) throw new Error("Invalid edit ID.");
             const success = await submitTribute(tributeData, idUpd); if (success) { resetForm(); } else { btn.disabled = false; txt.textContent = origTxt; }
@@ -491,7 +671,7 @@
         const options = { root: null, rootMargin: '0px 0px 300px 0px', threshold: 0.01 };
         observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
-                // console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`); // Can be noisy
+                // console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`); // Noisy
                 if (entry.isIntersecting && !isLoading && !allTributesLoaded) {
                     console.log(">>> Observer triggering loadNextTribute <<<");
                     loadNextTribute();
@@ -521,6 +701,8 @@
         // Initial load (Observer/Timer setup happens inside loadNextTribute on first success)
         console.log("Initiating first tribute load...");
         loadNextTribute();
+        // Update indicator initially (shows arrow if not loading)
+        updateIndicatorState();
         console.log("Initialization complete.");
     });
 
