@@ -11,33 +11,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* --- General Body & Font Styles --- */
-        body { font-family: 'Quicksand', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%); color: #546e7a; letter-spacing: 0.02em; box-sizing: border-box; width: 100%; overflow: initial !important; }
+        /* General Styles */
+        body { font-family: 'Quicksand', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #fff5f7 0%, #fef7fa 100%); color: #546e7a; }
         h1, h2, h3, .script-font { font-family: 'Indie Flower', cursive; }
 
-        /* --- Tribute Card Styles --- */
+        /* Tribute Card Base */
         .tribute-card { position: relative; box-shadow: 0 10px 25px rgba(149, 157, 165, 0.1); border-radius: 1.8rem; padding: 1.9rem 1.6rem 1.2rem 1.6rem; transition: transform 0.24s cubic-bezier(.24,1.46,.54,1.07), box-shadow 0.19s; margin-bottom: 0.7rem; display: flex; flex-direction: column; align-items: center; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); }
-        /* --- Hide Edit/Delete/Date --- */
-        .tribute-card .absolute.right-3.top-3 { display: none !important; }
-        .tribute-card .absolute.bottom-3 { display: none !important; }
-        /* --- Hover Effect --- */
+        /* Hide elements via CSS */
+        .tribute-card .absolute.right-3.top-3 { display: none !important; } /* Edit/Delete Buttons */
+        .tribute-card .absolute.bottom-3 { display: none !important; } /* Date */
+        /* Hover effect */
         .tribute-card:hover { transform: translateY(-12px) scale(1.04) rotate(-1.6deg); z-index: 10; box-shadow: 0 20px 40px rgba(114, 124, 245, 0.15), 0 2px 10px rgba(122, 122, 216, 0.1); }
 
-        /* --- Card Fade-In Animation --- */
+        /* Card Fade-In Animation */
         .tribute-card-fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .tribute-card-fade-in.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* --- Fan Photo Stack Styles --- */
-        .fan-stack { display: flex; flex-direction: row; align-items: center; justify-content: center; min-height: 112px; width: 176px; position: relative; margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; }
+        /* Fan Photo Stack */
+        .fan-stack { display: flex; align-items: center; justify-content: center; min-height: 112px; width: 176px; position: relative; margin: 0 auto 1.2rem auto; pointer-events: none; z-index: 1; }
         .fan-img { width: 96px; height: 96px; object-fit: cover; border-radius: 1.12rem; box-shadow: 0 8px 20px rgba(116, 185, 255, 0.2); transform-origin: 50% 80%; position: absolute; background: #f9fafb; border: 2.5px solid #fff; z-index: 1; cursor: pointer; pointer-events: auto; filter: brightness(1) saturate(1.02); }
 
-        /* --- Floating Background Elements --- */
+        /* Floating Elements */
         .floating-celebrate { position: absolute; font-size: 1.23rem; opacity: 0.17; pointer-events: none; animation: floatCelebrate 9.2s linear infinite; z-index: 0; }
         @keyframes floatCelebrate { 0% {transform: translateY(46px) scale(1.17);} 100% {transform: translateY(-220px) scale(1);} }
 
-        /* --- Misc Styles --- */
+        /* Misc Styles (Scrollbar, Form, Buttons, Footer, etc.) */
         .custom-scrollbar::-webkit-scrollbar { width: 7px; } .custom-scrollbar::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 10px; } .custom-scrollbar::-webkit-scrollbar-track { background: #eceff1; }
         input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } input[type="number"] { -moz-appearance: textfield; }
+        html, body { overflow: initial !important; box-sizing: border-box; width: 100%; }
         .form-container { background: linear-gradient(to right, #fdf5f7, #fef9fa); border-radius: 1rem; border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: 0 8px 32px rgba(224, 199, 210, 0.1); }
         input, textarea { transition: all 0.2s; border: 1px solid #f0e3e8 !important; }
         input:focus, textarea:focus { border-color: #ffbbd0 !important; box-shadow: 0 0 0 3px rgba(255, 187, 208, 0.25) !important; }
@@ -54,13 +55,11 @@
     <!-- Floating Background Elements -->
     <span class="floating-celebrate left-12 top-28" style="animation-delay:0.1s; color:#f09fa8;"><i class="fa-solid fa-book"></i></span>
     <span class="floating-celebrate left-1/4 top-56" style="animation-delay:1.6s; color:#ffb74d;"><i class="fa-solid fa-apple-whole"></i></span>
-    <!-- ... other floating elements ... -->
     <span class="floating-celebrate right-14 top-28" style="animation-delay:0.9s; color:#81c784;"><i class="fa-solid fa-seedling"></i></span>
     <span class="floating-celebrate left-1/3 top-44" style="animation-delay:2.1s; color:#ce93d8;"><i class="fa-solid fa-flower"></i></span>
     <span class="floating-celebrate right-1/4 top-56" style="animation-delay:1.2s; color:#ef9a9a;"><i class="fa-solid fa-star"></i></span>
     <span class="floating-celebrate left-3/5 top-96" style="animation-delay:2.36s; color:#4db6ac;"><i class="fa-solid fa-pencil"></i></span>
     <span class="floating-celebrate left-2/3 top-20" style="animation-delay:0.5s; color:#ffd54f;"><i class="fa-solid fa-bell"></i></span>
-
 
     <!-- Main Content Container -->
     <div class="max-w-5xl mx-auto mt-12 px-4">
@@ -76,30 +75,27 @@
 
         <!-- Add/Edit Tribute Form -->
         <form id="tributeForm" class="mb-10 form-container py-6 px-5 shadow-lg flex flex-wrap items-center justify-between">
-            <!-- Hidden input to store the ID of the tribute being edited -->
             <input type="hidden" id="editIndex" value="">
-            <!-- Form Inputs (Name, Message, Photos) -->
             <div class="flex flex-col w-full md:w-1/4 mb-3 md:mb-0 md:pr-3"> <label for="fromName" class="text-pink-500 font-semibold mb-1">Your Name</label> <input id="fromName" name="fromName" type="text" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="32" required placeholder="E.g. Alicia (Class of 2010)"> </div>
             <div class="flex flex-col w-full md:w-1/2 md:px-2 mb-3 md:mb-0"> <label for="message" class="text-pink-500 font-semibold mb-1">Message</label> <textarea id="message" name="message" rows="2" class="rounded-xl px-3 py-2 focus:outline-none" maxlength="1500" required placeholder="Write your message..."></textarea> </div>
             <div class="flex flex-col w-full md:w-1/6 md:pl-2 mb-3 md:mb-0"> <label for="photos" class="text-pink-500 font-semibold mb-1"> Photos<br> <span class="text-xs font-normal text-gray-400">(up to 4, max 20MB each)</span> </label> <input id="photos" name="photos" type="file" multiple accept="image/*" class="border rounded-xl py-2 px-2 text-xs bg-pink-50 border-pink-100"> </div>
-            <!-- Submit/Cancel Buttons -->
             <div class="w-full md:w-auto flex items-end justify-start md:justify-end mt-3 md:mt-0"> <button id="submitBtn" type="submit" class="btn-gradient font-bold py-2.5 px-7 text-white rounded-xl focus:outline-none transition duration-150"> <i class="fa-solid fa-paper-plane mr-1"></i> <span id="submitBtnText">Share</span> </button> <button type="button" id="cancelEditBtn" class="ml-2 hidden px-4 py-2 rounded-xl bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 focus:outline-none transition duration-100">Cancel</button> </div>
         </form>
 
-        <!-- Tribute Cards Grid - Populated by JavaScript -->
+        <!-- Tribute Cards Grid -->
         <div id="tributesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 custom-scrollbar">
-            <!-- Tribute cards will be appended here -->
+            <!-- Tribute cards added here by JS -->
         </div>
 
-        <!-- Loading Indicator for fetching the next single card -->
+        <!-- Loading Indicator (shown while fetching next card) -->
         <div id="singleLoadIndicator" class="text-center text-pink-400 italic mt-6 hidden h-10">
             <i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...
         </div>
 
-        <!-- Invisible Element to trigger loading when it scrolls into view -->
+        <!-- Scroll Trigger (invisible element watched by IntersectionObserver) -->
         <div id="scrollTrigger" style="height: 50px;"></div>
 
-        <!-- Message shown when no tributes exist or all are loaded -->
+        <!-- Empty State Message (shown initially or when all loaded) -->
         <div id="emptyState" class="text-center text-pink-300 italic mt-10 text-lg hidden">
             <i class="fa-solid fa-star fa-bounce mr-2"></i>
             <span id="initialEmptyMessage">No tributes yet. Be the first to post your memory!</span>
@@ -108,7 +104,7 @@
 
     </div> <!-- End Main Content Container -->
 
-    <!-- Modal for viewing a single photo -->
+    <!-- Photo Modal -->
     <div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-50 hidden flex items-center justify-center">
         <div class="absolute inset-0 cursor-pointer" id="modalBG"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-2 flex flex-col items-center px-2 py-5 border border-pink-100">
@@ -130,33 +126,36 @@
         <span class="block text-gray-500 pb-1" style="font-size:1rem;"> Made with <i class="fa-solid fa-heart text-pink-400"></i> by everyone who is grateful for you. </span>
     </footer>
 
-    <!-- Confetti Effect Container -->
+    <!-- Confetti -->
     <div id="confettiBox" class="confetti" style="pointer-events: none; display:none;"></div>
 
 <!-- ======================================================== -->
 <!--                  START JAVASCRIPT                      -->
 <!-- ======================================================== -->
 <script>
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*                     GLOBAL STATE                       */
-    /* ====================================================== */
-    let tributes = []; // Holds data for all loaded tributes
-    let editingTributeId = null; // ID of tribute being edited
-    let nextPageToFetch = 1; // Page number for the next single tribute fetch
-    let isLoading = false; // Prevents concurrent fetches
-    let allTributesLoaded = false; // True when backend confirms no more tributes
+    /* ------------------------------------------------------ */
+    let tributes = [];              // Array holds data of all loaded tributes
+    let editingTributeId = null;    // ID of tribute being edited, null if none
+    let nextPageToFetch = 1;        // Page number for the next single fetch (pageSize=1)
+    let isLoading = false;          // Flag: Is a fetch currently in progress?
+    let allTributesLoaded = false;  // Flag: Are all tributes loaded from backend?
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*                        CONSTANTS                       */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
+    // Icons used for dates on cards
     const cardDateIcons = ['fa-flower','fa-apple-whole','fa-star','fa-heart','fa-seedling','fa-book'];
+    // Background gradient pairs for cards
     const CARD_GRADIENT_PAIRS = [ ['#fef6f8', '#fdf3f6'], ['#fef9f9', '#fff7f9'], ['#fdf6ff', '#fef9fd'], ['#fff9fa', '#fdf8fe'], ['#fff9f9', '#fef9f7'], ['#fbfdff', '#fdfcfb'], ['#fdf9ff', '#fffaf9'] ];
+    // Colors for background patterns
     const patternColors = { light: 'rgba(255, 255, 255, 0.35)', dark: 'rgba(229, 131, 146, 0.06)', accent: 'rgba(206, 147, 216, 0.05)' };
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*                    UTILITY FUNCTIONS                   */
-    /* ====================================================== */
-    function hexToRgb(hex) { let r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return r ? { r: parseInt(r[1], 16), g: parseInt(r[2], 16), b: parseInt(r[3], 16) } : null; }
+    /* ------------------------------------------------------ */
+    /** Escapes HTML special characters */
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, s => ({
       '&': '&',
@@ -166,52 +165,68 @@
       "'": '&#39;'
     }[s]));
   }
+    /** Formats DB date string */
     function formatDateString(dbDateString) { if (!dbDateString || typeof dbDateString !== 'string') return ''; try { const d = new Date(dbDateString.replace(' ', 'T').replace(' UTC', 'Z')); return isNaN(d.getTime()) ? 'Date unavailable' : d.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { console.error("Date Format Error:", e); return ''; } }
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*                   RENDERING FUNCTIONS                  */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
 
     /** Appends a single tribute card to the grid with fade-in */
     function renderSingleTribute(tribute) {
-        const grid = document.getElementById("tributesGrid");
-        const emptyState = document.getElementById('emptyState');
-        if (!grid || !emptyState) return null;
-        emptyState.classList.add('hidden');
-        if (tributes.some(existing => existing.id === tribute.id)) { console.warn("Skip duplicate render:", tribute.id); return null; }
+        const grid = document.getElementById("tributesGrid"); // Grid container
+        const emptyState = document.getElementById('emptyState'); // Empty message div
+        if (!grid || !emptyState) return null; // Exit if elements missing
+
+        emptyState.classList.add('hidden'); // Hide empty message
+
+        // Avoid rendering duplicates
+        if (tributes.some(existing => existing.id === tribute.id)) {
+            console.warn("Skip duplicate render:", tribute.id);
+            return null;
+        }
+        // Add to local state array
         tributes.push(tribute);
-        const cardIndex = tributes.length - 1;
+        const cardIndex = tributes.length - 1; // Get index for this new card
+
+        // Generate HTML and create DOM element
         const cardHtml = renderTributeCard(tribute, cardIndex);
         const tempDiv = document.createElement('div'); tempDiv.innerHTML = cardHtml.trim(); const cardElement = tempDiv.firstChild;
         if (!cardElement) return null;
+
+        // Append (initially invisible due to CSS class added in renderTributeCard)
         grid.appendChild(cardElement);
-        requestAnimationFrame(() => { setTimeout(() => { cardElement.classList.add('is-visible'); }, 50); });
+
+        // Trigger fade-in animation after a brief delay
+        requestAnimationFrame(() => {
+            setTimeout(() => { cardElement.classList.add('is-visible'); }, 50);
+        });
         return cardElement;
     }
 
-    /** Renders the fan photo gallery (Corrected Version) */
+    /** Renders the fan photo gallery (Corrected structure) */
     function renderFanGallery(tribute, tributeIdx) {
         const photoArray = Array.isArray(tribute.photos) ? tribute.photos : [];
-        if (!photoArray.length) {
-            return `<div class="fan-stack mb-1"></div>`; // Empty container if no photos
-        }
+        if (!photoArray.length) return `<div class="fan-stack mb-1"></div>`; // Return empty if no photos
+
         let imgMarkup = "";
-        const numPhotos = Math.min(photoArray.length, 4);
+        const numPhotos = Math.min(photoArray.length, 4); // Max 4 photos shown
+        // Angles & positions for fan effect
         const spreadAngles = (numPhotos === 1) ? [0] : (numPhotos === 2) ? [-10, 10] : (numPhotos === 3) ? [-15, 0, 15] : [-18, -6, 6, 18];
-        const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0; // Adjusted shift
+        const horizontalShiftBase = (numPhotos > 1) ? (numPhotos - 1) * 20 : 0;
 
         for (let i = 0; i < numPhotos; i++) {
             const photoSrc = photoArray[i];
-            // Validate photo source
+            // Validate src (base64 or http/s)
             if (typeof photoSrc !== 'string' || (!photoSrc.startsWith('data:image') && !photoSrc.startsWith('http'))) {
-                console.warn(`Invalid photo data at index ${i} for tribute ${tribute.id}`);
-                continue; // Skip invalid photo entries
+                console.warn(`Invalid photo src at index ${i} for tribute ${tribute.id}`);
+                continue; // Skip invalid item
             }
             const angle = spreadAngles[i];
             const translateX = (numPhotos > 1) ? (i * 40) - horizontalShiftBase : 0;
-            const zIndex = numPhotos - i; // Last photo appears on top
+            const zIndex = numPhotos - i; // Last photo is highest z-index
 
-            // *** CRITICAL FIX: Ensure the entire <img> tag is correctly formed inside the template literal ***
+            // ** Fixed img tag structure **
             imgMarkup += `
                 <img src="${escapeHtml(photoSrc)}"
                      class="fan-img"
@@ -220,21 +235,33 @@
                      tabindex="0"
                      style="transform: rotate(${angle}deg) translateX(${translateX}px); z-index: ${zIndex};"
                      alt="Tribute Photo ${i + 1} from ${escapeHtml(tribute.from || 'Anonymous')}"
-                     loading="lazy"
-                >`; // Ensure closing '>' is present and correctly placed
+                     loading="lazy">`; // Closing tag here
         }
-        return `<div class="fan-stack mb-1">${imgMarkup}</div>`; // Return container with images
+        return `<div class="fan-stack mb-1">${imgMarkup}</div>`; // Return container + images
     }
 
 
-    /** Generates HTML for a single tribute card */
+    /** Generates HTML string for one tribute card */
     function renderTributeCard(tribute, idx) {
-        const tributeId = tribute.id; const fromName = tribute.from || "Anonymous"; const message = tribute.msg || ""; const date = tribute.date || "";
-        const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length]; const cardBaseGradient = `linear-gradient(135deg, ${gradientPair[0]} 0%, ${gradientPair[1]} 100%)`;
-        let cardPatternStyle = '', cardPatternBgImage = ''; const cardPatternType = idx % 5; const pDark = patternColors.dark, pLight = patternColors.light, pAccent = patternColors.accent;
-        switch (cardPatternType) { case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break; case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break; case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break; case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break; case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break; }
+        // Extract data
+        const tributeId = tribute.id; const fromName = tribute.from || "Anonymous";
+        const message = tribute.msg || ""; const date = tribute.date || "";
+        // Dynamic styles (gradient, pattern, date icon)
+        const gradientPair = CARD_GRADIENT_PAIRS[idx % CARD_GRADIENT_PAIRS.length];
+        const cardBaseGradient = `linear-gradient(135deg, ${gradientPair[0]} 0%, ${gradientPair[1]} 100%)`;
+        let cardPatternStyle = '', cardPatternBgImage = ''; const cardPatternType = idx % 5;
+        const pDark = patternColors.dark, pLight = patternColors.light, pAccent = patternColors.accent;
+        switch (cardPatternType) { /* Cases for patterns */
+            case 0: cardPatternBgImage = `radial-gradient(${pDark} 3%, transparent 4%), radial-gradient(${pDark} 3%, transparent 4%)`; cardPatternStyle = `background-size: 40px 40px; background-position: 0 0, 20px 20px;`; break;
+            case 1: cardPatternBgImage = `linear-gradient(135deg, ${pDark} 1%, transparent 2%, transparent 50%, ${pDark} 50%, ${pDark} 51%, transparent 52%, transparent 100%)`; cardPatternStyle = `background-size: 40px 40px;`; break;
+            case 2: cardPatternBgImage = `linear-gradient(45deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight}), linear-gradient(135deg, ${pLight} 10%, transparent 12%, transparent 90%, ${pLight} 91%, ${pLight})`; cardPatternStyle = `background-size: 38px 38px;`; break;
+            case 3: const wSvgC = pAccent.replace('rgba', 'rgba').replace(/[\d\.]+\)$/, '0.07)'); const svgW = `<svg width='120' height='15' xmlns='http://www.w3.org/2000/svg'><path d='M0 6 Q 30 12, 60 6 T 120 6' fill='none' stroke='${encodeURIComponent(wSvgC)}' stroke-width='0.8'/></svg>`; cardPatternBgImage = `url("data:image/svg+xml,${encodeURIComponent(svgW)}")`; cardPatternStyle = `background-size: 60px; background-repeat: repeat;`; break;
+            case 4: cardPatternBgImage = `radial-gradient(${pDark} 0.8px, transparent 0), radial-gradient(${pDark} 0.8px, transparent 0)`; cardPatternStyle = `background-size: 12px 12px; background-position: 0 0, 6px 6px;`; break;
+        }
         const cardBgStyle = `background: ${cardPatternBgImage ? cardPatternBgImage + ',' : ''} ${cardBaseGradient}; ${cardPatternStyle}`;
         const dateIcon = cardDateIcons[idx % cardDateIcons.length];
+
+        // Return HTML structure including fade-in class
         return `
         <div class="tribute-card tribute-card-fade-in relative" data-cardidx="${idx}" data-id="${tributeId}" style="${cardBgStyle}">
             <div class="absolute right-3 top-3 flex space-x-2" style="z-index: 5;"> <button title="Edit Tribute" aria-label="Edit Tribute by ${escapeHtml(fromName)}" data-act="edit" data-id="${tributeId}" class="text-pink-400 hover:text-amber-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-amber-300"> <i class="fa-solid fa-pen fa-xs"></i> </button> <button title="Delete Tribute" aria-label="Delete Tribute by ${escapeHtml(fromName)}" data-act="delete" data-id="${tributeId}" class="text-pink-400 hover:text-red-500 bg-white rounded-full shadow border border-pink-100 px-2 py-1 focus:outline-none transition focus:ring-2 focus:ring-red-300"> <i class="fa-solid fa-trash fa-xs"></i> </button> </div>
@@ -245,9 +272,9 @@
         </div>`;
     }
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*                API INTERACTION FUNCTIONS               */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
 
     /** Fetches the next single tribute */
     async function loadNextTribute() {
@@ -256,184 +283,427 @@
         const allLoadedMsg = document.getElementById('allLoadedMessage');
         const initialEmptyMsg = document.getElementById('initialEmptyMessage');
 
-        if (isLoading || allTributesLoaded) { console.log("Skip load:", {isLoading, allTributesLoaded}); return; }
-        isLoading = true;
-        if (indicator) indicator.classList.remove('hidden');
-        console.log(`FETCHING page ${nextPageToFetch}...`); // Log fetch attempt
+        // Prevent fetch if already loading or all tributes are loaded
+        if (isLoading || allTributesLoaded) {
+            console.log("Skip load:", {isLoading, allTributesLoaded});
+            return;
+        }
+        isLoading = true; // Set loading flag
+        if (indicator) indicator.classList.remove('hidden'); // Show loading spinner
+        const pageBeingFetched = nextPageToFetch; // Track page number for first load check
+        console.log(`FETCHING page ${pageBeingFetched}...`);
 
         try {
-            const response = await fetch(`/.netlify/functions/get-tributes?page=${nextPageToFetch}&pageSize=1`);
-            if (!response.ok) { let eMsg = `HTTP error! status: ${response.status}`; try { const eData = await response.json(); eMsg = eData.error || eMsg; } catch(e){} throw new Error(eMsg); }
-            const data = await response.json();
+            // Fetch page 'pageBeingFetched' with pageSize=1
+            const response = await fetch(`/.netlify/functions/get-tributes?page=${pageBeingFetched}&pageSize=1`);
+            // Handle HTTP errors
+            if (!response.ok) {
+                let eMsg = `HTTP error! status: ${response.status}`;
+                try { const eData = await response.json(); eMsg = eData.error || eMsg; } catch(e){}
+                throw new Error(eMsg);
+            }
+            const data = await response.json(); // Parse JSON response
 
+            // Check if data is valid and contains tributes
             if (!data || !Array.isArray(data.tributes) || data.tributes.length === 0) {
-                console.log("ALL TRIBUTES LOADED."); allTributesLoaded = true;
-                if (tributes.length === 0) { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; }
-                else { if(emptyState) emptyState.classList.remove('hidden'); if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'none';} // Show "end" message
+                // No more tributes found
+                console.log("ALL TRIBUTES LOADED.");
+                allTributesLoaded = true; // Set flag to stop observer
+                // Show appropriate message
+                if (tributes.length === 0) { // If grid was always empty
+                     if(emptyState) emptyState.classList.remove('hidden'); // Show parent container
+                     if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); // Hide "end" message
+                     if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; // Show "be the first" message
+                } else { // If grid has items, show "reached end"
+                     if(emptyState) emptyState.classList.remove('hidden'); // Show parent container
+                     if(allLoadedMsg) allLoadedMsg.classList.remove('hidden'); // Show "end" message
+                     if(initialEmptyMsg) initialEmptyMsg.style.display = 'none'; // Hide "be the first" message
+                }
             } else {
+                // Tribute received!
                 const tribute = data.tributes[0];
-                console.log(`RECEIVED tribute ID: ${tribute.id}`); renderSingleTribute(tribute);
-                nextPageToFetch++; // Prepare for next fetch
+                console.log(`RECEIVED tribute ID: ${tribute.id}`);
+                renderSingleTribute(tribute); // Render it
+                nextPageToFetch++; // Increment page counter for the next fetch
+
+                // ** FIX ** Setup observer only AFTER the first successful load
+                if (pageBeingFetched === 1) {
+                    console.log("First tribute loaded, setting up scroll observer now.");
+                    setupScrollObserver();
+                }
             }
         } catch (error) {
+            // Handle fetch errors
             console.error("Could not load next tribute:", error);
             if (indicator) indicator.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i>Error loading. Scroll to retry.`;
         } finally {
-            isLoading = false;
-            if (indicator) { setTimeout(() => { indicator.classList.add('hidden'); indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`; }, 500); } // Hide slightly slower
-             console.log("Fetch complete. isLoading:", isLoading, "allLoaded:", allTributesLoaded); // Log state after fetch
+            // Always run after try/catch
+            isLoading = false; // Reset loading flag
+            // Hide indicator after a delay
+            if (indicator) {
+                setTimeout(() => {
+                    indicator.classList.add('hidden');
+                    indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading next tribute...`; // Reset text
+                }, 500); // Hide slightly slower
+            }
+            console.log("Fetch complete. State:", {isLoading, allTributesLoaded, nextPageToFetch}); // Log state
         }
     }
 
-    /* ====================================================== */
-    /*            ADD/EDIT/DELETE & RELOAD LOGIC              */
-    /* ====================================================== */
 
-    /** Clears grid/state and reloads from page 1 */
+    /* ------------------------------------------------------ */
+    /*            ADD/EDIT/DELETE & RELOAD LOGIC              */
+    /* ------------------------------------------------------ */
+
+    /** Clears grid/state and reloads tributes from page 1 */
     async function resetAndReloadAll() {
         console.log(">>> RESETTING AND RELOADING ALL <<<");
-        const grid = document.getElementById("tributesGrid"); const emptyState = document.getElementById('emptyState'); const allLoadedMsg = document.getElementById('allLoadedMessage'); const initialEmptyMsg = document.getElementById('initialEmptyMessage');
+        // Get references to elements
+        const grid = document.getElementById("tributesGrid");
+        const emptyState = document.getElementById('emptyState');
+        const allLoadedMsg = document.getElementById('allLoadedMessage');
+        const initialEmptyMsg = document.getElementById('initialEmptyMessage');
+        const indicator = document.getElementById('singleLoadIndicator');
+
+        // Clear grid content
         if (grid) grid.innerHTML = '';
-        tributes = []; nextPageToFetch = 1; isLoading = false; allTributesLoaded = false;
-        if(emptyState) emptyState.classList.add('hidden'); if(allLoadedMsg) allLoadedMsg.classList.add('hidden'); if(initialEmptyMsg) initialEmptyMsg.style.display = 'block';
-        document.getElementById('singleLoadIndicator')?.classList.add('hidden');
-        await loadNextTribute(); // Load first one
-        setupScrollObserver(); // Re-attach observer
+
+        // Reset state variables
+        tributes = [];
+        nextPageToFetch = 1;
+        isLoading = false;
+        allTributesLoaded = false;
+
+        // Reset UI messages/indicators
+        if(emptyState) emptyState.classList.add('hidden');
+        if(allLoadedMsg) allLoadedMsg.classList.add('hidden');
+        if(initialEmptyMsg) initialEmptyMsg.style.display = 'block'; // Show initial message potential
+        if(indicator) indicator.classList.add('hidden'); // Hide loading spinner
+
+        // Disconnect observer *before* starting load to prevent premature triggers
+        if (observer) {
+            observer.disconnect();
+            console.log("Observer disconnected during reset.");
+        }
+
+        // Load the first tribute again
+        await loadNextTribute();
+        // The observer will be set up again inside loadNextTribute if the first load is successful
     }
 
-    /** Submits tribute (new/update), reloads on success */
+    /** Submits tribute (new/update), then calls resetAndReloadAll */
     async function submitTribute(tributeData, idToUpdate = null) {
         const isUpdating = idToUpdate !== null && !isNaN(parseInt(idToUpdate, 10));
-        const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute'; const method = isUpdating ? 'PUT' : 'POST';
-        const payload = { from: tributeData.from, msg: tributeData.msg, photos: tributeData.photos }; if (isUpdating) { payload.id = parseInt(idToUpdate, 10); }
+        const endpoint = isUpdating ? '/.netlify/functions/update-tribute' : '/.netlify/functions/add-tribute';
+        const method = isUpdating ? 'PUT' : 'POST';
+        const payload = { from: tributeData.from, msg: tributeData.msg, photos: tributeData.photos }; // Photos are base64
+        if (isUpdating) { payload.id = parseInt(idToUpdate, 10); }
+
         console.log(`Submitting tribute (${isUpdating ? 'Update ID: '+payload.id : 'New'})`);
         try {
             const response = await fetch(endpoint, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             if (!response.ok) { let e = `HTTP Error ${response.status}`; try{ const d=await response.json();e=d.error||e; }catch(x){} throw new Error(e); }
-            console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`); showConfetti(); await resetAndReloadAll(); return true;
-        } catch (error) { console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error); alert(`Error: ${error.message}`); return false; }
+            console.log(`Tribute ${isUpdating ? 'updated' : 'added'} successfully.`);
+            showConfetti();         // Show success animation
+            await resetAndReloadAll(); // Reload everything
+            return true;
+        } catch (error) {
+            console.error(`Error ${isUpdating ? 'updating' : 'sharing'} tribute:`, error);
+            alert(`Error submitting tribute: ${error.message}`);
+            return false;
+        }
     }
 
-    /** Deletes tribute, reloads on success */
+    /** Deletes tribute, then calls resetAndReloadAll */
     async function deleteTribute(tributeId) {
-        const idToDelete = parseInt(tributeId, 10); if (isNaN(idToDelete)) return false; if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
+        const idToDelete = parseInt(tributeId, 10);
+        if (isNaN(idToDelete)) return false;
+        if (!confirm('Are you sure you want to delete this tribute? This cannot be undone.')) return false;
+
         console.log("Attempting to delete tribute ID:", idToDelete);
         try {
             const response = await fetch('/.netlify/functions/delete-tribute', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: idToDelete }) });
             if (!response.ok) { let e = `HTTP Error ${response.status}`; try{ const d=await response.json();e=d.error||e; }catch(x){} throw new Error(e); }
-            console.log("Tribute deleted successfully:", idToDelete); await resetAndReloadAll(); return true;
-        } catch (error) { console.error("Error deleting tribute:", error); alert(`Error: ${error.message}`); return false; }
+            console.log("Tribute deleted successfully:", idToDelete);
+            await resetAndReloadAll(); // Reload everything
+            return true;
+        } catch (error) {
+            console.error("Error deleting tribute:", error);
+            alert(`Error deleting tribute: ${error.message}`);
+            return false;
+        }
     }
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*          FORM HANDLING & PHOTO PROCESSING              */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
 
     /** [TEMPORARY] Converts files to Base64 Data URLs */
     async function filesToDataURLs_Temporary(fileList) {
-        const MAX_FILES = 4, MAX_SIZE_MB = 20; const files = Array.from(fileList).slice(0, MAX_FILES);
-        const promises = files.map(f => new Promise((res, rej) => { if (!f.type.startsWith('image/')) return res(null); if (f.size > MAX_SIZE_MB * 1024 * 1024) { alert(`File "${f.name}" > ${MAX_SIZE_MB}MB.`); return res(null); } const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(f); }));
-        const results = await Promise.allSettled(promises); return results.filter(r => r.status === 'fulfilled' && r.value !== null).map(r => r.value);
+        const MAX_FILES = 4, MAX_SIZE_MB = 20; // Limits
+        const files = Array.from(fileList).slice(0, MAX_FILES); // Limit number of files
+        // Create a promise for each file read
+        const promises = files.map(f => new Promise((res, rej) => {
+            if (!f.type.startsWith('image/')) return res(null); // Skip non-images
+            if (f.size > MAX_SIZE_MB * 1024 * 1024) { // Check size
+                alert(`File "${f.name}" is too large (max ${MAX_SIZE_MB}MB) and will be skipped.`);
+                return res(null);
+            }
+            const reader = new FileReader();
+            reader.onload = () => res(reader.result); // Resolve with base64 string
+            reader.onerror = rej; // Reject on error
+            reader.readAsDataURL(f); // Read file
+        }));
+        const results = await Promise.allSettled(promises); // Wait for all reads
+        // Return only successful base64 strings
+        return results.filter(r => r.status === 'fulfilled' && r.value !== null).map(r => r.value);
     }
 
-    /** Handles form submission */
+    /** Handles the tribute form submission */
     async function handleFormSubmit(e) {
-        e.preventDefault(); const btn = document.getElementById('submitBtn'), txt = document.getElementById('submitBtnText'), fin = document.getElementById('photos'); if (!btn || !txt || !fin) return; if (isLoading) { alert("Please wait for loading."); return; } btn.disabled = true; const origTxt = editingTributeId ? "Update" : "Share"; let actTxt = editingTributeId ? 'Updating...' : 'Sharing...'; txt.textContent = actTxt; let photos = [];
+        e.preventDefault(); // Prevent default reload
+        // Get form elements
+        const btn = document.getElementById('submitBtn'), txt = document.getElementById('submitBtnText'),
+              fin = document.getElementById('photos'), nameIn = document.getElementById('fromName'), msgIn = document.getElementById('message');
+        if (!btn || !txt || !fin || !nameIn || !msgIn) return; // Exit if elements missing
+
+        if (isLoading) { alert("Please wait for loading to finish."); return; } // Prevent submit while loading
+
+        btn.disabled = true; // Disable button
+        const origTxt = editingTributeId ? "Update" : "Share"; // Store original text
+        let actTxt = editingTributeId ? 'Updating...' : 'Sharing...'; // Set initial processing text
+        txt.textContent = actTxt;
+
+        let photos = []; // Array for photo data
+
         try {
-            const files = fin.files; if (files.length > 0 && files.length <= 4) { actTxt = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...'; txt.textContent = actTxt; photos = await filesToDataURLs_Temporary(files); if(photos.length < files.length){ alert("Some photos skipped (size/type).");} } else if (files.length > 4) { throw new Error("Too many photos selected (max 4)."); } txt.textContent = actTxt;
-            const from = document.getElementById('fromName').value.trim() || "Anonymous"; const msg = document.getElementById('message').value.trim(); if (!msg) throw new Error("Message cannot be empty."); if (msg.length > 1500) throw new Error("Message exceeds 1500 characters.");
-            const tributeData = { from, msg, photos }; const idUpd = editingTributeId ? parseInt(editingTributeId, 10) : null; if (editingTributeId && isNaN(idUpd)) throw new Error("Invalid ID for update.");
-            const success = await submitTribute(tributeData, idUpd); if (success) { resetForm(); } else { btn.disabled = false; txt.textContent = origTxt; }
-        } catch (error) { console.error("Form submit error:", error); alert(error.message); btn.disabled = false; txt.textContent = origTxt; }
+            // Process photos (to Base64 for now)
+            const files = fin.files;
+            if (files.length > 0 && files.length <= 4) {
+                actTxt = editingTributeId ? 'Processing & Updating...' : 'Processing & Sharing...';
+                txt.textContent = actTxt; // Update text if processing photos
+                photos = await filesToDataURLs_Temporary(files); // Await base64 conversion
+            } else if (files.length > 4) {
+                throw new Error("Too many photos selected (max 4)."); // Validation error
+            }
+            txt.textContent = actTxt; // Ensure text shows processing state
+
+            // Get and validate text inputs
+            const from = nameIn.value.trim() || "Anonymous";
+            const msg = msgIn.value.trim();
+            if (!msg) throw new Error("Message cannot be empty.");
+            if (msg.length > 1500) throw new Error("Message exceeds 1500 characters.");
+
+            // Prepare data and submit
+            const tributeData = { from, msg, photos }; // Photos = base64 array
+            const idUpd = editingTributeId ? parseInt(editingTributeId, 10) : null;
+            if (editingTributeId && isNaN(idUpd)) throw new Error("Invalid ID for update.");
+
+            const success = await submitTribute(tributeData, idUpd); // Send to backend
+
+            // Reset form only on success (reload is handled within submitTribute)
+            if (success) { resetForm(); }
+            else { btn.disabled = false; txt.textContent = origTxt; } // Re-enable on failure
+
+        } catch (error) {
+            // Handle errors from validation or submission
+            console.error("Form submit error:", error);
+            alert(error.message); // Show validation or submission error
+            btn.disabled = false; txt.textContent = origTxt; // Always re-enable button
+        }
     }
 
-    /** Resets the form */
-    function resetForm() { const f = document.getElementById('tributeForm'), t = document.getElementById('submitBtnText'), c = document.getElementById('cancelEditBtn'), b = document.getElementById('submitBtn'); if (f) f.reset(); if (t) t.textContent = "Share"; if (c) c.classList.add('hidden'); if (b) b.disabled = false; editingTributeId = null; console.log("Form reset."); }
+    /** Resets the form fields and editing state */
+    function resetForm() {
+        const form = document.getElementById('tributeForm'), txt = document.getElementById('submitBtnText'),
+              cancel = document.getElementById('cancelEditBtn'), btn = document.getElementById('submitBtn');
+        if (form) form.reset();                 // Clear form inputs
+        if (txt) txt.textContent = "Share";     // Reset submit button text
+        if (cancel) cancel.classList.add('hidden'); // Hide cancel button
+        if (btn) btn.disabled = false;          // Enable submit button
+        editingTributeId = null;                // Exit editing mode
+        console.log("Form reset.");
+    }
 
-    /** Loads tribute data into form for editing */
-    function loadEditForm(tributeId) { const idL = parseInt(tributeId, 10); if (isNaN(idL)) return; const tEdit = tributes.find(t => t.id === idL); if (!tEdit) { alert("Could not find tribute data to edit."); return; } console.log("Loading for edit:", tEdit); const nIn = document.getElementById('fromName'), mIn = document.getElementById('message'), fIn = document.getElementById('photos'); if (nIn) nIn.value = tEdit.from || ''; if (mIn) mIn.value = tEdit.msg || ''; if (fIn) fIn.value = ''; editingTributeId = idL; const sTxt = document.getElementById('submitBtnText'), cBtn = document.getElementById('cancelEditBtn'); if (sTxt) sTxt.textContent = "Update"; if (cBtn) cBtn.classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    /** Loads existing tribute data into the form for editing */
+    function loadEditForm(tributeId) {
+        const idL = parseInt(tributeId, 10); if (isNaN(idL)) return;
+        // Find tribute in the currently loaded 'tributes' array
+        const tEdit = tributes.find(t => t.id === idL);
+        if (!tEdit) { alert("Could not find tribute data to edit. Please ensure all tributes are loaded."); return; }
 
-    /* ====================================================== */
+        console.log("Loading for edit:", tEdit);
+        // Get form elements
+        const nIn = document.getElementById('fromName'), mIn = document.getElementById('message'), fIn = document.getElementById('photos');
+        // Populate fields
+        if (nIn) nIn.value = tEdit.from || '';
+        if (mIn) mIn.value = tEdit.msg || '';
+        if (fIn) fIn.value = ''; // Clear file input - user must re-select
+
+        editingTributeId = idL; // Set editing state
+
+        // Update buttons
+        const sTxt = document.getElementById('submitBtnText'), cBtn = document.getElementById('cancelEditBtn');
+        if (sTxt) sTxt.textContent = "Update";
+        if (cBtn) cBtn.classList.remove('hidden');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to form
+    }
+
+    /* ------------------------------------------------------ */
     /*                UI INTERACTION LISTENERS                */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
 
-    /** Attaches delegated listeners to the grid */
+    /** Attaches delegated listeners to the tribute grid */
     function attachGridEventListeners() {
         const grid = document.getElementById('tributesGrid'); if (!grid) return;
-        grid.onclick = (e) => { const t = e.target; const btn = t.closest('button[data-act]'); const img = t.closest('.fan-img'); if (btn) { e.stopPropagation(); const act = btn.getAttribute('data-act'); const id = btn.getAttribute('data-id'); if (!id) return; if (act === 'edit') loadEditForm(id); else if (act === 'delete') deleteTribute(id); return; } if (img) { e.stopPropagation(); const card = img.closest('.tribute-card'); const tIdx = card ? parseInt(card.getAttribute("data-cardidx"), 10) : NaN; const pIdx = parseInt(img.getAttribute("data-pidx"), 10); if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } else { console.warn("Invalid modal indices.", {tIdx, pIdx}); } return; } };
-        grid.onkeydown = (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.fan-img')) { e.preventDefault(); e.target.click(); } }; console.log("Grid listeners attached.");
+
+        // Click handler for edit/delete/photo actions
+        grid.onclick = (e) => {
+            const t = e.target;
+            const btn = t.closest('button[data-act]'); // Find closest action button
+            const img = t.closest('.fan-img');        // Find closest fan image
+
+            if (btn) { // Handle action button click
+                e.stopPropagation(); const act = btn.getAttribute('data-act'); const id = btn.getAttribute('data-id'); if (!id) return;
+                if (act === 'edit') loadEditForm(id); else if (act === 'delete') deleteTribute(id); return;
+            }
+            if (img) { // Handle fan image click
+                e.stopPropagation(); const card = img.closest('.tribute-card'); const tIdx = card ? parseInt(card.getAttribute("data-cardidx"), 10) : NaN; const pIdx = parseInt(img.getAttribute("data-pidx"), 10);
+                if (!isNaN(tIdx) && !isNaN(pIdx) && tributes[tIdx]) { showModalGallery(tIdx, pIdx); } else { console.warn("Invalid modal indices.", {tIdx, pIdx}); } return;
+            }
+        };
+        // Keydown handler for accessibility (Enter/Space on images)
+        grid.onkeydown = (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.fan-img')) { e.preventDefault(); e.target.click(); } };
+        console.log("Grid listeners attached.");
     }
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*                  MODAL GALLERY LOGIC                   */
-    /* ====================================================== */
-    let modalTributeIdx = 0, modalPhotoIdx = 0;
-    function showModalGallery(tIdx, pIdx) { const m = document.getElementById("galleryModal"); if (!m || typeof tIdx !== 'number' || tIdx < 0 || tIdx >= tributes.length || !tributes[tIdx]) { console.error("Invalid modal data:", tIdx); return; } const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx !== 'number' || pIdx < 0 || pIdx >= t.photos.length) { console.error("Invalid photo index:", pIdx, t.photos); return; } modalTributeIdx = tIdx; modalPhotoIdx = pIdx; renderModalImage(); m.classList.remove("hidden"); m.focus(); document.body.style.overflow = 'hidden'; }
-    function renderModalImage() { const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'), prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn'); if (!img || !cap || !prev || !next) { closeModalGallery(); return; } const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : []; const src = p[modalPhotoIdx]; if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { console.error(`Invalid src index ${modalPhotoIdx}`); img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; } img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`; cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`; prev.classList.toggle('hidden', modalPhotoIdx === 0); next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); }
-    function closeModalGallery() { const m = document.getElementById("galleryModal"), i = document.getElementById('modalImg'); if (!m) return; m.classList.add("hidden"); if (i) i.src = ''; document.body.style.overflow = ''; }
-    function navigateModal(dir) { if (!tributes[modalTributeIdx]?.photos) return; const p = tributes[modalTributeIdx].photos; if (dir === 'prev' && modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); } else if (dir === 'next' && modalPhotoIdx < p.length - 1) { modalPhotoIdx++; renderModalImage(); } }
+    /* ------------------------------------------------------ */
+    let modalTributeIdx = 0, modalPhotoIdx = 0; // State for modal
 
-    /* ====================================================== */
+    /** Shows the photo modal */
+    function showModalGallery(tIdx, pIdx) {
+        const m = document.getElementById("galleryModal");
+        // Validate indices and data
+        if (!m || typeof tIdx!=='number' || tIdx<0 || tIdx>=tributes.length || !tributes[tIdx]) { console.error("Invalid modal data:", tIdx); return; }
+        const t = tributes[tIdx]; if (!Array.isArray(t.photos) || typeof pIdx!=='number' || pIdx<0 || pIdx>=t.photos.length) { console.error("Invalid photo index:", pIdx, t.photos); return; }
+        // Set state and render
+        modalTributeIdx = tIdx; modalPhotoIdx = pIdx;
+        renderModalImage();
+        m.classList.remove("hidden"); m.focus(); // Show and focus modal
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+
+    /** Updates the modal content (image, caption, buttons) */
+    function renderModalImage() {
+        const img = document.getElementById('modalImg'), cap = document.getElementById('galleryCaption'),
+              prev = document.getElementById('prevImgBtn'), next = document.getElementById('nextImgBtn');
+        if (!img || !cap || !prev || !next) { closeModalGallery(); return; } // Exit if elements missing
+        const t = tributes[modalTributeIdx]; const p = Array.isArray(t.photos) ? t.photos : [];
+        const src = p[modalPhotoIdx];
+        // Validate image source
+        if (typeof src !== 'string' || (!src.startsWith('data:image') && !src.startsWith('http'))) { console.error(`Invalid src index ${modalPhotoIdx}`); img.alt = "Invalid"; img.src = ""; cap.textContent = "Error."; prev.classList.add('hidden'); next.classList.add('hidden'); return; }
+        // Update modal elements
+        img.src = src; img.alt = `Photo ${modalPhotoIdx + 1} from ${escapeHtml(t.from || '?')}`;
+        cap.textContent = `${escapeHtml(t.from || '?')}: Photo ${modalPhotoIdx + 1} of ${p.length}`;
+        prev.classList.toggle('hidden', modalPhotoIdx === 0); // Hide prev if first image
+        next.classList.toggle('hidden', modalPhotoIdx >= p.length - 1); // Hide next if last image
+    }
+
+    /** Closes the photo modal */
+    function closeModalGallery() {
+        const m = document.getElementById("galleryModal"), i = document.getElementById('modalImg');
+        if (!m) return; m.classList.add("hidden"); // Hide modal
+        if (i) i.src = ''; // Clear image source
+        document.body.style.overflow = ''; // Restore page scroll
+    }
+
+    /** Navigates modal photos */
+    function navigateModal(dir) {
+        if (!tributes[modalTributeIdx]?.photos) return; const p = tributes[modalTributeIdx].photos;
+        if (dir === 'prev' && modalPhotoIdx > 0) { modalPhotoIdx--; renderModalImage(); }
+        else if (dir === 'next' && modalPhotoIdx < p.length - 1) { modalPhotoIdx++; renderModalImage(); }
+    }
+
+    /* ------------------------------------------------------ */
     /*                   CONFETTI ANIMATION                   */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
+    /** Shows confetti */
     function showConfetti() { const c=document.getElementById('confettiBox'); if(!c)return; c.style.display='flex'; c.innerHTML=''; const o=['#f8bbd0','#f48fb1','#f06292','#ec407a','#e91e63','#d81b60','#ce93d8','#ba68c8','#ab47bc','#9c27b0','#ffccbc','#ffab91','#ff8a65','#ff7043']; const n=30+Math.floor(15*Math.random()); for(let i=0;i<n;i++){ let d=document.createElement('span'); d.className='confetti__dot'; d.style.background=o[Math.floor(Math.random()*o.length)]; d.style.left=(2+96*Math.random())+'%'; d.style.top=(-5+Math.random()*10)+'%'; d.style.animationDelay=(Math.random()*0.9).toFixed(2)+'s'; d.style.opacity=(0.6+0.4*Math.random()).toFixed(2); const s=0.8+Math.random()*0.4; d.style.transform=`scale(${s.toFixed(2)})`; c.appendChild(d); } setTimeout(()=>{if(c){c.style.display='none';c.innerHTML='';}},2100); }
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*          INFINITE SCROLL INTERSECTION OBSERVER         */
-    /* ====================================================== */
-    let observer; // Holds the IntersectionObserver instance
+    /* ------------------------------------------------------ */
+    let observer; // Holds the observer instance
 
     /** Sets up IntersectionObserver to load more tributes */
     function setupScrollObserver() {
-        if (observer) { observer.disconnect(); console.log("Observer disconnected."); } // Clean up previous observer
-        const scrollTrigger = document.getElementById('scrollTrigger');
+        if (observer) { observer.disconnect(); console.log("Observer disconnected."); } // Clean up previous one
+        const scrollTrigger = document.getElementById('scrollTrigger'); // Element to watch
         if (!scrollTrigger) { console.error("#scrollTrigger not found."); return; }
 
-        // Options for the observer
+        // Observer options - load earlier using rootMargin
         const options = {
-            root: null, // Observe relative to viewport
-             // Trigger when the element is 300px away from entering the bottom of the viewport
-             // This starts loading earlier, making it feel smoother. Adjust px value as needed.
-            rootMargin: '0px 0px 300px 0px',
-            threshold: 0.01 // Trigger even if just a tiny part becomes "visible" according to rootMargin
+            root: null, // Use viewport
+            rootMargin: '0px 0px 300px 0px', // Trigger 300px before element enters viewport bottom
+            threshold: 0.01 // Trigger as soon as 1% is "visible" based on rootMargin
         };
 
+        // Create and configure the observer
         observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
-                // Log intersection changes for debugging
-                 console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`);
+                console.log(`ScrollTrigger intersecting: ${entry.isIntersecting}`); // Log state
+                // Load next if intersecting, not already loading, and not all loaded
                 if (entry.isIntersecting && !isLoading && !allTributesLoaded) {
-                    console.log(">>> Triggering loadNextTribute from observer <<<");
+                    console.log(">>> Observer triggering loadNextTribute <<<");
                     loadNextTribute();
                 }
             });
         }, options);
 
+        // Start observing the trigger element
         observer.observe(scrollTrigger);
         console.log("IntersectionObserver setup with rootMargin.");
     }
 
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
     /*              INITIALIZATION (DOM Ready)                */
-    /* ====================================================== */
+    /* ------------------------------------------------------ */
+    // Runs when the page's HTML is fully loaded
     document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOM fully loaded. Initializing...");
-        attachGridEventListeners(); // Setup delegated listeners on the grid
-        try { // Attach listeners to static elements
-            const form = document.getElementById('tributeForm'); if (form) form.onsubmit = handleFormSubmit; else console.warn("#tributeForm not found.");
-            const cancel = document.getElementById('cancelEditBtn'); if (cancel) cancel.onclick = resetForm; else console.warn("#cancelEditBtn not found.");
-            const closeBtn = document.getElementById('closeModalBtn'); if (closeBtn) closeBtn.onclick = closeModalGallery; else console.warn("#closeModalBtn not found.");
-            const modalBg = document.getElementById('modalBG'); if (modalBg) modalBg.onclick = closeModalGallery; else console.warn("#modalBG not found.");
-            const prevBtn = document.getElementById('prevImgBtn'); if (prevBtn) prevBtn.onclick=(e)=>{e.stopPropagation();navigateModal('prev');}; else console.warn("#prevImgBtn not found.");
-            const nextBtn = document.getElementById('nextImgBtn'); if (nextBtn) nextBtn.onclick=(e)=>{e.stopPropagation();navigateModal('next');}; else console.warn("#nextImgBtn not found.");
+        console.log("DOM loaded. Initializing...");
+
+        // Attach event listeners
+        attachGridEventListeners(); // For dynamic content in the grid
+        try { // Attach listeners for static elements
+            const form = document.getElementById('tributeForm'); if (form) form.onsubmit = handleFormSubmit; else console.warn("#tributeForm missing.");
+            const cancel = document.getElementById('cancelEditBtn'); if (cancel) cancel.onclick = resetForm; else console.warn("#cancelEditBtn missing.");
+            const closeBtn = document.getElementById('closeModalBtn'); if (closeBtn) closeBtn.onclick = closeModalGallery; else console.warn("#closeModalBtn missing.");
+            const modalBg = document.getElementById('modalBG'); if (modalBg) modalBg.onclick = closeModalGallery; else console.warn("#modalBG missing.");
+            const prevBtn = document.getElementById('prevImgBtn'); if (prevBtn) prevBtn.onclick=(e)=>{e.stopPropagation();navigateModal('prev');}; else console.warn("#prevImgBtn missing.");
+            const nextBtn = document.getElementById('nextImgBtn'); if (nextBtn) nextBtn.onclick=(e)=>{e.stopPropagation();navigateModal('next');}; else console.warn("#nextImgBtn missing.");
         } catch (error) { console.error("Error attaching static listeners:", error); }
-        // Global keydown listener for modal
-        window.addEventListener("keydown", function(e) { const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return; switch (e.key) { case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break; case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break; case "Escape": closeModalGallery(); break; } });
-        // Initial load & scroll setup
+
+        // Global listener for keyboard navigation in modal
+        window.addEventListener("keydown", function(e) {
+            const m=document.getElementById("galleryModal"); if (!m || m.classList.contains("hidden")) return;
+            switch (e.key) {
+                case "ArrowLeft": document.getElementById('prevImgBtn')?.click(); break;
+                case "ArrowRight": document.getElementById('nextImgBtn')?.click(); break;
+                case "Escape": closeModalGallery(); break;
+            }
+        });
+
+        // Load the first tribute card
+        console.log("Initiating first tribute load...");
         loadNextTribute();
-        setupScrollObserver();
+        // NOTE: Scroll observer is now set up *inside* loadNextTribute after the first load succeeds.
+
         console.log("Initialization complete.");
     });
+
 </script>
 <!-- ======================================================== -->
 <!--                   END JAVASCRIPT                       -->
